@@ -12,6 +12,7 @@
 		744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744733121EF9B4FF008CD8C5 /* Main.storyboard */; };
 		744733161EF9B4FF008CD8C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 744733151EF9B4FF008CD8C5 /* Assets.xcassets */; };
 		744733191EF9B4FF008CD8C5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744733171EF9B4FF008CD8C5 /* LaunchScreen.storyboard */; };
+		744733231EF9BA24008CD8C5 /* VideoSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744733221EF9BA24008CD8C5 /* VideoSessionController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		744733181EF9B4FF008CD8C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7447331A1EF9B4FF008CD8C5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		744733201EF9B533008CD8C5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		744733221EF9BA24008CD8C5 /* VideoSessionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoSessionController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		7447330D1EF9B4FF008CD8C5 /* vs-metal */ = {
 			isa = PBXGroup;
 			children = (
+				744733211EF9B99C008CD8C5 /* src */,
 				7447330E1EF9B4FF008CD8C5 /* AppDelegate.swift */,
 				744733101EF9B4FF008CD8C5 /* ViewController.swift */,
 				744733121EF9B4FF008CD8C5 /* Main.storyboard */,
@@ -64,6 +67,15 @@
 				7447331A1EF9B4FF008CD8C5 /* Info.plist */,
 			);
 			path = "vs-metal";
+			sourceTree = "<group>";
+		};
+		744733211EF9B99C008CD8C5 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				744733221EF9BA24008CD8C5 /* VideoSessionController.swift */,
+			);
+			name = src;
+			path = ../../src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -139,6 +151,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				744733231EF9BA24008CD8C5 /* VideoSessionController.swift in Sources */,
 				744733111EF9B4FF008CD8C5 /* ViewController.swift in Sources */,
 				7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */,
 			);
