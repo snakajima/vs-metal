@@ -147,6 +147,8 @@ class VideoSessionController: UIViewController {
   }
 }
 
+// https://github.com/McZonk/MetalCameraSample
+
 extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
                                    AVCaptureVideoDataOutputSampleBufferDelegate {
   public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
@@ -160,7 +162,7 @@ extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
         let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.r8Unorm, width, height, 0, &texture)
         if let texture = texture, status == kCVReturnSuccess {
           //print("capture", width, height, texture)
-          render(texture:texture)
+          render(metalTexture:texture)
         } else {
           print("capture failed")
         }
@@ -170,12 +172,15 @@ extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
     }
   }
   
-  func render(texture:CVMetalTexture) {
+  func render(metalTexture:CVMetalTexture) {
     guard let drawable = metalLayer.nextDrawable(),
       let pipelineState = self.pipelineState,
-      let commandBuffer = commandQueue?.makeCommandBuffer() else {
+      let commandBuffer = commandQueue?.makeCommandBuffer(),
+      let texture = CVMetalTextureGetTexture(metalTexture) else {
+        print("something is wrong")
         return
     }
+    
     let renderPassDescriptor = MTLRenderPassDescriptor()
     renderPassDescriptor.colorAttachments[0].texture = drawable.texture
     renderPassDescriptor.colorAttachments[0].loadAction = .clear
@@ -185,6 +190,7 @@ extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
     renderEncoder.setRenderPipelineState(pipelineState)
     renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, at: 0)
     renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3, instanceCount: 1)
+    renderEncoder.setFragmentTexture(texture, at: 0)
     renderEncoder.endEncoding()
     
     commandBuffer.present(drawable)
