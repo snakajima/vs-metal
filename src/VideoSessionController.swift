@@ -40,7 +40,10 @@ class VideoSessionController: UIViewController {
   var vertexBuffer:MTLBuffer?
   
   // Debug only for Metal
-  let vertexData:[Float] = [ 0.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0 ]
+  let vertexData:[Float] = [ -1.0, -1.0,  0.0, 1.0,
+                             1.0, -1.0,  1.0, 1.0,
+                             -1.0,  1.0,  0.0, 0.0,
+                             1.0,  1.0,  1.0, 0.0, ]
   var pipelineState: MTLRenderPipelineState?
   var commandQueue: MTLCommandQueue?
 
