@@ -105,7 +105,7 @@ extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
                                    AVCaptureVideoDataOutputSampleBufferDelegate {
   public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
     // to be implemented
-    print("capture")
+    print("capture", captureOutput)
   }
 }
 
