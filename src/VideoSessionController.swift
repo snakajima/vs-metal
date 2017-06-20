@@ -38,7 +38,6 @@ class VideoSessionController: UIViewController {
   let vertexData:[Float] = [ 0.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0 ]
   var pipelineState: MTLRenderPipelineState?
   var commandQueue: MTLCommandQueue?
-  var timer: CADisplayLink?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -62,8 +61,6 @@ class VideoSessionController: UIViewController {
     // 3
     pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     commandQueue = device.makeCommandQueue()
-    timer = CADisplayLink(target: self, selector: #selector(VideoSessionController.gameloop))
-    timer?.add(to: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
     
     startVideoCaptureSession()
   }
@@ -87,12 +84,7 @@ class VideoSessionController: UIViewController {
     
     commandBuffer.present(drawable)
     commandBuffer.commit()
-  }
-  
-  func gameloop() {
-    autoreleasepool {
-      self.render()
-    }
+    print("render")
   }
   
   override func viewDidLayoutSubviews() {
@@ -176,7 +168,12 @@ extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
                                    AVCaptureVideoDataOutputSampleBufferDelegate {
   public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
     // to be implemented
-    print("capture", captureOutput)
+    if captureOutput is AVCaptureVideoDataOutput {
+      //print("capture", captureOutput)
+      render()
+    } else {
+      print("capture", captureOutput)
+    }
   }
 }
 
