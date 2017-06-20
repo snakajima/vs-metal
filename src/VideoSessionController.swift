@@ -56,7 +56,7 @@ class VideoSessionController: UIViewController {
     // 1
     let defaultLibrary = VideoSessionController.device.newDefaultLibrary()!
     let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
-    let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
+    let vertexProgram = defaultLibrary.makeFunction(name: "vertexPassthrough")
     // 2
     let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
     pipelineStateDescriptor.vertexFunction = vertexProgram
