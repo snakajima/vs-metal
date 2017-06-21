@@ -45,7 +45,10 @@ class VSRenderer: NSObject, MTKViewDelegate {
     }
 
     public func draw(in view: MTKView) {
-        let vertexData:[Float] = [ 0.0, -1.0, 0.0, -1.0, 1.0, 0.0, 1.0, 1.0, 0.0 ]
+        let vertexData:[Float] = [
+             0.0, -1.0, 0.0, 1.0, 0.0, 0.0, 1.0,
+            -1.0,  1.0, 0.0, 0.0, 1.0, 0.0, 1.0,
+             1.0,  1.0, 0.0, 0.0, 0.0, 1.0, 1.0, ]
         /*
         guard let drawable = metalLayer.nextDrawable(),
           let pipelineState = self.pipelineState,

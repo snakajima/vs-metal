@@ -31,14 +31,6 @@ class VSVideoSessionController: UIViewController {
     CVMetalTextureCacheCreate(nil, nil, VSVideoSessionController.device, nil, &cache)
     return cache!
   }()
-  
-  // Debug only for Metal
-  let vertexData:[Float] = [ -1.0, -1.0,  0.0, 1.0,
-                             1.0, -1.0,  1.0, 1.0,
-                             -1.0,  1.0,  0.0, 0.0,
-                             1.0,  1.0,  1.0, 0.0, ]
-  var pipelineState: MTLRenderPipelineState?
-  var commandQueue: MTLCommandQueue?
   var renderer:VSRenderer?
 
   override func viewDidLoad() {
