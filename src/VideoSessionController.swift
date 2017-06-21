@@ -31,13 +31,6 @@ class VideoSessionController: UIViewController {
     CVMetalTextureCacheCreate(nil, nil, VideoSessionController.device, nil, &cache)
     return cache!
   }()
-  let metalLayer:CAMetalLayer = {
-    let layer = CAMetalLayer()
-    layer.pixelFormat = .bgra8Unorm
-    layer.framebufferOnly = true
-    return layer
-  }()
-  var vertexBuffer:MTLBuffer?
   
   // Debug only for Metal
   let vertexData:[Float] = [ -1.0, -1.0,  0.0, 1.0,
@@ -52,7 +45,7 @@ class VideoSessionController: UIViewController {
     super.viewDidLoad()
     
     if let mtkView = self.view as? MTKView {
-        mtkView.device = MTLCreateSystemDefaultDevice()
+        mtkView.device = VideoSessionController.device
         renderer = VSRenderer(view: mtkView)
         renderer?.mtkView(mtkView, drawableSizeWillChange: mtkView.drawableSize)
         mtkView.delegate = renderer
@@ -83,11 +76,6 @@ class VideoSessionController: UIViewController {
     startVideoCaptureSession()
   }
   
-  override func viewDidLayoutSubviews() {
-    super.viewDidLayoutSubviews()
-    metalLayer.frame = view.layer.frame
-  }
-
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
@@ -171,11 +159,11 @@ extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
       if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
         let width = CVPixelBufferGetWidth(pixelBuffer)
         let height = CVPixelBufferGetHeight(pixelBuffer)
-        var texture:CVMetalTexture? = nil
-        let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.r8Unorm, width, height, 0, &texture)
-        if let texture = texture, status == kCVReturnSuccess {
+        var metalTexture:CVMetalTexture? = nil
+        let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.r8Unorm, width, height, 0, &metalTexture)
+        if let metalTexture = metalTexture, status == kCVReturnSuccess,
+           let _ = CVMetalTextureGetTexture(metalTexture) {
           //print("capture", width, height, texture)
-          //render(metalTexture:texture)
         } else {
           print("capture failed")
         }
@@ -184,34 +172,6 @@ extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
       //print("capture", captureOutput)
     }
   }
-  
-  /*
-  func render(metalTexture:CVMetalTexture) {
-    guard let drawable = metalLayer.nextDrawable(),
-      let pipelineState = self.pipelineState,
-      let commandBuffer = commandQueue?.makeCommandBuffer(),
-      let texture = CVMetalTextureGetTexture(metalTexture) else {
-        print("something is wrong")
-        return
-    }
-    
-    let renderPassDescriptor = MTLRenderPassDescriptor()
-    renderPassDescriptor.colorAttachments[0].texture = drawable.texture
-    renderPassDescriptor.colorAttachments[0].loadAction = .clear
-    renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.0, green: 104.0/255.0, blue: 5.0/255.0, alpha: 1.0)
-    
-    let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
-    renderEncoder.setRenderPipelineState(pipelineState)
-    renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, at: 0)
-    renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3, instanceCount: 1)
-    renderEncoder.setFragmentTexture(texture, at: 0)
-    renderEncoder.endEncoding()
-    
-    commandBuffer.present(drawable)
-    commandBuffer.commit()
-    print("render", texture)
-  }
-  */
 }
 
 
