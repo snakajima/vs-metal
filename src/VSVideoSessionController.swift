@@ -37,7 +37,7 @@ class VSVideoSessionController: UIViewController {
         super.viewDidLoad()
 
         guard let mtkView = self.view as? MTKView else {
-            print("VSVS view is not an MTKView")
+            print("VSVS: view is not an MTKView")
             return
         }
         
@@ -46,25 +46,28 @@ class VSVideoSessionController: UIViewController {
         startVideoCaptureSession()
     }
 
-    private func addCamera(session:AVCaptureSession) throws {
-        self.camera = nil
+    private func addCamera(session:AVCaptureSession) throws -> Bool {
         let s = AVCaptureDeviceDiscoverySession(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera],
                                                 mediaType: AVMediaTypeVideo, position: self.cameraPosition)
-        if let camera = s?.devices[0] {
-            self.camera = camera
-            let preset = AVCaptureSessionPreset1280x720
-            if camera.supportsAVCaptureSessionPreset(preset) {
-                session.sessionPreset = preset
-            }
-            let cameraInput = try AVCaptureDeviceInput(device: camera)
-            session.addInput(cameraInput)
-
-            if let fps = self.fps {
-                try camera.lockForConfiguration()
-                camera.activeVideoMinFrameDuration = CMTimeMake(1, Int32(fps))
-                camera.unlockForConfiguration()
-            }
+        guard let camera = s?.devices[0] else {
+            self.camera = nil
+            return false
         }
+        
+        self.camera = camera
+        let preset = AVCaptureSessionPreset1280x720
+        if camera.supportsAVCaptureSessionPreset(preset) {
+            session.sessionPreset = preset
+        }
+        let cameraInput = try AVCaptureDeviceInput(device: camera)
+        session.addInput(cameraInput)
+
+        if let fps = self.fps {
+            try camera.lockForConfiguration()
+            camera.activeVideoMinFrameDuration = CMTimeMake(1, Int32(fps))
+            camera.unlockForConfiguration()
+        }
+        return true
     }
 
     private func startVideoCaptureSession() {
@@ -78,26 +81,24 @@ class VSVideoSessionController: UIViewController {
                 session.addInput(audioInput)
                 session.addOutput(audioOutput)
             }
-            try addCamera(session:session)
-            if let _ = self.camera {
-                let videoOutput = AVCaptureVideoDataOutput()
-                videoOutput.videoSettings = [
-                  kCVPixelBufferPixelFormatTypeKey as AnyHashable: kCVPixelFormatType_32BGRA
-                ]
-                videoOutput.setSampleBufferDelegate(self, queue: .main)
-                session.addOutput(videoOutput)
-
-                let imageOutput = AVCapturePhotoOutput()
-                session.addOutput(imageOutput)
-
-                self.session = session
-                session.startRunning()
-                print("session started")
-            } else {
-                print("no camera")
+            guard try addCamera(session:session) else {
+                print("VSVS: no camera on this device")
+                return
             }
+            let videoOutput = AVCaptureVideoDataOutput()
+            videoOutput.videoSettings = [
+              kCVPixelBufferPixelFormatTypeKey as AnyHashable: kCVPixelFormatType_32BGRA
+            ]
+            videoOutput.setSampleBufferDelegate(self, queue: .main)
+            session.addOutput(videoOutput)
+
+            let imageOutput = AVCapturePhotoOutput()
+            session.addOutput(imageOutput)
+
+            self.session = session
+            session.startRunning()
         } catch {
-          print("error")
+          print("VSVS: failed to start the video capture session")
         }
     }
 }
@@ -116,7 +117,7 @@ extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegat
                 if let metalTexture = metalTexture, status == kCVReturnSuccess {
                     renderer?.texture = metalTexture
                 } else {
-                    print("capture failed")
+                    print("VSVS: failed to create texture")
                 }
             }
         } else {
