@@ -10,6 +10,7 @@ import UIKit
 import MetalKit
 
 class VSRenderer: NSObject, MTKViewDelegate {
+    // Public properties to be updated by the caller (controller)
     var texture:CVMetalTexture? {
         didSet {
             textureUpdated = true
@@ -31,7 +32,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
         VSVertex(position:[1.0, -1.0], textureCoordinate:[1.0, 1.0]),
         VSVertex(position:[1.0,  1.0], textureCoordinate:[0.0, 1.0]),
         VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
-        ]
+    ]
     let dataSize = VSRenderer.vertexData.count * MemoryLayout.size(ofValue: VSRenderer.vertexData[0])
 
     init(view:MTKView) {
@@ -65,21 +66,24 @@ class VSRenderer: NSObject, MTKViewDelegate {
               let drawable = view.currentDrawable,
               let pipelineState = self.pipelineState,
               let texture = self.texture,
-              let commandBuffer = commandQueue?.makeCommandBuffer() else {
+              let commandQueue = self.commandQueue else {
             print("VSR:draw something is wrong")
             return
         }
         
-        if !textureUpdated {
-            print("texture not updated")
+        guard textureUpdated else {
+            print("VSS:draw texture not updated")
             return
         }
 
+        let commandBuffer = commandQueue.makeCommandBuffer()
         let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         encoder.setRenderPipelineState(pipelineState)
         encoder.setVertexBytes(VSRenderer.vertexData, length: dataSize, at: 0)
         encoder.setFragmentTexture(CVMetalTextureGetTexture(texture), at: 0)
-        encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6, instanceCount: 2)
+        encoder.drawPrimitives(type: .triangle, vertexStart: 0,
+                               vertexCount: VSRenderer.vertexData.count,
+                               instanceCount: VSRenderer.vertexData.count/3)
         encoder.endEncoding()
         
         commandBuffer.present(drawable)
