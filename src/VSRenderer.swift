@@ -39,6 +39,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
             commandQueue = device.makeCommandQueue()
         }
+        view.delegate = self
     }
 
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {

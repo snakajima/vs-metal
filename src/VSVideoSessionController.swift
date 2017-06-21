@@ -11,12 +11,12 @@ import AVFoundation
 import MetalKit
 
 class VSVideoSessionController: UIViewController {
-    // Public properties
+    // Public properties to be specified by the callers
     var useFrontCamera = true
     var fps:Int?
 
     // Calculated properties
-    var cameraPosition:AVCaptureDevicePosition {
+    private var cameraPosition:AVCaptureDevicePosition {
         return useFrontCamera ? AVCaptureDevicePosition.front : AVCaptureDevicePosition.back
     }
 
@@ -25,60 +25,44 @@ class VSVideoSessionController: UIViewController {
     private var camera:AVCaptureDevice?
 
     // Metal properties
-    static let device = MTLCreateSystemDefaultDevice()!
-    let textureCache:CVMetalTextureCache = {
+    private static let device = MTLCreateSystemDefaultDevice()!
+    fileprivate let textureCache:CVMetalTextureCache = {
         var cache:CVMetalTextureCache? = nil
         CVMetalTextureCacheCreate(nil, nil, VSVideoSessionController.device, nil, &cache)
         return cache!
     }()
-    var renderer:VSRenderer?
+    fileprivate var renderer:VSRenderer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let mtkView = self.view as? MTKView {
-            mtkView.device = VSVideoSessionController.device
-            renderer = VSRenderer(view: mtkView)
-            renderer?.mtkView(mtkView, drawableSizeWillChange: mtkView.drawableSize)
-            mtkView.delegate = renderer
+        guard let mtkView = self.view as? MTKView else {
+            print("VSVS view is not an MTKView")
+            return
         }
-
+        
+        mtkView.device = VSVideoSessionController.device
+        renderer = VSRenderer(view: mtkView)
         startVideoCaptureSession()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-      // Get the new view controller using segue.destinationViewController.
-      // Pass the selected object to the new view controller.
-    }
-    */
 
     private func addCamera(session:AVCaptureSession) throws {
         self.camera = nil
         let s = AVCaptureDeviceDiscoverySession(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera],
                                                 mediaType: AVMediaTypeVideo, position: self.cameraPosition)
-        if let device = s?.devices[0] {
-            self.camera = device
+        if let camera = s?.devices[0] {
+            self.camera = camera
             let preset = AVCaptureSessionPreset1280x720
-            if device.supportsAVCaptureSessionPreset(preset) {
+            if camera.supportsAVCaptureSessionPreset(preset) {
                 session.sessionPreset = preset
             }
-            let cameraInput = try AVCaptureDeviceInput(device: device)
+            let cameraInput = try AVCaptureDeviceInput(device: camera)
             session.addInput(cameraInput)
 
             if let fps = self.fps {
-                try device.lockForConfiguration()
-                device.activeVideoMinFrameDuration = CMTimeMake(1, Int32(fps))
-                device.unlockForConfiguration()
+                try camera.lockForConfiguration()
+                camera.activeVideoMinFrameDuration = CMTimeMake(1, Int32(fps))
+                camera.unlockForConfiguration()
             }
         }
     }
