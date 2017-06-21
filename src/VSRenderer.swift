@@ -48,25 +48,13 @@ class VSRenderer: NSObject, MTKViewDelegate {
         struct AAPLVertex {
             let position:vector_float3
             let color:vector_float4
-            init(position:vector_float3, color:vector_float4) {
-                self.position = position
-                self.color = color
-            }
         }
         let vertexData:[AAPLVertex] = [
             AAPLVertex(position:[0.0, -1.0, 0.0], color:[1.0, 0.0, 0.0, 1.0]),
             AAPLVertex(position:[-1.0,  1.0, 0.0], color:[0.0, 1.0, 0.0, 1.0]),
             AAPLVertex(position:[1.0,  1.0, 0.0], color:[0.0, 0.0, 1.0, 1.0])
         ]
-        /*
-        guard let drawable = metalLayer.nextDrawable(),
-          let pipelineState = self.pipelineState,
-          let commandBuffer = commandQueue?.makeCommandBuffer(),
-          let texture = CVMetalTextureGetTexture(metalTexture) else {
-            print("something is wrong")
-            return
-        }
-        */
+
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
               let drawable = view.currentDrawable,
               let pipelineState = self.pipelineState,
