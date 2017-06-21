@@ -20,22 +20,38 @@ class VSRenderer: NSObject, MTKViewDelegate {
     private var commandQueue: MTLCommandQueue?
     private var textureUpdated = false
     
+    struct VSVertex {
+        let position:vector_float2
+        let textureCoordinate:vector_float2
+    }
+    static let vertexData:[VSVertex] = [
+        VSVertex(position:[-1.0, -1.0], textureCoordinate:[1.0, 0.0]),
+        VSVertex(position:[1.0,  -1.0], textureCoordinate:[1.0, 1.0]),
+        VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
+        VSVertex(position:[1.0, -1.0], textureCoordinate:[1.0, 1.0]),
+        VSVertex(position:[1.0,  1.0], textureCoordinate:[0.0, 1.0]),
+        VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
+        ]
+    let dataSize = VSRenderer.vertexData.count * MemoryLayout.size(ofValue: VSRenderer.vertexData[0])
+
     init(view:MTKView) {
         super.init()
         
         if let device = view.device {
-            //view.colorPixelFormat = .bgra8Unorm_srgb
-            let defaultLibrary = device.newDefaultLibrary()!
-            let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
-            let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
+            // create a single command queue for rendering to this view
+            commandQueue = device.makeCommandQueue()
 
+            // load vertex & fragment shaders
+            let defaultLibrary = device.newDefaultLibrary()!
+            let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
+            let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
+
+            // compile them into a pipeline state object
             let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
             pipelineStateDescriptor.vertexFunction = vertexProgram
             pipelineStateDescriptor.fragmentFunction = fragmentProgram
             pipelineStateDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
-            
             pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
-            commandQueue = device.makeCommandQueue()
         }
         view.delegate = self
     }
@@ -45,24 +61,12 @@ class VSRenderer: NSObject, MTKViewDelegate {
     }
 
     public func draw(in view: MTKView) {
-        struct VSVertex {
-            let position:vector_float2
-            let textureCoordinate:vector_float2
-        }
-        let vertexData:[VSVertex] = [
-            VSVertex(position:[-1.0, -1.0], textureCoordinate:[1.0, 0.0]),
-            VSVertex(position:[1.0,  -1.0], textureCoordinate:[1.0, 1.0]),
-            VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
-            VSVertex(position:[1.0, -1.0], textureCoordinate:[1.0, 1.0]),
-            VSVertex(position:[1.0,  1.0], textureCoordinate:[0.0, 1.0]),
-            VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
-        ]
-        let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
-
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
               let drawable = view.currentDrawable,
               let pipelineState = self.pipelineState,
+              let texture = self.texture,
               let commandBuffer = commandQueue?.makeCommandBuffer() else {
+            print("VSR:draw something is wrong")
             return
         }
         
@@ -71,12 +75,10 @@ class VSRenderer: NSObject, MTKViewDelegate {
             return
         }
 
-        let metalTexture = CVMetalTextureGetTexture(texture!)
-        
         let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         encoder.setRenderPipelineState(pipelineState)
-        encoder.setVertexBytes(vertexData, length: dataSize, at: 0)
-        encoder.setFragmentTexture(metalTexture, at: 0)
+        encoder.setVertexBytes(VSRenderer.vertexData, length: dataSize, at: 0)
+        encoder.setFragmentTexture(CVMetalTextureGetTexture(texture), at: 0)
         encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6, instanceCount: 2)
         encoder.endEncoding()
         
