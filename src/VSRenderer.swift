@@ -10,9 +10,16 @@ import UIKit
 import MetalKit
 
 class VSRenderer: NSObject, MTKViewDelegate {
-    var device:MTLDevice?
-    var pipelineState: MTLRenderPipelineState?
-    var commandQueue: MTLCommandQueue?
+    var texture:MTLTexture? {
+        didSet {
+            textureUpdated = true
+        }
+    }
+
+    private var device:MTLDevice?
+    private var pipelineState: MTLRenderPipelineState?
+    private var commandQueue: MTLCommandQueue?
+    private var textureUpdated = false
     
     init(view:MTKView) {
         super.init()
@@ -52,6 +59,11 @@ class VSRenderer: NSObject, MTKViewDelegate {
               let drawable = view.currentDrawable,
               let pipelineState = self.pipelineState,
               let commandBuffer = commandQueue?.makeCommandBuffer() else {
+            return
+        }
+        
+        if !textureUpdated {
+            print("texture not updated")
             return
         }
                 
