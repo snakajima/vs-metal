@@ -46,14 +46,17 @@ class VSRenderer: NSObject, MTKViewDelegate {
     }
 
     public func draw(in view: MTKView) {
-        struct AAPLVertex {
+        struct VSVertex {
             let position:vector_float2
             let textureCoordinate:vector_float2
         }
-        let vertexData:[AAPLVertex] = [
-            AAPLVertex(position:[0.0, -1.0], textureCoordinate:[0.0, 0.0]),
-            AAPLVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 1.0]),
-            AAPLVertex(position:[1.0,  1.0], textureCoordinate:[1.0, 0.0])
+        let vertexData:[VSVertex] = [
+            VSVertex(position:[-1.0, -1.0], textureCoordinate:[0.0, 1.0]),
+            VSVertex(position:[1.0,  -1.0], textureCoordinate:[0.0, 0.0]),
+            VSVertex(position:[-1.0,  1.0], textureCoordinate:[1.0, 1.0]),
+            VSVertex(position:[1.0, -1.0], textureCoordinate:[0.0, 0.0]),
+            VSVertex(position:[1.0,  1.0], textureCoordinate:[1.0, 0.0]),
+            VSVertex(position:[-1.0,  1.0], textureCoordinate:[1.0, 1.0]),
         ]
 
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
@@ -75,7 +78,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
         let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
         renderEncoder.setVertexBytes(vertexData, length: dataSize, at: 0)
         renderEncoder.setFragmentTexture(metalTexture, at: 0)
-        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3, instanceCount: 1)
+        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6, instanceCount: 2)
         renderEncoder.endEncoding()
         
         commandBuffer.present(drawable)

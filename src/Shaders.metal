@@ -12,7 +12,7 @@ using namespace metal;
 typedef struct {
     vector_float2 position;
     vector_float2 textureCoordinate;
-} AAPLVertex;
+} VSVertex;
 
 typedef struct {
     // The [[position]] attribute qualifier of this member indicates this value is the clip space
@@ -27,7 +27,7 @@ typedef struct {
 } RasterizerData;
 
 vertex RasterizerData basic_vertex(unsigned int vid [[ vertex_id ]],
-             constant AAPLVertex *vertices [[buffer(0)]]) {
+             constant VSVertex *vertices [[buffer(0)]]) {
     RasterizerData out;
 
     out.clipSpacePosition = float4(vertices[vid].position, 0.0, 1.0);
