@@ -122,25 +122,23 @@ class VSVideoSessionController: UIViewController {
 
 extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
                                    AVCaptureVideoDataOutputSampleBufferDelegate {
-  public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-    // to be implemented
-    if captureOutput is AVCaptureVideoDataOutput {
-      
-      if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-        let width = CVPixelBufferGetWidth(pixelBuffer)
-        let height = CVPixelBufferGetHeight(pixelBuffer)
-        var metalTexture:CVMetalTexture? = nil
-        let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.bgra8Unorm, width, height, 0, &metalTexture)
-        if let metalTexture = metalTexture, status == kCVReturnSuccess {
-           renderer?.texture = metalTexture
+    public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+        if captureOutput is AVCaptureVideoDataOutput {
+            if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+                let width = CVPixelBufferGetWidth(pixelBuffer)
+                let height = CVPixelBufferGetHeight(pixelBuffer)
+                var metalTexture:CVMetalTexture? = nil
+                let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.bgra8Unorm, width, height, 0, &metalTexture)
+                if let metalTexture = metalTexture, status == kCVReturnSuccess {
+                    renderer?.texture = metalTexture
+                } else {
+                    print("capture failed")
+                }
+            }
         } else {
-          print("capture failed")
+            //print("capture", captureOutput)
         }
-      }
-    } else {
-      //print("capture", captureOutput)
     }
-  }
 }
 
 

@@ -42,6 +42,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
     }
 
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        // nothing to do
     }
 
     public func draw(in view: MTKView) {
