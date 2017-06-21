@@ -152,7 +152,7 @@ extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegat
         let width = CVPixelBufferGetWidth(pixelBuffer)
         let height = CVPixelBufferGetHeight(pixelBuffer)
         var metalTexture:CVMetalTexture? = nil
-        let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.r8Unorm, width, height, 0, &metalTexture)
+        let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.bgra8Unorm, width, height, 0, &metalTexture)
         if let metalTexture = metalTexture, status == kCVReturnSuccess {
            renderer?.texture = metalTexture
           //print("capture", width, height, texture)

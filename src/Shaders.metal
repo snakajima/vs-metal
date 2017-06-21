@@ -43,14 +43,15 @@ vertex RasterizerData basic_vertex(unsigned int vid [[ vertex_id ]],
 }
 
 fragment float4 basic_fragment(RasterizerData in [[stage_in]],
-                               texture2d<float> colorTexture [[ texture(1) ]]) {
+                               texture2d<half> colorTexture [[ texture(1) ]]) {
     constexpr sampler textureSampler (mag_filter::linear,
                                       min_filter::linear);
     
     // Sample the texture and return the color to colorSample
-    const float4 colorSample = colorTexture.sample (textureSampler, in.textureCoordinate);
-    //return colorSample;
-    return in.color;
+    const half4 colorSample = colorTexture.sample (textureSampler, in.textureCoordinate);
+    //return float4(colorSample);
+    //return in.color;
+    return float4(in.textureCoordinate.x, in.textureCoordinate.y, 0.0, 1.0);
     //return half4(1.0, 1.0, 0.0, 1.0);
 }
 
