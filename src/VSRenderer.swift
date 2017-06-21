@@ -17,20 +17,21 @@ class VSRenderer: NSObject, MTKViewDelegate {
     init(view:MTKView) {
         super.init()
         device = view.device
-        
-        //view.colorPixelFormat = .rgba8Unorm_srgb
-        let defaultLibrary = VideoSessionController.device.newDefaultLibrary()!
-        let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
-        let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
-        // 2
-        let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
-        pipelineStateDescriptor.vertexFunction = vertexProgram
-        pipelineStateDescriptor.fragmentFunction = fragmentProgram
-        pipelineStateDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
-        
-        // 3
-        pipelineState = try! VideoSessionController.device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
-        commandQueue = VideoSessionController.device.makeCommandQueue()
+        if let device = device {
+            //view.colorPixelFormat = .rgba8Unorm_srgb
+            let defaultLibrary = device.newDefaultLibrary()!
+            let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
+            let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
+            // 2
+            let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
+            pipelineStateDescriptor.vertexFunction = vertexProgram
+            pipelineStateDescriptor.fragmentFunction = fragmentProgram
+            pipelineStateDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
+            
+            // 3
+            pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+            commandQueue = device.makeCommandQueue()
+        }
     }
 
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {

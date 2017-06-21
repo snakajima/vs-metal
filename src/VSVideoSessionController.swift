@@ -1,5 +1,5 @@
 //
-//  VideoSessionController.swift
+//  VSVideoSessionController.swift
 //  vs-metal
 //
 //  Created by SATOSHI NAKAJIMA on 6/20/17.
@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import MetalKit
 
-class VideoSessionController: UIViewController {
+class VSVideoSessionController: UIViewController {
   // Public properties
   var useFronCamera = false
   var fps:Int?
@@ -28,7 +28,7 @@ class VideoSessionController: UIViewController {
   static let device = MTLCreateSystemDefaultDevice()!
   let textureCache:CVMetalTextureCache = {
     var cache:CVMetalTextureCache? = nil
-    CVMetalTextureCacheCreate(nil, nil, VideoSessionController.device, nil, &cache)
+    CVMetalTextureCacheCreate(nil, nil, VSVideoSessionController.device, nil, &cache)
     return cache!
   }()
   
@@ -45,7 +45,7 @@ class VideoSessionController: UIViewController {
     super.viewDidLoad()
     
     if let mtkView = self.view as? MTKView {
-        mtkView.device = VideoSessionController.device
+        mtkView.device = VSVideoSessionController.device
         renderer = VSRenderer(view: mtkView)
         renderer?.mtkView(mtkView, drawableSizeWillChange: mtkView.drawableSize)
         mtkView.delegate = renderer
@@ -150,7 +150,7 @@ class VideoSessionController: UIViewController {
 
 // https://github.com/McZonk/MetalCameraSample
 
-extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
+extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
                                    AVCaptureVideoDataOutputSampleBufferDelegate {
   public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
     // to be implemented
