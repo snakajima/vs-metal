@@ -1,0 +1,69 @@
+//
+//  VSRenderer.swift
+//  vs-metal
+//
+//  Created by satoshi on 6/21/17.
+//  Copyright © 2017 SATOSHI NAKAJIMA. All rights reserved.
+//
+
+import UIKit
+import MetalKit
+
+class VSRenderer: NSObject, MTKViewDelegate {
+    var device:MTLDevice?
+    var pipelineState: MTLRenderPipelineState?
+    var commandQueue: MTLCommandQueue?
+    
+    init(view:MTKView) {
+        super.init()
+        device = view.device
+        
+        view.colorPixelFormat = .rgba8Unorm_srgb
+        let defaultLibrary = VideoSessionController.device.newDefaultLibrary()!
+        let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
+        let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
+        // 2
+        let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
+        pipelineStateDescriptor.vertexFunction = vertexProgram
+        pipelineStateDescriptor.fragmentFunction = fragmentProgram
+        pipelineStateDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
+        
+        // 3
+        pipelineState = try! VideoSessionController.device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        commandQueue = VideoSessionController.device.makeCommandQueue()
+    }
+
+    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+    }
+
+    public func draw(in view: MTKView) {
+        let vertexData:[Float] = [ 0.0, -1.0, -1.0, 1.0, 1.0, 1.0 ]
+        /*
+        guard let drawable = metalLayer.nextDrawable(),
+          let pipelineState = self.pipelineState,
+          let commandBuffer = commandQueue?.makeCommandBuffer(),
+          let texture = CVMetalTextureGetTexture(metalTexture) else {
+            print("something is wrong")
+            return
+        }
+        */
+        guard let renderPassDescriptor = view.currentRenderPassDescriptor,
+              let drawable = view.currentDrawable,
+              let pipelineState = self.pipelineState,
+              let commandBuffer = commandQueue?.makeCommandBuffer() else {
+            return
+        }
+                
+        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
+        renderEncoder.setRenderPipelineState(pipelineState)
+        let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
+        renderEncoder.setVertexBytes(vertexData, length: dataSize, at: 0)
+        //renderEncoder.setVertexBuffer(vertexData, offset: 0, at: 0)
+        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3, instanceCount: 1)
+        //renderEncoder.setFragmentTexture(texture, at: 0)
+        renderEncoder.endEncoding()
+        
+        commandBuffer.present(drawable)
+        commandBuffer.commit()
+    }
+}
