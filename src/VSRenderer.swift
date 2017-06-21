@@ -10,7 +10,7 @@ import UIKit
 import MetalKit
 
 class VSRenderer: NSObject, MTKViewDelegate {
-    var texture:MTLTexture? {
+    var texture:CVMetalTexture? {
         didSet {
             textureUpdated = true
         }
@@ -67,6 +67,8 @@ class VSRenderer: NSObject, MTKViewDelegate {
             print("texture not updated")
             return
         }
+
+        let metalTexture = CVMetalTextureGetTexture(texture!)
         
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         renderEncoder.setRenderPipelineState(pipelineState)
@@ -74,7 +76,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
         renderEncoder.setVertexBytes(vertexData, length: dataSize, at: 0)
         //renderEncoder.setVertexBuffer(vertexData, offset: 0, at: 0)
         renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3, instanceCount: 1)
-        renderEncoder.setFragmentTexture(texture, at: 1)
+        renderEncoder.setFragmentTexture(metalTexture, at: 1)
         renderEncoder.endEncoding()
         
         commandBuffer.present(drawable)
