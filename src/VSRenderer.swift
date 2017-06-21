@@ -45,7 +45,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
     }
 
     public func draw(in view: MTKView) {
-        let vertexData:[Float] = [ 0.0, -1.0, -1.0, 1.0, 1.0, 1.0 ]
+        let vertexData:[Float] = [ 0.0, -1.0, 0.0, -1.0, 1.0, 0.0, 1.0, 1.0, 0.0 ]
         /*
         guard let drawable = metalLayer.nextDrawable(),
           let pipelineState = self.pipelineState,
@@ -66,7 +66,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             print("texture not updated")
             return
         }
-                
+        
         let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         renderEncoder.setRenderPipelineState(pipelineState)
         let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
