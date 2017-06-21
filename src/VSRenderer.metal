@@ -41,7 +41,6 @@ fragment float4 basic_fragment(RasterizerData in [[stage_in]],
     constexpr sampler textureSampler (mag_filter::linear,
                                       min_filter::linear);
     
-    // Sample the texture and return the color to colorSample
     const half4 colorSample = colorTexture.sample (textureSampler, in.textureCoordinate);
     return float4(colorSample);
 }
