@@ -25,7 +25,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
         super.init()
         device = view.device
         if let device = device {
-            //view.colorPixelFormat = .rgba8Unorm_srgb
+            view.colorPixelFormat = .bgra8Unorm_srgb
             let defaultLibrary = device.newDefaultLibrary()!
             let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
             let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
