@@ -16,26 +16,24 @@ class VSRenderer: NSObject, MTKViewDelegate {
         }
     }
 
-    private var device:MTLDevice?
     private var pipelineState: MTLRenderPipelineState?
     private var commandQueue: MTLCommandQueue?
     private var textureUpdated = false
     
     init(view:MTKView) {
         super.init()
-        device = view.device
-        if let device = device {
+        
+        if let device = view.device {
             //view.colorPixelFormat = .bgra8Unorm_srgb
             let defaultLibrary = device.newDefaultLibrary()!
             let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
             let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
-            // 2
+
             let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
             pipelineStateDescriptor.vertexFunction = vertexProgram
             pipelineStateDescriptor.fragmentFunction = fragmentProgram
             pipelineStateDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
             
-            // 3
             pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
             commandQueue = device.makeCommandQueue()
         }
