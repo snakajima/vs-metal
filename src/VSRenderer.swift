@@ -74,7 +74,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
         renderEncoder.setVertexBytes(vertexData, length: dataSize, at: 0)
         //renderEncoder.setVertexBuffer(vertexData, offset: 0, at: 0)
         renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3, instanceCount: 1)
-        //renderEncoder.setFragmentTexture(texture, at: 0)
+        renderEncoder.setFragmentTexture(texture, at: 1)
         renderEncoder.endEncoding()
         
         commandBuffer.present(drawable)

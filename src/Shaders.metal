@@ -25,6 +25,7 @@ typedef struct
     //   interpolate its value with values of other vertices making up the triangle and
     //   pass that interpolated value to the fragment shader for each fragment in that triangle
     float4 color;
+    float2 textureCoordinate;
 
 } RasterizerData;
 
@@ -35,13 +36,21 @@ vertex RasterizerData basic_vertex(unsigned int vid [[ vertex_id ]],
     // Initialize our output clip space position
     out.clipSpacePosition = float4(vertices[vid].position, 0.0, 1.0);
     out.color = vertices[vid].color;
+    out.textureCoordinate = vertices[vid].textureCoordinate;
 
     return out;
     //return float4(vertex_array[vid], 1.0);
 }
 
-fragment float4 basic_fragment(RasterizerData in [[stage_in]]) {
-  return in.color;
-  //return half4(1.0, 1.0, 0.0, 1.0);
+fragment float4 basic_fragment(RasterizerData in [[stage_in]],
+                               texture2d<float> colorTexture [[ texture(1) ]]) {
+    constexpr sampler textureSampler (mag_filter::linear,
+                                      min_filter::linear);
+    
+    // Sample the texture and return the color to colorSample
+    const float4 colorSample = colorTexture.sample (textureSampler, in.textureCoordinate);
+    //return colorSample;
+    return in.color;
+    //return half4(1.0, 1.0, 0.0, 1.0);
 }
 
