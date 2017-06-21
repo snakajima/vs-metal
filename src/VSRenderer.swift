@@ -47,12 +47,13 @@ class VSRenderer: NSObject, MTKViewDelegate {
     public func draw(in view: MTKView) {
         struct AAPLVertex {
             let position:vector_float2
+            let textureCoordinate:vector_float2
             let color:vector_float4
         }
         let vertexData:[AAPLVertex] = [
-            AAPLVertex(position:[0.0, -1.0], color:[1.0, 0.0, 0.0, 1.0]),
-            AAPLVertex(position:[-1.0,  1.0], color:[0.0, 1.0, 0.0, 1.0]),
-            AAPLVertex(position:[1.0,  1.0], color:[0.0, 0.0, 1.0, 1.0])
+            AAPLVertex(position:[0.0, -1.0], textureCoordinate:[0.0, 0.0], color:[1.0, 0.0, 0.0, 1.0]),
+            AAPLVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 1.0], color:[0.0, 1.0, 0.0, 1.0]),
+            AAPLVertex(position:[1.0,  1.0], textureCoordinate:[1.0, 0.0], color:[0.0, 0.0, 1.0, 1.0])
         ]
 
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
