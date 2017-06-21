@@ -57,6 +57,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             VSVertex(position:[1.0,  1.0], textureCoordinate:[0.0, 1.0]),
             VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
         ]
+        let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
 
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
               let drawable = view.currentDrawable,
@@ -72,13 +73,12 @@ class VSRenderer: NSObject, MTKViewDelegate {
 
         let metalTexture = CVMetalTextureGetTexture(texture!)
         
-        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
-        renderEncoder.setRenderPipelineState(pipelineState)
-        let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
-        renderEncoder.setVertexBytes(vertexData, length: dataSize, at: 0)
-        renderEncoder.setFragmentTexture(metalTexture, at: 0)
-        renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6, instanceCount: 2)
-        renderEncoder.endEncoding()
+        let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
+        encoder.setRenderPipelineState(pipelineState)
+        encoder.setVertexBytes(vertexData, length: dataSize, at: 0)
+        encoder.setFragmentTexture(metalTexture, at: 0)
+        encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6, instanceCount: 2)
+        encoder.endEncoding()
         
         commandBuffer.present(drawable)
         commandBuffer.commit()
