@@ -10,7 +10,7 @@
 using namespace metal;
 
 typedef struct {
-    vector_float3 position;
+    vector_float2 position;
     vector_float4 color;
 } AAPLVertex;
 
@@ -32,7 +32,7 @@ vertex RasterizerData basic_vertex(unsigned int vid [[ vertex_id ]],
     RasterizerData out;
 
     // Initialize our output clip space position
-    out.clipSpacePosition = float4(vertices[vid].position, 1.0);
+    out.clipSpacePosition = float4(vertices[vid].position, 0.0, 1.0);
     out.color = vertices[vid].color;
 
     return out;
