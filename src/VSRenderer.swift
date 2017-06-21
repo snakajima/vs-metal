@@ -51,12 +51,12 @@ class VSRenderer: NSObject, MTKViewDelegate {
             let textureCoordinate:vector_float2
         }
         let vertexData:[VSVertex] = [
-            VSVertex(position:[-1.0, -1.0], textureCoordinate:[0.0, 1.0]),
-            VSVertex(position:[1.0,  -1.0], textureCoordinate:[0.0, 0.0]),
-            VSVertex(position:[-1.0,  1.0], textureCoordinate:[1.0, 1.0]),
-            VSVertex(position:[1.0, -1.0], textureCoordinate:[0.0, 0.0]),
-            VSVertex(position:[1.0,  1.0], textureCoordinate:[1.0, 0.0]),
-            VSVertex(position:[-1.0,  1.0], textureCoordinate:[1.0, 1.0]),
+            VSVertex(position:[-1.0, -1.0], textureCoordinate:[1.0, 0.0]),
+            VSVertex(position:[1.0,  -1.0], textureCoordinate:[1.0, 1.0]),
+            VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
+            VSVertex(position:[1.0, -1.0], textureCoordinate:[1.0, 1.0]),
+            VSVertex(position:[1.0,  1.0], textureCoordinate:[0.0, 1.0]),
+            VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
         ]
 
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
