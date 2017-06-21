@@ -75,8 +75,8 @@ class VSRenderer: NSObject, MTKViewDelegate {
         let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
         renderEncoder.setVertexBytes(vertexData, length: dataSize, at: 0)
         //renderEncoder.setVertexBuffer(vertexData, offset: 0, at: 0)
+        renderEncoder.setFragmentTexture(metalTexture, at: 0)
         renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3, instanceCount: 1)
-        renderEncoder.setFragmentTexture(metalTexture, at: 1)
         renderEncoder.endEncoding()
         
         commandBuffer.present(drawable)
