@@ -48,12 +48,11 @@ class VSRenderer: NSObject, MTKViewDelegate {
         struct AAPLVertex {
             let position:vector_float2
             let textureCoordinate:vector_float2
-            let color:vector_float4
         }
         let vertexData:[AAPLVertex] = [
-            AAPLVertex(position:[0.0, -1.0], textureCoordinate:[0.0, 0.0], color:[1.0, 0.0, 0.0, 1.0]),
-            AAPLVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 1.0], color:[0.0, 1.0, 0.0, 1.0]),
-            AAPLVertex(position:[1.0,  1.0], textureCoordinate:[1.0, 0.0], color:[0.0, 0.0, 1.0, 1.0])
+            AAPLVertex(position:[0.0, -1.0], textureCoordinate:[0.0, 0.0]),
+            AAPLVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 1.0]),
+            AAPLVertex(position:[1.0,  1.0], textureCoordinate:[1.0, 0.0])
         ]
 
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
@@ -74,7 +73,6 @@ class VSRenderer: NSObject, MTKViewDelegate {
         renderEncoder.setRenderPipelineState(pipelineState)
         let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
         renderEncoder.setVertexBytes(vertexData, length: dataSize, at: 0)
-        //renderEncoder.setVertexBuffer(vertexData, offset: 0, at: 0)
         renderEncoder.setFragmentTexture(metalTexture, at: 0)
         renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 3, instanceCount: 1)
         renderEncoder.endEncoding()
