@@ -8,7 +8,7 @@
 
 import UIKit
 import AVFoundation
-import Metal
+import MetalKit
 
 class VideoSessionController: UIViewController {
   // Public properties
@@ -46,10 +46,19 @@ class VideoSessionController: UIViewController {
                              1.0,  1.0,  1.0, 0.0, ]
   var pipelineState: MTLRenderPipelineState?
   var commandQueue: MTLCommandQueue?
+  var renderer:VSRenderer?
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    if let mtkView = self.view as? MTKView {
+        mtkView.device = MTLCreateSystemDefaultDevice()
+        renderer = VSRenderer(view: mtkView)
+        renderer?.mtkView(mtkView, drawableSizeWillChange: mtkView.drawableSize)
+        mtkView.delegate = renderer
+    }
 
+    /*
     metalLayer.device = VideoSessionController.device
     view.layer.addSublayer(metalLayer)
     
@@ -69,6 +78,7 @@ class VideoSessionController: UIViewController {
     // 3
     pipelineState = try! VideoSessionController.device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     commandQueue = VideoSessionController.device.makeCommandQueue()
+    */
     
     startVideoCaptureSession()
   }
@@ -165,7 +175,7 @@ extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
         let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.r8Unorm, width, height, 0, &texture)
         if let texture = texture, status == kCVReturnSuccess {
           //print("capture", width, height, texture)
-          render(metalTexture:texture)
+          //render(metalTexture:texture)
         } else {
           print("capture failed")
         }
@@ -175,6 +185,7 @@ extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
     }
   }
   
+  /*
   func render(metalTexture:CVMetalTexture) {
     guard let drawable = metalLayer.nextDrawable(),
       let pipelineState = self.pipelineState,
@@ -200,6 +211,7 @@ extension VideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
     commandBuffer.commit()
     print("render", texture)
   }
+  */
 }
 
 

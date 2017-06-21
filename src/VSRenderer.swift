@@ -18,7 +18,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
         super.init()
         device = view.device
         
-        view.colorPixelFormat = .rgba8Unorm_srgb
+        //view.colorPixelFormat = .rgba8Unorm_srgb
         let defaultLibrary = VideoSessionController.device.newDefaultLibrary()!
         let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
         let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")

@@ -14,6 +14,7 @@ vertex float4 basic_vertex(const device packed_float3* vertex_array [[ buffer(0)
   return float4(vertex_array[vid], 1.0);
 }
 
+/*
 typedef struct {
   packed_float2 position;
   packed_float2 texcoord;
@@ -38,10 +39,9 @@ vertex Varyings vertexPassthrough(
   
   return out;
 }
+*/
 
-fragment half4 basic_fragment(Varyings in [[ stage_in ]], texture2d<float, access::sample> texture [[ texture(0) ]]) {
-  constexpr sampler s(address::clamp_to_edge, filter::linear);
-  return half4(texture.sample(s, in.texcoord));
-  //return half4(1.0);
+fragment half4 basic_fragment() {
+  return half4(1.0);
 }
 
