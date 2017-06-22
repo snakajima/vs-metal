@@ -29,10 +29,19 @@ class VSContext {
         self.pixelFormat = pixelFormat
     }
     
-    func set(width:Int, height:Int) {
-        if width==self.width && height==self.height {
+    func set(texture:MTLTexture) {
+        stack.removeAll() // for now
+        push(texture: texture)
+        
+        if texture.width==width && texture.height==height {
             return
         }
+        width = texture.width
+        height = texture.height
+        
+        transient.removeAll()
+        pool.removeAll()
+        
         descriptor.textureType = .type2D
         descriptor.pixelFormat = pixelFormat
         descriptor.width = width
@@ -41,15 +50,17 @@ class VSContext {
 
         threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
         threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
+
+        print("VSContext:set", threadGroupCount)
     }
     
-    func popTexture() -> MTLTexture {
+    func pop() -> MTLTexture {
         let texture = stack.popLast()!
         transient.append(texture)
         return texture
     }
     
-    func pushTexture(texture:MTLTexture) {
+    func push(texture:MTLTexture) {
         stack.append(texture)
     }
     
@@ -58,16 +69,16 @@ class VSContext {
         transient.removeAll()
     }
     
-    func getTexture() -> MTLTexture {
+    func get() -> MTLTexture {
         if let texture = pool.last {
             return texture
         }
         return device.makeTexture(descriptor: descriptor)
     }
     
-    func getAndPushTexture() -> MTLTexture {
-        let texture = getTexture()
-        pushTexture(texture: texture)
+    func getAndPush() -> MTLTexture {
+        let texture = get()
+        push(texture: texture)
         return texture
     }
 }

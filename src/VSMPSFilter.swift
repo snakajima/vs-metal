@@ -17,8 +17,8 @@ class VSMPSFilter: NSObject {
     }
 
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
-        let source = context.popTexture()
-        let destination = context.getAndPushTexture()
+        let source = context.pop()
+        let destination = context.getAndPush()
         kernel.encode(commandBuffer: commandBuffer, sourceTexture: source, destinationTexture: destination)
     }
 }

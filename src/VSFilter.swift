@@ -18,8 +18,8 @@ class VSFilter {
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
         let encoder = commandBuffer.makeComputeCommandEncoder()
         encoder.setComputePipelineState(pipelineState)
-        encoder.setTexture(context.popTexture(), at: 0)
-        encoder.setTexture(context.getAndPushTexture(), at: 1)
+        encoder.setTexture(context.pop(), at: 0)
+        encoder.setTexture(context.getAndPush(), at: 1)
         encoder.dispatchThreadgroups(context.threadGroupCount, threadsPerThreadgroup: context.threadGroupSize)
         encoder.endEncoding()
     }
