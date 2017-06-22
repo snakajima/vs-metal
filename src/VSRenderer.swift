@@ -105,7 +105,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             print("VSS:draw texture not updated")
             return
         }
-        let cmGrayScale:MTLCommandBuffer = {
+        let cmCompute:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()
             let encoder = commandBuffer.makeComputeCommandEncoder()
             encoder.setComputePipelineState(psGrayScale!)
@@ -113,11 +113,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             encoder.setTexture(textureOut0, at: 1)
             encoder.dispatchThreadgroups(threadGroupCount, threadsPerThreadgroup: threadGroupSize)
             encoder.endEncoding()
-            return commandBuffer
-        }()
-        
-        let cmGaussian:MTLCommandBuffer = {
-            let commandBuffer = commandQueue.makeCommandBuffer()
+
             guassian?.encode(commandBuffer: commandBuffer, sourceTexture: textureOut0!, destinationTexture: textureOut1!)
             return commandBuffer
         }()
@@ -136,8 +132,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             return commandBuffer
         }()
         
-        cmGrayScale.commit()
-        cmGaussian.commit()
+        cmCompute.commit()
         cmRender.commit()
     }
 }
