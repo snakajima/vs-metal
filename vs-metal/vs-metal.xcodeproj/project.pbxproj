@@ -20,6 +20,7 @@
 		74A39DD21EFC4778004713D8 /* VSMPSFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */; };
 		74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */; };
 		74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBF1EFC828E0039A0CA /* VSNode.swift */; };
+		74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BC11EFC84070039A0CA /* VSFilters.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSMPSFilter.swift; sourceTree = "<group>"; };
 		74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSRenderer.swift; sourceTree = "<group>"; };
 		74FB9BBF1EFC828E0039A0CA /* VSNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSNode.swift; sourceTree = "<group>"; };
+		74FB9BC11EFC84070039A0CA /* VSFilters.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSFilters.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +96,7 @@
 				74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */,
 				74A39DCF1EFC31AB004713D8 /* VSContext.swift */,
 				74A39DCB1EF9D106004713D8 /* VSRenderer.metal */,
+				74FB9BC11EFC84070039A0CA /* VSFilters.metal */,
 			);
 			name = src;
 			path = ../../src;
@@ -177,6 +180,7 @@
 				74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */,
 				74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */,
 				7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */,
+				74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */,
 				74A39DD21EFC4778004713D8 /* VSMPSFilter.swift in Sources */,
 				74A39DCC1EF9D106004713D8 /* VSRenderer.metal in Sources */,
 				74A39DCE1EFC30EB004713D8 /* VSFilter.swift in Sources */,

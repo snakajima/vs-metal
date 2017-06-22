@@ -22,7 +22,7 @@ class VSProcessor: NSObject, MTKViewDelegate {
         self.context = context
         super.init()
         
-        nodes.append(VSFilter(name: "grayscaleKernel", context: context))
+        nodes.append(VSFilter(name: "mono", context: context))
         nodes.append(VSMPSFilter(name: "gaussian", context: context))
         renderer = VSRenderer(context:context)
         
