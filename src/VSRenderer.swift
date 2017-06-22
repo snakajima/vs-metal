@@ -17,9 +17,11 @@ class VSRenderer: NSObject, MTKViewDelegate {
         }
     }
 
-    private var pipelineState: MTLRenderPipelineState?
-    private var commandQueue: MTLCommandQueue?
     private var textureUpdated = false
+    private var commandQueue: MTLCommandQueue?
+    
+    private var pipelineState: MTLRenderPipelineState?
+    private var psGrayScale: MTLComputePipelineState?
     
     struct VSVertex {
         let position:vector_float2
@@ -53,6 +55,10 @@ class VSRenderer: NSObject, MTKViewDelegate {
             pipelineStateDescriptor.fragmentFunction = fragmentProgram
             pipelineStateDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
             pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+            
+            //
+            let kernel = defaultLibrary.makeFunction(name: "grayscaleKernel")!
+            psGrayScale = try! device.makeComputePipelineState(function: kernel)
         }
         view.delegate = self
     }
@@ -76,17 +82,20 @@ class VSRenderer: NSObject, MTKViewDelegate {
             return
         }
 
-        let commandBuffer = commandQueue.makeCommandBuffer()
-        let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
-        encoder.setRenderPipelineState(pipelineState)
-        encoder.setVertexBytes(VSRenderer.vertexData, length: dataSize, at: 0)
-        encoder.setFragmentTexture(CVMetalTextureGetTexture(texture), at: 0)
-        encoder.drawPrimitives(type: .triangle, vertexStart: 0,
-                               vertexCount: VSRenderer.vertexData.count,
-                               instanceCount: VSRenderer.vertexData.count/3)
-        encoder.endEncoding()
+        let cmRender:MTLCommandBuffer = {
+            let commandBuffer = commandQueue.makeCommandBuffer()
+            let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
+            encoder.setRenderPipelineState(pipelineState)
+            encoder.setVertexBytes(VSRenderer.vertexData, length: dataSize, at: 0)
+            encoder.setFragmentTexture(CVMetalTextureGetTexture(texture), at: 0)
+            encoder.drawPrimitives(type: .triangle, vertexStart: 0,
+                                   vertexCount: VSRenderer.vertexData.count,
+                                   instanceCount: VSRenderer.vertexData.count/3)
+            encoder.endEncoding()
+            commandBuffer.present(drawable)
+            return commandBuffer
+        }()
         
-        commandBuffer.present(drawable)
-        commandBuffer.commit()
+        cmRender.commit()
     }
 }
