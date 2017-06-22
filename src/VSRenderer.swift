@@ -114,23 +114,20 @@ class VSRenderer: NSObject, MTKViewDelegate {
         }
         let cmCompute:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()
-            let encoder = commandBuffer.makeComputeCommandEncoder()
-            encoder.setComputePipelineState(psGrayScale!)
-            encoder.setTexture(textureIn, at: 0)
-            encoder.setTexture(textureOut0, at: 1)
-            encoder.dispatchThreadgroups(threadGroupCount, threadsPerThreadgroup: threadGroupSize)
-            encoder.endEncoding()
-
-            guassian?.encode(commandBuffer: commandBuffer, sourceTexture: textureOut0!, destinationTexture: textureOut1!)
+            filter0!.encode(commandBuffer: commandBuffer, context: context)
+            context.flush()
+            filter1!.encode(commandBuffer: commandBuffer, context: context)
+            context.flush()
             return commandBuffer
         }()
 
+        let texture = context.pop()
         let cmRender:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()
             let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
             encoder.setRenderPipelineState(pipelineState)
             encoder.setVertexBytes(VSRenderer.vertexData, length: dataSize, at: 0)
-            encoder.setFragmentTexture(textureOut1, at: 0)
+            encoder.setFragmentTexture(texture, at: 0)
             encoder.drawPrimitives(type: .triangle, vertexStart: 0,
                                    vertexCount: VSRenderer.vertexData.count,
                                    instanceCount: VSRenderer.vertexData.count/3)

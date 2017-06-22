@@ -23,18 +23,19 @@ class VSContext {
     private var stack = [MTLTexture]()
     private var pool = [MTLTexture]()
     private var transient = [MTLTexture]()
+    private var source:MTLTexture?
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
         self.device = device
         self.pixelFormat = pixelFormat
     }
     
-    var isEmpty:Bool { return stack.isEmpty }
+    var isEmpty:Bool { return source==nil }
     
     // Special type of push for the video source
     func set(texture:MTLTexture) {
-        stack.removeAll() // for now
-        push(texture: texture)
+        stack.removeAll() // HACK: for now
+        source = texture
         
         if texture.width==width && texture.height==height {
             return
@@ -54,13 +55,15 @@ class VSContext {
         threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
         threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
 
-        print("VSContext:set", threadGroupCount)
+        print("VSContext:set", threadGroupCount, texture.usage)
     }
     
     func pop() -> MTLTexture {
-        let texture = stack.popLast()!
-        transient.append(texture)
-        return texture
+        if let texture = stack.popLast() {
+            transient.append(texture)
+            return texture
+        }
+        return source!
     }
     
     func push(texture:MTLTexture) {
@@ -68,7 +71,7 @@ class VSContext {
     }
     
     func flush() {
-        stack.append(contentsOf: transient)
+        pool.append(contentsOf: transient)
         transient.removeAll()
     }
     
