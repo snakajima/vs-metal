@@ -12,8 +12,9 @@ import MetalPerformanceShaders
 class VSMPSFilter: VSNode {
     let kernel:MPSUnaryImageKernel
     
-    init(name:String, context:VSContext) {
-        kernel = MPSImageGaussianBlur(device: context.device, sigma: 5.0)
+    init(name:String, params:[String:Any], context:VSContext) {
+        let sigma = (params["sigma"] as? Double) ?? 1.0
+        kernel = MPSImageGaussianBlur(device: context.device, sigma: Float(sigma))
     }
 
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {

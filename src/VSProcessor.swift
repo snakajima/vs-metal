@@ -22,8 +22,10 @@ class VSProcessor: NSObject, MTKViewDelegate {
         self.context = context
         super.init()
         
-        nodes.append(VSFilter(name: "mono", context: context))
-        nodes.append(VSMPSFilter(name: "gaussian", context: context))
+        nodes = [
+            VSFilter(name: "mono", params: ["weight" : [0.2126, 0.7152, 0.0722]], context: context),
+            VSMPSFilter(name: "gaussian", params: ["sigma" : 5.0], context: context)
+        ]
         renderer = VSRenderer(context:context)
         
         // create a single command queue for rendering to this view

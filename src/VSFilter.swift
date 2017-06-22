@@ -11,7 +11,10 @@ import Metal
 
 class VSFilter: VSNode {
     let pipelineState:MTLComputePipelineState
-    init(name:String, context:VSContext) {
+    let params:[String:Any]
+    
+    init(name:String, params:[String:Any], context:VSContext) {
+        self.params = params
         let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name)!
         pipelineState = try! context.device.makeComputePipelineState(function: kernel)
     }
