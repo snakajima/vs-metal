@@ -16,6 +16,10 @@ class VSRenderer: NSObject, MTKViewDelegate {
             textureUpdated = true
         }
     }
+    
+    private var textureOut:MTLTexture?
+    private var threadGroupSize = MTLSizeMake(16,16,1)
+    private var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled
 
     private var textureUpdated = false
     private var commandQueue: MTLCommandQueue?
@@ -59,6 +63,19 @@ class VSRenderer: NSObject, MTKViewDelegate {
             //
             let kernel = defaultLibrary.makeFunction(name: "grayscaleKernel")!
             psGrayScale = try! device.makeComputePipelineState(function: kernel)
+            
+            let descriptor = MTLTextureDescriptor()
+            descriptor.textureType = .type2D
+            descriptor.pixelFormat = view.colorPixelFormat
+            descriptor.width = width
+            descriptor.height = height
+            descriptor.usage = [.shaderRead, .shaderWrite]
+            textureOut = device.makeTexture(descriptor: descriptor)
+            
+            threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
+            threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
+            
+            print("VSR", threadGroupCount)
         }
         view.delegate = self
     }
