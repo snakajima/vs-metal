@@ -12,7 +12,7 @@ import MetalPerformanceShaders
 
 class VSRenderer: NSObject, MTKViewDelegate {
     // Public properties to be updated by the caller (controller)
-    var textureIn:CVMetalTexture? {
+    var textureIn:MTLTexture? {
         didSet {
             textureUpdated = true
         }
@@ -109,7 +109,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             let commandBuffer = commandQueue.makeCommandBuffer()
             let encoder = commandBuffer.makeComputeCommandEncoder()
             encoder.setComputePipelineState(psGrayScale!)
-            encoder.setTexture(CVMetalTextureGetTexture(textureIn), at: 0)
+            encoder.setTexture(textureIn, at: 0)
             encoder.setTexture(textureOut0, at: 1)
             encoder.dispatchThreadgroups(threadGroupCount, threadsPerThreadgroup: threadGroupSize)
             encoder.endEncoding()

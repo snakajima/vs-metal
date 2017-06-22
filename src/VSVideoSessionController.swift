@@ -117,7 +117,7 @@ extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegat
                     if renderer == nil, let mtkView = self.view as? MTKView {
                         renderer = VSRenderer(view:mtkView, width:width, height:height)
                     }
-                    renderer?.textureIn = metalTexture
+                    renderer?.textureIn = CVMetalTextureGetTexture(metalTexture)
                 } else {
                     print("VSVS: failed to create texture")
                 }
