@@ -29,6 +29,9 @@ class VSContext {
         self.pixelFormat = pixelFormat
     }
     
+    var isEmpty:Bool { return stack.isEmpty }
+    
+    // Special type of push for the video source
     func set(texture:MTLTexture) {
         stack.removeAll() // for now
         push(texture: texture)

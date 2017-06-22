@@ -12,6 +12,9 @@ import MetalPerformanceShaders
 
 class VSRenderer: NSObject, MTKViewDelegate {
     let context:VSContext
+    var filter0:VSFilter?
+    var filter1:VSMPSFilter?
+    
     // Public properties to be updated by the caller (controller)
     var textureIn:MTLTexture? {
         didSet {
@@ -49,6 +52,9 @@ class VSRenderer: NSObject, MTKViewDelegate {
     init(context:VSContext, view:MTKView, width:Int, height:Int) {
         self.context = context
         super.init()
+        
+        filter0 = VSFilter(name: "grayscaleKernel", context: context)
+        filter1 = VSMPSFilter(name: "gaussian", context: context)
         
         // create a single command queue for rendering to this view
         commandQueue = context.device.makeCommandQueue()
@@ -102,7 +108,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             return
         }
         
-        guard textureUpdated else {
+        if context.isEmpty {
             print("VSS:draw texture not updated")
             return
         }
