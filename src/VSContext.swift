@@ -11,6 +11,7 @@ import UIKit
 class VSContext {
     let device:MTLDevice
     let library:MTLLibrary
+    var piexlFormat = MTLPixelFormat.bgra8Unorm
     let threadGroupSize = MTLSizeMake(16,16,1)
     var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
 
@@ -28,9 +29,12 @@ class VSContext {
         library = device.newDefaultLibrary()!
     }
     
-    func set(width:Int, height:Int, colorPixelFormat:MTLPixelFormat) {
+    func set(width:Int, height:Int) {
+        if width==self.width && height==self.height {
+            return
+        }
         descriptor.textureType = .type2D
-        descriptor.pixelFormat = colorPixelFormat
+        descriptor.pixelFormat = pixelFormat
         descriptor.width = width
         descriptor.height = height
         descriptor.usage = [.shaderRead, .shaderWrite]
