@@ -8,6 +8,7 @@
 
 import UIKit
 import MetalKit
+import MetalPerformanceShaders
 
 class VSRenderer: NSObject, MTKViewDelegate {
     // Public properties to be updated by the caller (controller)
@@ -17,7 +18,8 @@ class VSRenderer: NSObject, MTKViewDelegate {
         }
     }
     
-    private var textureOut:MTLTexture?
+    private var textureOut0:MTLTexture?
+    private var textureOut1:MTLTexture?
     private var threadGroupSize = MTLSizeMake(16,16,1)
     private var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
 
@@ -26,6 +28,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
     
     private var pipelineState: MTLRenderPipelineState?
     private var psGrayScale: MTLComputePipelineState?
+    private var guassian:MPSUnaryImageKernel?
     
     struct VSVertex {
         let position:vector_float2
@@ -71,7 +74,10 @@ class VSRenderer: NSObject, MTKViewDelegate {
             descriptor.width = width
             descriptor.height = height
             descriptor.usage = [.shaderRead, .shaderWrite]
-            textureOut = device.makeTexture(descriptor: descriptor)
+            textureOut0 = device.makeTexture(descriptor: descriptor)
+            textureOut1 = device.makeTexture(descriptor: descriptor)
+            
+            guassian = MPSImageGaussianBlur(device: device, sigma: 5.0)
             
             threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
             threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
@@ -99,15 +105,20 @@ class VSRenderer: NSObject, MTKViewDelegate {
             print("VSS:draw texture not updated")
             return
         }
-        
         let cmGrayScale:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()
             let encoder = commandBuffer.makeComputeCommandEncoder()
             encoder.setComputePipelineState(psGrayScale!)
             encoder.setTexture(CVMetalTextureGetTexture(textureIn), at: 0)
-            encoder.setTexture(textureOut, at: 1)
+            encoder.setTexture(textureOut0, at: 1)
             encoder.dispatchThreadgroups(threadGroupCount, threadsPerThreadgroup: threadGroupSize)
             encoder.endEncoding()
+            return commandBuffer
+        }()
+        
+        let cmGaussian:MTLCommandBuffer = {
+            let commandBuffer = commandQueue.makeCommandBuffer()
+            guassian?.encode(commandBuffer: commandBuffer, sourceTexture: textureOut0!, destinationTexture: textureOut1!)
             return commandBuffer
         }()
 
@@ -116,7 +127,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
             encoder.setRenderPipelineState(pipelineState)
             encoder.setVertexBytes(VSRenderer.vertexData, length: dataSize, at: 0)
-            encoder.setFragmentTexture(textureOut, at: 0)
+            encoder.setFragmentTexture(textureOut1, at: 0)
             encoder.drawPrimitives(type: .triangle, vertexStart: 0,
                                    vertexCount: VSRenderer.vertexData.count,
                                    instanceCount: VSRenderer.vertexData.count/3)
@@ -126,6 +137,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
         }()
         
         cmGrayScale.commit()
+        cmGaussian.commit()
         cmRender.commit()
     }
 }
