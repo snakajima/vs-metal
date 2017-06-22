@@ -12,8 +12,7 @@ import MetalPerformanceShaders
 
 class VSProcessor: NSObject, MTKViewDelegate {
     let context:VSContext
-    var filter0:VSNode?
-    var filter1:VSNode?
+    var nodes = [VSNode]()
     var renderer:VSRenderer?
     
     private var commandQueue: MTLCommandQueue?
@@ -23,8 +22,8 @@ class VSProcessor: NSObject, MTKViewDelegate {
         self.context = context
         super.init()
         
-        filter0 = VSFilter(name: "grayscaleKernel", context: context)
-        filter1 = VSMPSFilter(name: "gaussian", context: context)
+        nodes.append(VSFilter(name: "grayscaleKernel", context: context))
+        nodes.append(VSMPSFilter(name: "gaussian", context: context))
         renderer = VSRenderer(context:context)
         
         // create a single command queue for rendering to this view
@@ -49,10 +48,10 @@ class VSProcessor: NSObject, MTKViewDelegate {
         }
         let cmCompute:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()
-            filter0!.encode(commandBuffer: commandBuffer, context: context)
-            context.flush()
-            filter1!.encode(commandBuffer: commandBuffer, context: context)
-            context.flush()
+            for node in nodes {
+                node.encode(commandBuffer:commandBuffer, context:context)
+                context.flush()
+            }
             return commandBuffer
         }()
 
