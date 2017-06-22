@@ -10,7 +10,7 @@ import UIKit
 import MetalKit
 import MetalPerformanceShaders
 
-class VSRenderer: NSObject, MTKViewDelegate {
+class VSProcessor: NSObject, MTKViewDelegate {
     let context:VSContext
     var filter0:VSFilter?
     var filter1:VSMPSFilter?
@@ -31,7 +31,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
         VSVertex(position:[1.0,  1.0], textureCoordinate:[0.0, 1.0]),
         VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
     ]
-    let dataSize = VSRenderer.vertexData.count * MemoryLayout.size(ofValue: VSRenderer.vertexData[0])
+    let dataSize = VSProcessor.vertexData.count * MemoryLayout.size(ofValue: VSProcessor.vertexData[0])
 
     // width/height are texture's, not view's
     init(context:VSContext, view:MTKView) {
@@ -90,11 +90,11 @@ class VSRenderer: NSObject, MTKViewDelegate {
             let commandBuffer = commandQueue.makeCommandBuffer()
             let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
             encoder.setRenderPipelineState(pipelineState)
-            encoder.setVertexBytes(VSRenderer.vertexData, length: dataSize, at: 0)
+            encoder.setVertexBytes(VSProcessor.vertexData, length: dataSize, at: 0)
             encoder.setFragmentTexture(texture, at: 0)
             encoder.drawPrimitives(type: .triangle, vertexStart: 0,
-                                   vertexCount: VSRenderer.vertexData.count,
-                                   instanceCount: VSRenderer.vertexData.count/3)
+                                   vertexCount: VSProcessor.vertexData.count,
+                                   instanceCount: VSProcessor.vertexData.count/3)
             encoder.endEncoding()
             commandBuffer.present(drawable)
             return commandBuffer

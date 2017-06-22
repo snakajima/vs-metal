@@ -31,7 +31,7 @@ class VSVideoSessionController: UIViewController {
         CVMetalTextureCacheCreate(nil, nil, self.context!.device, nil, &cache)
         return cache!
     }()
-    fileprivate var renderer:VSRenderer?
+    fileprivate var renderer:VSProcessor?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +42,7 @@ class VSVideoSessionController: UIViewController {
         }
 
         context = VSContext(device: MTLCreateSystemDefaultDevice()!, pixelFormat: mtkView.colorPixelFormat)
-        renderer = VSRenderer(context:context!, view:mtkView)
+        renderer = VSProcessor(context:context!, view:mtkView)
         mtkView.device = context!.device
 
         startVideoCaptureSession()
