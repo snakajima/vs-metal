@@ -19,7 +19,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
     
     private var textureOut:MTLTexture?
     private var threadGroupSize = MTLSizeMake(16,16,1)
-    private var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled
+    private var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
 
     private var textureUpdated = false
     private var commandQueue: MTLCommandQueue?
@@ -41,6 +41,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
     ]
     let dataSize = VSRenderer.vertexData.count * MemoryLayout.size(ofValue: VSRenderer.vertexData[0])
 
+    // width/height are texture's, not view's
     init(view:MTKView, width:Int, height:Int) {
         super.init()
         
