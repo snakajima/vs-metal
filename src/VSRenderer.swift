@@ -50,42 +50,41 @@ class VSRenderer: NSObject, MTKViewDelegate {
         self.context = context
         super.init()
         
-        if let device = view.device {
-            // create a single command queue for rendering to this view
-            commandQueue = device.makeCommandQueue()
+        // create a single command queue for rendering to this view
+        commandQueue = context.device.makeCommandQueue()
 
-            // load vertex & fragment shaders
-            let defaultLibrary = device.newDefaultLibrary()!
-            let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
-            let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
+        // load vertex & fragment shaders
+        let defaultLibrary = context.device.newDefaultLibrary()!
+        let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
+        let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
 
-            // compile them into a pipeline state object
-            let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
-            pipelineStateDescriptor.vertexFunction = vertexProgram
-            pipelineStateDescriptor.fragmentFunction = fragmentProgram
-            pipelineStateDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
-            pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
-            
-            //
-            let kernel = defaultLibrary.makeFunction(name: "grayscaleKernel")!
-            psGrayScale = try! device.makeComputePipelineState(function: kernel)
-            
-            let descriptor = MTLTextureDescriptor()
-            descriptor.textureType = .type2D
-            descriptor.pixelFormat = view.colorPixelFormat
-            descriptor.width = width
-            descriptor.height = height
-            descriptor.usage = [.shaderRead, .shaderWrite]
-            textureOut0 = device.makeTexture(descriptor: descriptor)
-            textureOut1 = device.makeTexture(descriptor: descriptor)
-            
-            guassian = MPSImageGaussianBlur(device: device, sigma: 5.0)
-            
-            threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
-            threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
-            
-            print("VSR", threadGroupCount)
-        }
+        // compile them into a pipeline state object
+        let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
+        pipelineStateDescriptor.vertexFunction = vertexProgram
+        pipelineStateDescriptor.fragmentFunction = fragmentProgram
+        pipelineStateDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
+        pipelineState = try! context.device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        
+        //
+        let kernel = defaultLibrary.makeFunction(name: "grayscaleKernel")!
+        psGrayScale = try! context.device.makeComputePipelineState(function: kernel)
+        
+        let descriptor = MTLTextureDescriptor()
+        descriptor.textureType = .type2D
+        descriptor.pixelFormat = view.colorPixelFormat
+        descriptor.width = width
+        descriptor.height = height
+        descriptor.usage = [.shaderRead, .shaderWrite]
+        textureOut0 = context.device.makeTexture(descriptor: descriptor)
+        textureOut1 = context.device.makeTexture(descriptor: descriptor)
+        
+        guassian = MPSImageGaussianBlur(device: context.device, sigma: 5.0)
+        
+        threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
+        threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
+        
+        print("VSR", threadGroupCount)
+
         view.delegate = self
     }
 
