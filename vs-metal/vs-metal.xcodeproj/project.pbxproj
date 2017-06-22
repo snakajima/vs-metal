@@ -15,6 +15,8 @@
 		744733231EF9BA24008CD8C5 /* VSVideoSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744733221EF9BA24008CD8C5 /* VSVideoSessionController.swift */; };
 		7480D28B1EFA928B00DAA88E /* VSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7480D28A1EFA928B00DAA88E /* VSRenderer.swift */; };
 		74A39DCC1EF9D106004713D8 /* VSRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCB1EF9D106004713D8 /* VSRenderer.metal */; };
+		74A39DCE1EFC30EB004713D8 /* VSFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCD1EFC30EB004713D8 /* VSFilter.swift */; };
+		74A39DD01EFC31AB004713D8 /* VSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCF1EFC31AB004713D8 /* VSContext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		744733221EF9BA24008CD8C5 /* VSVideoSessionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSVideoSessionController.swift; sourceTree = "<group>"; };
 		7480D28A1EFA928B00DAA88E /* VSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSRenderer.swift; sourceTree = "<group>"; };
 		74A39DCB1EF9D106004713D8 /* VSRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSRenderer.metal; sourceTree = "<group>"; };
+		74A39DCD1EFC30EB004713D8 /* VSFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSFilter.swift; sourceTree = "<group>"; };
+		74A39DCF1EFC31AB004713D8 /* VSContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSContext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +82,8 @@
 			children = (
 				744733221EF9BA24008CD8C5 /* VSVideoSessionController.swift */,
 				7480D28A1EFA928B00DAA88E /* VSRenderer.swift */,
+				74A39DCD1EFC30EB004713D8 /* VSFilter.swift */,
+				74A39DCF1EFC31AB004713D8 /* VSContext.swift */,
 				74A39DCB1EF9D106004713D8 /* VSRenderer.metal */,
 			);
 			name = src;
@@ -161,7 +167,9 @@
 				744733111EF9B4FF008CD8C5 /* ViewController.swift in Sources */,
 				7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */,
 				74A39DCC1EF9D106004713D8 /* VSRenderer.metal in Sources */,
+				74A39DCE1EFC30EB004713D8 /* VSFilter.swift in Sources */,
 				7480D28B1EFA928B00DAA88E /* VSRenderer.swift in Sources */,
+				74A39DD01EFC31AB004713D8 /* VSContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
