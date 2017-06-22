@@ -64,4 +64,10 @@ class VSContext {
         }
         return device.makeTexture(descriptor: descriptor)
     }
+    
+    func getAndPushTexture() -> MTLTexture {
+        let texture = getTexture()
+        pushTexture(texture: texture)
+        return texture
+    }
 }

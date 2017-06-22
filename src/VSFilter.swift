@@ -19,7 +19,7 @@ class VSFilter {
         let encoder = commandBuffer.makeComputeCommandEncoder()
         encoder.setComputePipelineState(pipelineState)
         encoder.setTexture(context.popTexture(), at: 0)
-        encoder.setTexture(context.getTexture(), at: 1)
+        encoder.setTexture(context.getAndPushTexture(), at: 1)
         encoder.dispatchThreadgroups(context.threadGroupCount, threadsPerThreadgroup: context.threadGroupSize)
         encoder.endEncoding()
     }
