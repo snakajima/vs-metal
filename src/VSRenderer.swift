@@ -15,24 +15,9 @@ class VSRenderer: NSObject, MTKViewDelegate {
     var filter0:VSFilter?
     var filter1:VSMPSFilter?
     
-    // Public properties to be updated by the caller (controller)
-    var textureIn:MTLTexture? {
-        didSet {
-            textureUpdated = true
-        }
-    }
-    
-    private var textureOut0:MTLTexture?
-    private var textureOut1:MTLTexture?
-    private var threadGroupSize = MTLSizeMake(16,16,1)
-    private var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
-
-    private var textureUpdated = false
     private var commandQueue: MTLCommandQueue?
     
     private var pipelineState: MTLRenderPipelineState?
-    private var psGrayScale: MTLComputePipelineState?
-    private var guassian:MPSUnaryImageKernel?
     
     struct VSVertex {
         let position:vector_float2
@@ -70,26 +55,6 @@ class VSRenderer: NSObject, MTKViewDelegate {
         pipelineStateDescriptor.fragmentFunction = fragmentProgram
         pipelineStateDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat
         pipelineState = try! context.device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
-        
-        //
-        let kernel = defaultLibrary.makeFunction(name: "grayscaleKernel")!
-        psGrayScale = try! context.device.makeComputePipelineState(function: kernel)
-        
-        let descriptor = MTLTextureDescriptor()
-        descriptor.textureType = .type2D
-        descriptor.pixelFormat = view.colorPixelFormat
-        descriptor.width = width
-        descriptor.height = height
-        descriptor.usage = [.shaderRead, .shaderWrite]
-        textureOut0 = context.device.makeTexture(descriptor: descriptor)
-        textureOut1 = context.device.makeTexture(descriptor: descriptor)
-        
-        guassian = MPSImageGaussianBlur(device: context.device, sigma: 5.0)
-        
-        threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
-        threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
-        
-        print("VSR", threadGroupCount)
 
         view.delegate = self
     }
@@ -102,7 +67,6 @@ class VSRenderer: NSObject, MTKViewDelegate {
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
               let drawable = view.currentDrawable,
               let pipelineState = self.pipelineState,
-              let textureIn = self.textureIn,
               let commandQueue = self.commandQueue else {
             print("VSR:draw something is wrong")
             return
