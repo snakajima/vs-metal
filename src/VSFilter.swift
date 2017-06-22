@@ -6,9 +6,10 @@
 //  Copyright © 2017 SATOSHI NAKAJIMA. All rights reserved.
 //
 
-import UIKit
+import Foundation
+import Metal
 
-class VSFilter {
+class VSFilter: VSNode {
     let pipelineState:MTLComputePipelineState
     init(name:String, context:VSContext) {
         let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name)!

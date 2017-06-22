@@ -6,10 +6,10 @@
 //  Copyright © 2017 SATOSHI NAKAJIMA. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import MetalPerformanceShaders
 
-class VSMPSFilter: NSObject {
+class VSMPSFilter: VSNode {
     let kernel:MPSUnaryImageKernel
     
     init(name:String, context:VSContext) {

@@ -6,14 +6,14 @@
 //  Copyright © 2017 SATOSHI NAKAJIMA. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import MetalKit
 import MetalPerformanceShaders
 
 class VSProcessor: NSObject, MTKViewDelegate {
     let context:VSContext
-    var filter0:VSFilter?
-    var filter1:VSMPSFilter?
+    var filter0:VSNode?
+    var filter1:VSNode?
     var renderer:VSRenderer?
     
     private var commandQueue: MTLCommandQueue?
