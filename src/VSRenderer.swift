@@ -11,7 +11,7 @@ import MetalKit
 
 class VSRenderer: NSObject, MTKViewDelegate {
     // Public properties to be updated by the caller (controller)
-    var texture:CVMetalTexture? {
+    var textureIn:CVMetalTexture? {
         didSet {
             textureUpdated = true
         }
@@ -37,7 +37,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
     ]
     let dataSize = VSRenderer.vertexData.count * MemoryLayout.size(ofValue: VSRenderer.vertexData[0])
 
-    init(view:MTKView) {
+    init(view:MTKView, width:Int, height:Int) {
         super.init()
         
         if let device = view.device {
@@ -71,7 +71,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
               let drawable = view.currentDrawable,
               let pipelineState = self.pipelineState,
-              let texture = self.texture,
+              let textureIn = self.textureIn,
               let commandQueue = self.commandQueue else {
             print("VSR:draw something is wrong")
             return
@@ -99,7 +99,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
             encoder.setRenderPipelineState(pipelineState)
             encoder.setVertexBytes(VSRenderer.vertexData, length: dataSize, at: 0)
-            encoder.setFragmentTexture(CVMetalTextureGetTexture(texture), at: 0)
+            encoder.setFragmentTexture(CVMetalTextureGetTexture(textureIn), at: 0)
             encoder.drawPrimitives(type: .triangle, vertexStart: 0,
                                    vertexCount: VSRenderer.vertexData.count,
                                    instanceCount: VSRenderer.vertexData.count/3)
