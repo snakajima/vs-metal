@@ -11,7 +11,7 @@ import UIKit
 class VSFilter {
     let pipelineState:MTLComputePipelineState
     init(name:String, context:VSContext) {
-        let kernel = context.library.makeFunction(name: name)!
+        let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name)!
         pipelineState = try! context.device.makeComputePipelineState(function: kernel)
     }
     

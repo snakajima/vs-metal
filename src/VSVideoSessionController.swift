@@ -14,6 +14,7 @@ class VSVideoSessionController: UIViewController {
     // Public properties to be specified by the callers
     var useFrontCamera = true
     var fps:Int?
+    var context:VSContext?
 
     // Calculated properties
     private var cameraPosition:AVCaptureDevicePosition {
@@ -25,10 +26,9 @@ class VSVideoSessionController: UIViewController {
     private var camera:AVCaptureDevice?
 
     // Metal properties
-    private static let device = MTLCreateSystemDefaultDevice()!
-    fileprivate let textureCache:CVMetalTextureCache = {
+    fileprivate lazy var textureCache:CVMetalTextureCache = {
         var cache:CVMetalTextureCache? = nil
-        CVMetalTextureCacheCreate(nil, nil, VSVideoSessionController.device, nil, &cache)
+        CVMetalTextureCacheCreate(nil, nil, self.context!.device, nil, &cache)
         return cache!
     }()
     fileprivate var renderer:VSRenderer?
@@ -40,8 +40,9 @@ class VSVideoSessionController: UIViewController {
             print("VSVS: view is not an MTKView")
             return
         }
-        
-        mtkView.device = VSVideoSessionController.device
+
+        context = VSContext(device: MTLCreateSystemDefaultDevice()!, pixelFormat: mtkView.colorPixelFormat)
+        mtkView.device = context!.device
         startVideoCaptureSession()
     }
 

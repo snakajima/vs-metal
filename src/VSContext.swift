@@ -10,11 +10,11 @@ import UIKit
 
 class VSContext {
     let device:MTLDevice
-    let library:MTLLibrary
-    var piexlFormat = MTLPixelFormat.bgra8Unorm
+    let pixelFormat:MTLPixelFormat
     let threadGroupSize = MTLSizeMake(16,16,1)
     var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
 
+    private var width = 1, height = 1 // to be set later
     private var descriptor = MTLTextureDescriptor()
     
     // stack: texture stack for the video pipeline
@@ -24,9 +24,9 @@ class VSContext {
     private var pool = [MTLTexture]()
     private var transient = [MTLTexture]()
     
-    init() {
-        device = MTLCreateSystemDefaultDevice()!
-        library = device.newDefaultLibrary()!
+    init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
+        self.device = device
+        self.pixelFormat = pixelFormat
     }
     
     func set(width:Int, height:Int) {
