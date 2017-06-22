@@ -11,6 +11,7 @@ import MetalKit
 import MetalPerformanceShaders
 
 class VSRenderer: NSObject, MTKViewDelegate {
+    let context:VSContext
     // Public properties to be updated by the caller (controller)
     var textureIn:MTLTexture? {
         didSet {
@@ -45,7 +46,8 @@ class VSRenderer: NSObject, MTKViewDelegate {
     let dataSize = VSRenderer.vertexData.count * MemoryLayout.size(ofValue: VSRenderer.vertexData[0])
 
     // width/height are texture's, not view's
-    init(view:MTKView, width:Int, height:Int) {
+    init(context:VSContext, view:MTKView, width:Int, height:Int) {
+        self.context = context
         super.init()
         
         if let device = view.device {
