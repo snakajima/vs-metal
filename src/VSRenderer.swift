@@ -99,24 +99,23 @@ class VSRenderer: NSObject, MTKViewDelegate {
             return
         }
         
-        /*
         let cmGrayScale:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()
             let encoder = commandBuffer.makeComputeCommandEncoder()
-            encoder.setComputePipelineState(psGrayScale)
-            //encoder.setTexture(xxx, at: 0)
-            //encoder.setTexture(xxx, at: 1)
+            encoder.setComputePipelineState(psGrayScale!)
+            encoder.setTexture(CVMetalTextureGetTexture(textureIn), at: 0)
+            encoder.setTexture(textureOut, at: 1)
+            encoder.dispatchThreadgroups(threadGroupCount, threadsPerThreadgroup: threadGroupSize)
             encoder.endEncoding()
             return commandBuffer
         }()
-        */
 
         let cmRender:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()
             let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
             encoder.setRenderPipelineState(pipelineState)
             encoder.setVertexBytes(VSRenderer.vertexData, length: dataSize, at: 0)
-            encoder.setFragmentTexture(CVMetalTextureGetTexture(textureIn), at: 0)
+            encoder.setFragmentTexture(textureOut, at: 0)
             encoder.drawPrimitives(type: .triangle, vertexStart: 0,
                                    vertexCount: VSRenderer.vertexData.count,
                                    instanceCount: VSRenderer.vertexData.count/3)
@@ -125,7 +124,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             return commandBuffer
         }()
         
-        //cmGrayScale.commit()
+        cmGrayScale.commit()
         cmRender.commit()
     }
 }
