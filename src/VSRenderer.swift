@@ -34,7 +34,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
     let dataSize = VSRenderer.vertexData.count * MemoryLayout.size(ofValue: VSRenderer.vertexData[0])
 
     // width/height are texture's, not view's
-    init(context:VSContext, view:MTKView, width:Int, height:Int) {
+    init(context:VSContext, view:MTKView) {
         self.context = context
         super.init()
         

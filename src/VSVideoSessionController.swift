@@ -42,7 +42,9 @@ class VSVideoSessionController: UIViewController {
         }
 
         context = VSContext(device: MTLCreateSystemDefaultDevice()!, pixelFormat: mtkView.colorPixelFormat)
+        renderer = VSRenderer(context:context!, view:mtkView)
         mtkView.device = context!.device
+
         startVideoCaptureSession()
     }
 
@@ -115,9 +117,6 @@ extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegat
                 var metalTexture:CVMetalTexture? = nil
                 let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.bgra8Unorm, width, height, 0, &metalTexture)
                 if let metalTexture = metalTexture, status == kCVReturnSuccess {
-                    if renderer == nil, let mtkView = self.view as? MTKView {
-                        renderer = VSRenderer(context:context!, view:mtkView, width:width, height:height)
-                    }
                     let texture = CVMetalTextureGetTexture(metalTexture)!
                     context?.set(texture: texture)
                 } else {
