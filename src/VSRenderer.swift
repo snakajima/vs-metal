@@ -81,6 +81,18 @@ class VSRenderer: NSObject, MTKViewDelegate {
             print("VSS:draw texture not updated")
             return
         }
+        
+        /*
+        let cmGrayScale:MTLCommandBuffer = {
+            let commandBuffer = commandQueue.makeCommandBuffer()
+            let encoder = commandBuffer.makeComputeCommandEncoder()
+            encoder.setComputePipelineState(psGrayScale)
+            //encoder.setTexture(xxx, at: 0)
+            //encoder.setTexture(xxx, at: 1)
+            encoder.endEncoding()
+            return commandBuffer
+        }()
+        */
 
         let cmRender:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()
@@ -96,6 +108,7 @@ class VSRenderer: NSObject, MTKViewDelegate {
             return commandBuffer
         }()
         
+        //cmGrayScale.commit()
         cmRender.commit()
     }
 }
