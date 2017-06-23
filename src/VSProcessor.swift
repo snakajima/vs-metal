@@ -12,7 +12,7 @@ import MetalPerformanceShaders
 
 class VSProcessor: NSObject, MTKViewDelegate {
     let context:VSContext
-    var nodes = [VSNode]()
+    var nodes:[VSNode]
     var renderer:VSRenderer?
     
     private var commandQueue: MTLCommandQueue?
@@ -20,12 +20,14 @@ class VSProcessor: NSObject, MTKViewDelegate {
     // width/height are texture's, not view's
     init(context:VSContext, view:MTKView) {
         self.context = context
+        nodes = [VSNode]()
         super.init()
         
-        nodes = [
-            VSFilter(name: "mono", params: ["weight" : [0.2126, 0.7152, 0.0722] as [Float], "color" : [1.0, 1.0, 0.0, 1.0] as [Float]], context: context),
-            VSMPSFilter(name: "gaussianblur", params: ["sigma" : [5.0] as [Float]], context: context)
-        ]
+        nodes.append(
+            VSFilter(name: "mono", params: ["weight" : [0.2126, 0.7152, 0.0722] as [Float], "color" : [1.0, 1.0, 0.0, 1.0] as [Float]], context: context))
+        nodes.append(
+            VSMPSFilter(name: "gaussianblur", params: ["sigma" : [5.0] as [Float]], context: context))
+
         renderer = VSRenderer(context:context)
         
         // create a single command queue for rendering to this view
