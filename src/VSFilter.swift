@@ -22,12 +22,18 @@ class VSFilter: VSNode {
         if let info = context.nodes[name],
             let attrs = info["attr"] as? [[String:Any]] {
             for attr in attrs {
-                if let name=attr["name"],
-                   let values=attr["default"] as? [Float] {
+                if let name=attr["name"] as? String,
+                   var defaults=attr["default"] as? [Float] {
                     //let weight:[Float] = [1.0, 0.0, 0.0] //[0.2126, 0.7152, 0.0722]
-                    let length = MemoryLayout.size(ofValue: values[0]) * values.count
+                    let length = MemoryLayout.size(ofValue: defaults[0]) * defaults.count
                     let buffer = context.device.makeBuffer(length: (length + 15) / 16 * 16, options: .storageModeShared)
-                    memcpy(buffer.contents(), values, length)
+                    if let values = params[name] as? [Float], values.count <= defaults.count {
+                        print("overriding", name)
+                        for (index, value) in values.enumerated() {
+                            defaults[index] = value
+                        }
+                    }
+                    memcpy(buffer.contents(), defaults, length)
                     buffers.append(buffer)
                 }
             }
