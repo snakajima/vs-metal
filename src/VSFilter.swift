@@ -28,7 +28,9 @@ class VSFilter: VSNode {
         encoder.setComputePipelineState(pipelineState)
         encoder.setTexture(context.pop(), at: 0)
         encoder.setTexture(context.getAndPush(), at: 1)
-        encoder.setBuffer(paramBuffers[0], offset: 0, at: 2)
+        for (index, buffer) in paramBuffers.enumerated() {
+            encoder.setBuffer(buffer, offset: 0, at: 2 + index)
+        }
         encoder.dispatchThreadgroups(context.threadGroupCount, threadsPerThreadgroup: context.threadGroupSize)
         encoder.endEncoding()
     }
