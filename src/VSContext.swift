@@ -95,7 +95,7 @@ class VSContext {
         return texture
     }
 
-    func makeNode(name:String, params paramsIn:[String:Any]) -> VSNode? {
+    func makeNode(name:String, params paramsIn:[String:Any]?) -> VSNode? {
         guard let info = self.nodes[name] else {
             print("VSC:Invalid node name", name)
             return nil
@@ -106,7 +106,7 @@ class VSContext {
             for attr in attrs {
                 if let name=attr["name"] as? String,
                     var defaults=attr["default"] as? [Float] {
-                    if let values = paramsIn[name] as? [Float], values.count <= defaults.count {
+                    if let values = paramsIn?[name] as? [Float], values.count <= defaults.count {
                         print("VSC:makeNode overriding", name)
                         for (index, value) in values.enumerated() {
                             defaults[index] = value

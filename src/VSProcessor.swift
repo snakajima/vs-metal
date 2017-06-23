@@ -23,6 +23,18 @@ class VSProcessor: NSObject, MTKViewDelegate {
         nodes = [VSNode]()
         super.init()
         
+        let url = Bundle.main.url(forResource: "test1", withExtension: "js")!
+        if let script = VSScript.make(url: url) {
+            print("script:succeeded")
+            for item in script.pipeline {
+                if let name=item["name"] as? String {
+                    print("name", name)
+                }
+            }
+        } else {
+            print("script:failed")
+        }
+        
         if let node = context.makeNode(name: "mono", params: ["weight" : [0.2126, 0.7152, 0.0722] as [Float], "color" : [1.0, 1.0, 0.0, 1.0] as [Float]]) {
             nodes.append(node)
         }
