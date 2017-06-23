@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Metal
+import MetalPerformanceShaders
 
 class VSContext {
     let device:MTLDevice
@@ -94,4 +94,37 @@ class VSContext {
         push(texture: texture)
         return texture
     }
+
+    func makeNode(name:String, params paramsIn:[String:Any]) -> VSNode? {
+        var params:[String:Any] = {
+            var params = [String:Any]()
+            if let info = self.nodes[name],
+                let attrs = info["attr"] as? [[String:Any]] {
+                for attr in attrs {
+                    if let name=attr["name"] as? String,
+                        var defaults=attr["default"] as? [Float] {
+                        if let values = paramsIn[name] as? [Float], values.count <= defaults.count {
+                            print("overriding", name)
+                            for (index, value) in values.enumerated() {
+                                defaults[index] = value
+                            }
+                        }
+                        params[name] = defaults
+                    }
+                }
+            }
+            return params
+        }()
+        switch(name) {
+        case "gaussianblur":
+            if let sigma = params["sigma"] as? [Float], sigma.count == 1 {
+                let kernel = MPSImageGaussianBlur(device: self.device, sigma: sigma[0])
+                return VSMPSFilter(kernel: kernel)
+            }
+        default:
+            break
+        }
+        return nil
+    }
+    
 }
