@@ -17,9 +17,10 @@ class VSFilter: VSNode {
         let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name)!
         pipelineState = try! context.device.makeComputePipelineState(function: kernel)
         
-        let buffer = context.device.makeBuffer(length: 16, options: .storageModeShared)
         let weight:[Float] = [1.0, 0.0, 0.0] //[0.2126, 0.7152, 0.0722]
-        memcpy(buffer.contents(), weight, MemoryLayout.size(ofValue: weight[0]) * weight.count)
+        let length = MemoryLayout.size(ofValue: weight[0]) * weight.count
+        let buffer = context.device.makeBuffer(length: (length + 15) / 16 * 16, options: .storageModeShared)
+        memcpy(buffer.contents(), weight, length)
         paramBuffers = [buffer]
     }
     
