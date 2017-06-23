@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		742CBFBC1EFDD6930017D38A /* test1.js in Resources */ = {isa = PBXBuildFile; fileRef = 742CBFBB1EFDD6930017D38A /* test1.js */; };
 		7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7447330E1EF9B4FF008CD8C5 /* AppDelegate.swift */; };
-		744733111EF9B4FF008CD8C5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744733101EF9B4FF008CD8C5 /* ViewController.swift */; };
 		744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744733121EF9B4FF008CD8C5 /* Main.storyboard */; };
 		744733161EF9B4FF008CD8C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 744733151EF9B4FF008CD8C5 /* Assets.xcassets */; };
 		744733191EF9B4FF008CD8C5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744733171EF9B4FF008CD8C5 /* LaunchScreen.storyboard */; };
@@ -26,9 +26,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		742CBFBB1EFDD6930017D38A /* test1.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test1.js; sourceTree = "<group>"; };
 		7447330B1EF9B4FF008CD8C5 /* vs-metal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "vs-metal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7447330E1EF9B4FF008CD8C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		744733101EF9B4FF008CD8C5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		744733131EF9B4FF008CD8C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		744733151EF9B4FF008CD8C5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		744733181EF9B4FF008CD8C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -58,6 +58,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		742CBFBD1EFDD7E40017D38A /* metal */ = {
+			isa = PBXGroup;
+			children = (
+				74A39DCB1EF9D106004713D8 /* VSRenderer.metal */,
+				74FB9BC11EFC84070039A0CA /* VSFilters.metal */,
+			);
+			name = metal;
+			sourceTree = "<group>";
+		};
+		742CBFBE1EFDD7F90017D38A /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				742CBFBB1EFDD6930017D38A /* test1.js */,
+			);
+			name = scripts;
+			sourceTree = "<group>";
+		};
 		744733021EF9B4FF008CD8C5 = {
 			isa = PBXGroup;
 			children = (
@@ -80,7 +97,6 @@
 			children = (
 				744733211EF9B99C008CD8C5 /* src */,
 				7447330E1EF9B4FF008CD8C5 /* AppDelegate.swift */,
-				744733101EF9B4FF008CD8C5 /* ViewController.swift */,
 				744733121EF9B4FF008CD8C5 /* Main.storyboard */,
 				744733151EF9B4FF008CD8C5 /* Assets.xcassets */,
 				744733171EF9B4FF008CD8C5 /* LaunchScreen.storyboard */,
@@ -92,8 +108,9 @@
 		744733211EF9B99C008CD8C5 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				7480D28C1EFCC63D00DAA88E /* VSNodes.js */,
 				7480D28E1EFCC91A00DAA88E /* shaders.js */,
+				7480D28C1EFCC63D00DAA88E /* VSNodes.js */,
+				742CBFBE1EFDD7F90017D38A /* scripts */,
 				744733221EF9BA24008CD8C5 /* VSVideoSessionController.swift */,
 				74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */,
 				7480D28A1EFA928B00DAA88E /* VSProcessor.swift */,
@@ -101,8 +118,7 @@
 				74FB9BBF1EFC828E0039A0CA /* VSNode.swift */,
 				74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */,
 				74A39DCF1EFC31AB004713D8 /* VSContext.swift */,
-				74A39DCB1EF9D106004713D8 /* VSRenderer.metal */,
-				74FB9BC11EFC84070039A0CA /* VSFilters.metal */,
+				742CBFBD1EFDD7E40017D38A /* metal */,
 			);
 			name = src;
 			path = ../../src;
@@ -172,6 +188,7 @@
 				744733191EF9B4FF008CD8C5 /* LaunchScreen.storyboard in Resources */,
 				744733161EF9B4FF008CD8C5 /* Assets.xcassets in Resources */,
 				744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */,
+				742CBFBC1EFDD6930017D38A /* test1.js in Resources */,
 				7480D28D1EFCC63D00DAA88E /* VSNodes.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -184,7 +201,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				744733231EF9BA24008CD8C5 /* VSVideoSessionController.swift in Sources */,
-				744733111EF9B4FF008CD8C5 /* ViewController.swift in Sources */,
 				74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */,
 				74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */,
 				7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */,
