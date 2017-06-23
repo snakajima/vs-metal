@@ -17,6 +17,7 @@ kernel void
 mono(texture2d<half, access::read>  inTexture  [[texture(0)]],
                 texture2d<half, access::write> outTexture [[texture(1)]],
                 const device float3& weight [[ buffer(2) ]],
+                const device float4& color [[ buffer(3) ]],
                 uint2                          gid         [[thread_position_in_grid]])
 {
     // Check if the pixel is within the bounds of the output texture
@@ -28,6 +29,6 @@ mono(texture2d<half, access::read>  inTexture  [[texture(0)]],
     
     half4 inColor  = inTexture.read(gid);
     half  gray     = dot(inColor.rgb, half3(weight));
-    outTexture.write(half4(gray, gray, gray, 1.0), gid);
+    outTexture.write(half4(gray, gray, gray, 1.0) * half4(color), gid);
 }
 
