@@ -14,16 +14,26 @@ class VSFilter: VSNode {
     let paramBuffers:[MTLBuffer]
     
     init(name:String, params:[String:Any], context:VSContext) {
-        let info = context.nodes[name] 
-        print(info)
+        //print(info)
         let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name)!
         pipelineState = try! context.device.makeComputePipelineState(function: kernel)
+
+        var buffers = [MTLBuffer]()
+        if let info = context.nodes[name],
+            let attrs = info["attr"] as? [[String:Any]] {
+            for attr in attrs {
+                if let name=attr["name"],
+                   let values=attr["default"] as? [Float] {
+                    //let weight:[Float] = [1.0, 0.0, 0.0] //[0.2126, 0.7152, 0.0722]
+                    let length = MemoryLayout.size(ofValue: values[0]) * values.count
+                    let buffer = context.device.makeBuffer(length: (length + 15) / 16 * 16, options: .storageModeShared)
+                    memcpy(buffer.contents(), values, length)
+                    buffers.append(buffer)
+                }
+            }
+        }
         
-        let weight:[Float] = [1.0, 0.0, 0.0] //[0.2126, 0.7152, 0.0722]
-        let length = MemoryLayout.size(ofValue: weight[0]) * weight.count
-        let buffer = context.device.makeBuffer(length: (length + 15) / 16 * 16, options: .storageModeShared)
-        memcpy(buffer.contents(), weight, length)
-        paramBuffers = [buffer]
+        paramBuffers = buffers
     }
     
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
