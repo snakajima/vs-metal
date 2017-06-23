@@ -12,6 +12,10 @@ import MetalPerformanceShaders
 class VSMPSFilter: VSNode {
     let kernel:MPSUnaryImageKernel
     
+    init(kernel:MPSUnaryImageKernel) {
+        self.kernel = kernel
+    }
+    
     init(name:String, params paramsIn:[String:Any], context:VSContext) {
         var params:[String:Any] = {
             var params = [String:Any]()
