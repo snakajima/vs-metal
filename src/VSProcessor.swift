@@ -11,47 +11,33 @@ import MetalKit
 import MetalPerformanceShaders
 
 class VSProcessor: NSObject, MTKViewDelegate {
-    let context:VSContext
-    var nodes:[VSNode]
-    var renderer:VSRenderer?
+    private let context:VSContext
+    private let renderer:VSRenderer?
+    private let commandQueue: MTLCommandQueue
     
-    private var commandQueue: MTLCommandQueue?
+    private var nodes = [VSNode]()
     
     // width/height are texture's, not view's
     init(context:VSContext, view:MTKView) {
         self.context = context
-        nodes = [VSNode]()
+        commandQueue = context.device.makeCommandQueue()
+        renderer = VSRenderer(context:context)
+
         super.init()
         
         let url = Bundle.main.url(forResource: "test1", withExtension: "js")!
         if let script = VSScript.make(url: url) {
-            print("script:succeeded")
             for item in script.pipeline {
                 if let name=item["name"] as? String {
-                    print("name", name)
                     if let node = context.makeNode(name: name, params: item["attr"] as? [String:Any]) {
                         nodes.append(node)
                     }
                 }
             }
         } else {
-            print("script:failed")
+            print("VSProcessor: ### ERROR ### failed to load script")
         }
-
-/*
-        if let node = context.makeNode(name: "mono", params: ["weight" : [0.2126, 0.7152, 0.0722] as [Float], "color" : [1.0, 1.0, 0.0, 1.0] as [Float]]) {
-            nodes.append(node)
-        }
-        if let node = context.makeNode(name: "gaussianblur", params: ["sigma" : [5.0] as [Float]]) {
-            nodes.append(node)
-        }
-*/
-
-        renderer = VSRenderer(context:context)
         
-        // create a single command queue for rendering to this view
-        commandQueue = context.device.makeCommandQueue()
-
         view.delegate = self
     }
 
@@ -60,11 +46,6 @@ class VSProcessor: NSObject, MTKViewDelegate {
     }
 
     public func draw(in view: MTKView) {
-        guard let commandQueue = self.commandQueue else {
-            print("VSR:draw something is wrong")
-            return
-        }
-        
         if context.isEmpty {
             print("VSS:draw texture not updated")
             return
