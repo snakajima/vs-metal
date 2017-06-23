@@ -96,10 +96,13 @@ class VSContext {
     }
 
     func makeNode(name:String, params paramsIn:[String:Any]) -> VSNode? {
+        guard let info = self.nodes[name] else {
+            print("VSC:Invalid node name", name)
+            return nil
+        }
         var params = [String:Any]()
         var names = [String]()
-        if let info = self.nodes[name],
-            let attrs = info["attr"] as? [[String:Any]] {
+        if let attrs = info["attr"] as? [[String:Any]] {
             for attr in attrs {
                 if let name=attr["name"] as? String,
                     var defaults=attr["default"] as? [Float] {
@@ -123,7 +126,16 @@ class VSContext {
                 return VSMPSFilter(kernel: kernel)
             }
         default:
-            break
+            let buffers = names.map({ (name) -> MTLBuffer in
+                let values = params[name] as! [Float]
+                let length = MemoryLayout.size(ofValue: values[0]) * values.count
+                let buffer = self.device.makeBuffer(length: (length + 15) / 16 * 16, options: .storageModeShared)
+                memcpy(buffer.contents(), values, length)
+                return buffer
+            })
+            let kernel = self.device.newDefaultLibrary()!.makeFunction(name: name)!
+            let pipelineState = try! self.device.makeComputePipelineState(function: kernel)
+            return VSFilter(pipelineState: pipelineState, buffers: buffers)
         }
         return nil
     }

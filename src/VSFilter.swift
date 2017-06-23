@@ -13,6 +13,11 @@ class VSFilter: VSNode {
     let pipelineState:MTLComputePipelineState
     let paramBuffers:[MTLBuffer]
     
+    init(pipelineState:MTLComputePipelineState, buffers:[MTLBuffer]) {
+        self.pipelineState = pipelineState
+        self.paramBuffers = buffers
+    }
+    
     init(name:String, params:[String:Any], context:VSContext) {
         //print(info)
         let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name)!
