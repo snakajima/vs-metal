@@ -29,18 +29,23 @@ class VSProcessor: NSObject, MTKViewDelegate {
             for item in script.pipeline {
                 if let name=item["name"] as? String {
                     print("name", name)
+                    if let node = context.makeNode(name: name, params: item["attr"] as? [String:Any]) {
+                        nodes.append(node)
+                    }
                 }
             }
         } else {
             print("script:failed")
         }
-        
+
+/*
         if let node = context.makeNode(name: "mono", params: ["weight" : [0.2126, 0.7152, 0.0722] as [Float], "color" : [1.0, 1.0, 0.0, 1.0] as [Float]]) {
             nodes.append(node)
         }
         if let node = context.makeNode(name: "gaussianblur", params: ["sigma" : [5.0] as [Float]]) {
             nodes.append(node)
         }
+*/
 
         renderer = VSRenderer(context:context)
         
