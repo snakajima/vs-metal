@@ -23,15 +23,10 @@ class VSProcessor: NSObject, MTKViewDelegate {
         nodes = [VSNode]()
         super.init()
         
-        //nodes.append(
-            //VSFilter(name: "mono", params: ["weight" : [0.2126, 0.7152, 0.0722] as [Float], "color" : [1.0, 1.0, 0.0, 1.0] as [Float]], context: context))
-        //nodes.append(
-        //    VSMPSFilter(name: "gaussianblur", params: ["sigma" : [5.0] as [Float]], context: context))
         if let node = context.makeNode(name: "mono", params: ["weight" : [0.2126, 0.7152, 0.0722] as [Float], "color" : [1.0, 1.0, 0.0, 1.0] as [Float]]) {
             nodes.append(node)
         }
         if let node = context.makeNode(name: "gaussianblur", params: ["sigma" : [5.0] as [Float]]) {
-            print("#####", node)
             nodes.append(node)
         }
 
