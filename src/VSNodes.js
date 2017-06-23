@@ -14,4 +14,15 @@
             },
         ],
     },
+    "gaussianblur": {
+        "type":"filter",
+        "title":"Gaussian Blur",
+        "description":"Gaussian Blur",
+        "attr" : [
+            {
+                "name":"sigma",
+                "default":[4.0],
+            },
+        ],
+    },
 }

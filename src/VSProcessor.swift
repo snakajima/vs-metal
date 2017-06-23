@@ -24,7 +24,7 @@ class VSProcessor: NSObject, MTKViewDelegate {
         
         nodes = [
             VSFilter(name: "mono", params: ["weight" : [0.2126, 0.7152, 0.0722] as [Float], "color" : [1.0, 1.0, 0.0, 1.0] as [Float]], context: context),
-            VSMPSFilter(name: "gaussian", params: ["sigma" : 5.0], context: context)
+            VSMPSFilter(name: "gaussianblur", params: ["sigma" : [5.0] as [Float]], context: context)
         ]
         renderer = VSRenderer(context:context)
         
