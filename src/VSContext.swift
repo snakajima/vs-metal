@@ -96,25 +96,26 @@ class VSContext {
     }
 
     func makeNode(name:String, params paramsIn:[String:Any]) -> VSNode? {
-        var params:[String:Any] = {
-            var params = [String:Any]()
-            if let info = self.nodes[name],
-                let attrs = info["attr"] as? [[String:Any]] {
-                for attr in attrs {
-                    if let name=attr["name"] as? String,
-                        var defaults=attr["default"] as? [Float] {
-                        if let values = paramsIn[name] as? [Float], values.count <= defaults.count {
-                            print("VSC:makeNode overriding", name)
-                            for (index, value) in values.enumerated() {
-                                defaults[index] = value
-                            }
+        var params = [String:Any]()
+        var names = [String]()
+        if let info = self.nodes[name],
+            let attrs = info["attr"] as? [[String:Any]] {
+            for attr in attrs {
+                if let name=attr["name"] as? String,
+                    var defaults=attr["default"] as? [Float] {
+                    if let values = paramsIn[name] as? [Float], values.count <= defaults.count {
+                        print("VSC:makeNode overriding", name)
+                        for (index, value) in values.enumerated() {
+                            defaults[index] = value
                         }
-                        params[name] = defaults
                     }
+                    names.append(name)
+                    params[name] = defaults
                 }
             }
-            return params
-        }()
+        }
+        print("VSC:names = ", names)
+
         switch(name) {
         case "gaussianblur":
             if let sigma = params["sigma"] as? [Float], sigma.count == 1 {
