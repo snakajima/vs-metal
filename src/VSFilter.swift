@@ -11,12 +11,16 @@ import MetalKit
 
 class VSFilter: VSNode {
     let pipelineState:MTLComputePipelineState
-    let params:[String:Any]
+    let paramBuffers:[MTLBuffer]
     
     init(name:String, params:[String:Any], context:VSContext) {
-        self.params = params
         let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name)!
         pipelineState = try! context.device.makeComputePipelineState(function: kernel)
+        
+        let buffer = context.device.makeBuffer(length: 16, options: .storageModeShared)
+        let weight:[Float] = [1.0, 0.0, 0.0] //[0.2126, 0.7152, 0.0722]
+        memcpy(buffer.contents(), weight, MemoryLayout.size(ofValue: weight[0]) * weight.count)
+        paramBuffers = [buffer]
     }
     
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
@@ -24,8 +28,7 @@ class VSFilter: VSNode {
         encoder.setComputePipelineState(pipelineState)
         encoder.setTexture(context.pop(), at: 0)
         encoder.setTexture(context.getAndPush(), at: 1)
-        let weight:[Float] = [0.2126, 0.7152, 0.0722, 0.0] // must have an extra float (alignment?)
-        encoder.setBytes(weight, length: MemoryLayout.size(ofValue: weight[0]) * weight.count, at: 2)
+        encoder.setBuffer(paramBuffers[0], offset: 0, at: 2)
         encoder.dispatchThreadgroups(context.threadGroupCount, threadsPerThreadgroup: context.threadGroupSize)
         encoder.endEncoding()
     }
