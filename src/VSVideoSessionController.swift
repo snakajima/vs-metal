@@ -15,6 +15,7 @@ class VSVideoSessionController: UIViewController {
     var useFrontCamera = true
     var fps:Int?
     var context:VSContext?
+    var urlScript:URL?
 
     // Calculated properties
     private var cameraPosition:AVCaptureDevicePosition {
@@ -42,8 +43,7 @@ class VSVideoSessionController: UIViewController {
         }
 
         context = VSContext(device: MTLCreateSystemDefaultDevice()!, pixelFormat: mtkView.colorPixelFormat)
-        let url = Bundle.main.url(forResource: "test2", withExtension: "js")!
-        if let script = VSScript.make(url: url) {
+        if let url = urlScript, let script = VSScript.make(url: url) {
             renderer = VSProcessor(context:context!, view:mtkView, script:script)
         }
         mtkView.device = context!.device
