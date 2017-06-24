@@ -27,7 +27,7 @@ class VSProcessor: NSObject, MTKViewDelegate {
         
         for item in script.pipeline {
             if let name=item["name"] as? String {
-                if let node = context.makeNode(name: name, params: item["attr"] as? [String:Any]) {
+                if let node = script.makeNode(name: name, params: item["attr"] as? [String:Any], context:context) {
                     nodes.append(node)
                 }
             }
