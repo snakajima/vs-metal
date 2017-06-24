@@ -25,7 +25,7 @@ class VSProcessor: NSObject, MTKViewDelegate {
 
         super.init()
         
-        let url = Bundle.main.url(forResource: "test1", withExtension: "js")!
+        let url = Bundle.main.url(forResource: "test2", withExtension: "js")!
         if let script = VSScript.make(url: url) {
             for item in script.pipeline {
                 if let name=item["name"] as? String {

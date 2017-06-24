@@ -25,4 +25,15 @@
             },
         ],
     },
+    "sobel": {
+        "type":"filter",
+        "title":"Sobel",
+        "description":"Sobel operator (for Canny Edge Detector)",
+        "attr": [
+            {
+                "name":"color",
+                "default":[ 1.0, 1.0, 1.0 ],
+            },
+        ],
+    },
 }

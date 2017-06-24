@@ -125,6 +125,11 @@ class VSContext {
                 let kernel = MPSImageGaussianBlur(device: self.device, sigma: sigma[0])
                 return VSMPSFilter(kernel: kernel)
             }
+        case "sobel":
+            if let color = params["color"] as? [Float], color.count == 3 {
+                let kernel = MPSImageSobel(device: device) // LATER: color
+                return VSMPSFilter(kernel: kernel)
+            }
         default:
             let buffers = names.map({ (name) -> MTLBuffer in
                 let values = params[name] as! [Float]
