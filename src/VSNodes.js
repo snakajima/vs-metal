@@ -29,11 +29,23 @@
         "type":"filter",
         "title":"Sobel",
         "description":"Sobel operator (for Canny Edge Detector)",
-        "attr": [
-            {
+        "attr": [{
                 "name":"weight",
                 "default":[ 0.299, 0.587, 0.114 ],
-            },
-        ],
+        }]
+    },
+    "pyramid": {
+        "type":"filter",
+        "title":"Pyramid",
+        "description":"Pyramid Images",
+        "attr": [{
+            "name":"weight",
+            "default":[ 0.299, 0.587, 0.114 ],
+        }]
+    },
+    "laplacian": {
+        "type":"filter",
+        "title":"Laplacian",
+        "description":"Laplacian Images",
     },
 }

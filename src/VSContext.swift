@@ -130,6 +130,16 @@ class VSContext {
                 let kernel = MPSImageSobel(device: device, linearGrayColorTransform: weight)
                 return VSMPSFilter(kernel: kernel)
             }
+        /*
+        case "pyramid":
+            if let weight = params["weight"] as? [Float], weight.count == 3 {
+                let kernel = MPSImagePyramid(device: device)
+                return VSMPSFilter(kernel: kernel)
+            }
+        */
+        case "laplacian":
+            let kernel = MPSImageLaplacian()
+            return VSMPSFilter(kernel: kernel)
         default:
             let buffers = names.map({ (name) -> MTLBuffer in
                 let values = params[name] as! [Float]

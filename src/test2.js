@@ -1,5 +1,5 @@
 {
     "pipeline":[{
-        "name":"sobel",
+        "name":"laplacian",
     }]
 }
