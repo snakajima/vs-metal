@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7428EF2A1EFE2E8C007BECAF /* VSVideoSessionController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7428EF291EFE2E8C007BECAF /* VSVideoSessionController.storyboard */; };
+		7428EF2C1EFE2F8D007BECAF /* test3.js in Resources */ = {isa = PBXBuildFile; fileRef = 7428EF2B1EFE2F8D007BECAF /* test3.js */; };
 		742CBFBC1EFDD6930017D38A /* test1.js in Resources */ = {isa = PBXBuildFile; fileRef = 742CBFBB1EFDD6930017D38A /* test1.js */; };
 		7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7447330E1EF9B4FF008CD8C5 /* AppDelegate.swift */; };
 		744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744733121EF9B4FF008CD8C5 /* Main.storyboard */; };
@@ -31,6 +32,7 @@
 
 /* Begin PBXFileReference section */
 		7428EF291EFE2E8C007BECAF /* VSVideoSessionController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VSVideoSessionController.storyboard; sourceTree = "<group>"; };
+		7428EF2B1EFE2F8D007BECAF /* test3.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test3.js; sourceTree = "<group>"; };
 		742CBFBB1EFDD6930017D38A /* test1.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test1.js; sourceTree = "<group>"; };
 		7447330B1EF9B4FF008CD8C5 /* vs-metal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "vs-metal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7447330E1EF9B4FF008CD8C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 			children = (
 				742CBFBB1EFDD6930017D38A /* test1.js */,
 				74D3EFCE1EFDE41B0005765A /* test2.js */,
+				7428EF2B1EFE2F8D007BECAF /* test3.js */,
 			);
 			name = scripts;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				7480D28F1EFCC91A00DAA88E /* shaders.js in Resources */,
 				74D3EFCF1EFDE41B0005765A /* test2.js in Resources */,
 				7428EF2A1EFE2E8C007BECAF /* VSVideoSessionController.storyboard in Resources */,
+				7428EF2C1EFE2F8D007BECAF /* test3.js in Resources */,
 				744733191EF9B4FF008CD8C5 /* LaunchScreen.storyboard in Resources */,
 				744733161EF9B4FF008CD8C5 /* Assets.xcassets in Resources */,
 				744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */,

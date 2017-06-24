@@ -42,7 +42,10 @@ class VSVideoSessionController: UIViewController {
         }
 
         context = VSContext(device: MTLCreateSystemDefaultDevice()!, pixelFormat: mtkView.colorPixelFormat)
-        renderer = VSProcessor(context:context!, view:mtkView)
+        let url = Bundle.main.url(forResource: "test2", withExtension: "js")!
+        if let script = VSScript.make(url: url) {
+            renderer = VSProcessor(context:context!, view:mtkView, script:script)
+        }
         mtkView.device = context!.device
 
         startVideoCaptureSession()

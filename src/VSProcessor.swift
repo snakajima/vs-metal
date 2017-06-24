@@ -18,24 +18,19 @@ class VSProcessor: NSObject, MTKViewDelegate {
     private var nodes = [VSNode]()
     
     // width/height are texture's, not view's
-    init(context:VSContext, view:MTKView) {
+    init(context:VSContext, view:MTKView, script:VSScript) {
         self.context = context
         commandQueue = context.device.makeCommandQueue()
         renderer = VSRenderer(context:context)
 
         super.init()
         
-        let url = Bundle.main.url(forResource: "test2", withExtension: "js")!
-        if let script = VSScript.make(url: url) {
-            for item in script.pipeline {
-                if let name=item["name"] as? String {
-                    if let node = context.makeNode(name: name, params: item["attr"] as? [String:Any]) {
-                        nodes.append(node)
-                    }
+        for item in script.pipeline {
+            if let name=item["name"] as? String {
+                if let node = context.makeNode(name: name, params: item["attr"] as? [String:Any]) {
+                    nodes.append(node)
                 }
             }
-        } else {
-            print("VSProcessor: ### ERROR ### failed to load script")
         }
         
         view.delegate = self
