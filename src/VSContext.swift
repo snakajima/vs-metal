@@ -126,8 +126,8 @@ class VSContext {
                 return VSMPSFilter(kernel: kernel)
             }
         case "sobel":
-            if let color = params["color"] as? [Float], color.count == 3 {
-                let kernel = MPSImageSobel(device: device) // LATER: color
+            if let weight = params["weight"] as? [Float], weight.count == 3 {
+                let kernel = MPSImageSobel(device: device, linearGrayColorTransform: weight)
                 return VSMPSFilter(kernel: kernel)
             }
         default:

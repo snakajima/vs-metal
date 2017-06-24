@@ -31,8 +31,8 @@
         "description":"Sobel operator (for Canny Edge Detector)",
         "attr": [
             {
-                "name":"color",
-                "default":[ 1.0, 1.0, 1.0 ],
+                "name":"weight",
+                "default":[ 0.299, 0.587, 0.114 ],
             },
         ],
     },
