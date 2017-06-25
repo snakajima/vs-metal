@@ -9,8 +9,13 @@
 import Foundation
 import MetalPerformanceShaders
 
-struct VSTexture {
+// A wrapper of MTLTexture so that we can compare
+struct VSTexture:Equatable {
     let texture:MTLTexture
+    let identity:Int
+    public static func ==(lhs: VSTexture, rhs: VSTexture) -> Bool {
+        return lhs.identity == rhs.identity
+    }
 }
 
 class VSContext {
@@ -32,8 +37,7 @@ class VSContext {
     // transient: popped textures to be migrated to pool later
     // pool: pool of textures to be reused for stack
     private var stack = [VSTexture]()
-    private var pool = [VSTexture]()
-    private var transient = [VSTexture]()
+    private var pool2 = [VSTexture]()
     private var source:MTLTexture?
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
@@ -55,9 +59,6 @@ class VSContext {
         width = texture.width
         height = texture.height
         
-        transient.removeAll()
-        pool.removeAll()
-        
         descriptor.textureType = .type2D
         descriptor.pixelFormat = pixelFormat
         descriptor.width = width
@@ -72,27 +73,31 @@ class VSContext {
     
     func pop() -> VSTexture {
         if let texture = stack.popLast() {
-            transient.append(texture)
             return texture
         }
-        return VSTexture(texture:source!)
+        return VSTexture(texture:source!, identity:-1)
     }
     
     func push(texture:VSTexture) {
+        //print("VSC:push", texture.identity)
         stack.append(texture)
     }
     
     func flush() {
-        pool.append(contentsOf: transient)
-        transient.removeAll()
+        // no op
     }
     
     func get() -> VSTexture {
-        if let texture = pool.last {
-            return texture
+        for texture in pool2 {
+            guard let _ = stack.index(of:texture) else {
+                //print("VSC:get returning", texture.identity)
+                return texture
+            }
         }
-        print("VSC:get makeTexture")
-        return VSTexture(texture:device.makeTexture(descriptor: descriptor))
+        print("VSC:get makeTexture", pool2.count)
+        let ret = VSTexture(texture:device.makeTexture(descriptor: descriptor), identity:pool2.count)
+        pool2.append(ret)
+        return ret
     }
     
     func getAndPush() -> VSTexture {

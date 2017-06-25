@@ -19,10 +19,12 @@ class VSFilter: VSNode {
     }
         
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
+        let destination = context.get() // WARNING:we must call get before any pop
         let encoder = commandBuffer.makeComputeCommandEncoder()
         encoder.setComputePipelineState(pipelineState)
         encoder.setTexture(context.pop().texture, at: 0)
-        encoder.setTexture(context.getAndPush().texture, at: 1)
+        encoder.setTexture(destination.texture, at: 1)
+        context.push(texture:destination)
         for (index, buffer) in paramBuffers.enumerated() {
             encoder.setBuffer(buffer, offset: 0, at: 2 + index)
         }
