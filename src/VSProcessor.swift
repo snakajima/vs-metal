@@ -31,7 +31,7 @@ class VSProcessor: NSObject, MTKViewDelegate {
     }
 
     public func draw(in view: MTKView) {
-        if context.isEmpty {
+        if context.hasUpdate {
             print("VSS:draw texture not updated")
             return
         }

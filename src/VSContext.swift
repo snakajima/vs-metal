@@ -45,7 +45,7 @@ class VSContext {
         self.pixelFormat = pixelFormat
     }
     
-    var isEmpty:Bool { return source==nil }
+    var hasUpdate:Bool { return source==nil }
     
     // Special type of push for the video source
     func set(texture:MTLTexture) {
