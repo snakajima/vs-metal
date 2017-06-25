@@ -9,7 +9,7 @@
 import UIKit
 
 class ScriptsViewController: UITableViewController {
-    let filenames = ["test1", "test2", "test3"]
+    let filenames = ["test1", "test2", "test3", "test4", "test5", "test6"]
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -1,4 +1,14 @@
 {
+    "fork": {
+        "type":"control",
+        "title":"Duplicate",
+        "description":"Duplicate the topmost layer",
+    },
+    "swap": {
+        "type":"control",
+        "title":"Swap",
+        "description":"Swap two topmost layers",
+    },
     "mono": {
         "type":"filter",
         "title":"Monochrome",

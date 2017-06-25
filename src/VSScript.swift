@@ -77,6 +77,10 @@ struct VSScript {
         case "laplacian":
             let kernel = MPSImageLaplacian()
             return VSMPSFilter(kernel: kernel)
+        case "fork":
+            return VSFork()
+        case "swap":
+            return VSSwap()
         default:
             let buffers = names.map({ (name) -> MTLBuffer in
                 let values = params[name] as! [Float]
