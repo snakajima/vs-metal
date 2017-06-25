@@ -15,23 +15,16 @@ class VSProcessor: NSObject, MTKViewDelegate {
     private let renderer:VSRenderer?
     private let commandQueue: MTLCommandQueue
     
-    private var nodes = [VSNode]()
+    private var nodes:[VSNode]
     
     // width/height are texture's, not view's
     init(context:VSContext, view:MTKView, script:VSScript) {
         self.context = context
         commandQueue = context.device.makeCommandQueue()
         renderer = VSRenderer(context:context)
+        nodes = script.compile(context: context)
 
         super.init()
-        
-        for item in script.pipeline {
-            if let name=item["name"] as? String {
-                if let node = script.makeNode(name: name, params: item["attr"] as? [String:Any], context:context) {
-                    nodes.append(node)
-                }
-            }
-        }
         
         view.delegate = self
     }

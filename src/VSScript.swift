@@ -32,7 +32,7 @@ struct VSScript {
         return nil
     }
     
-    func makeNode(name:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
+    private static func makeNode(name:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
         guard let info = context.nodes[name] else {
             print("VSC:Invalid node name", name)
             return nil
@@ -92,4 +92,15 @@ struct VSScript {
         return nil
     }
     
+    func compile(context:VSContext) -> [VSNode]{
+        var nodes = [VSNode]()
+        for item in self.pipeline {
+            if let name=item["name"] as? String {
+                if let node = VSScript.makeNode(name: name, params: item["attr"] as? [String:Any], context:context) {
+                    nodes.append(node)
+                }
+            }
+        }
+        return nodes
+    }
 }
