@@ -9,6 +9,10 @@
 import Foundation
 import MetalPerformanceShaders
 
+struct VSTexture {
+    let texture:MTLTexture
+}
+
 class VSContext {
     let device:MTLDevice
     let pixelFormat:MTLPixelFormat
@@ -27,9 +31,9 @@ class VSContext {
     // stack: texture stack for the video pipeline
     // transient: popped textures to be migrated to pool later
     // pool: pool of textures to be reused for stack
-    private var stack = [MTLTexture]()
-    private var pool = [MTLTexture]()
-    private var transient = [MTLTexture]()
+    private var stack = [VSTexture]()
+    private var pool = [VSTexture]()
+    private var transient = [VSTexture]()
     private var source:MTLTexture?
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
@@ -66,15 +70,15 @@ class VSContext {
         //print("VSContext:set", threadGroupCount, texture.usage)
     }
     
-    func pop() -> MTLTexture {
+    func pop() -> VSTexture {
         if let texture = stack.popLast() {
             transient.append(texture)
             return texture
         }
-        return source!
+        return VSTexture(texture:source!)
     }
     
-    func push(texture:MTLTexture) {
+    func push(texture:VSTexture) {
         stack.append(texture)
     }
     
@@ -83,15 +87,15 @@ class VSContext {
         transient.removeAll()
     }
     
-    func get() -> MTLTexture {
+    func get() -> VSTexture {
         if let texture = pool.last {
             return texture
         }
         print("VSC:get makeTexture")
-        return device.makeTexture(descriptor: descriptor)
+        return VSTexture(texture:device.makeTexture(descriptor: descriptor))
     }
     
-    func getAndPush() -> MTLTexture {
+    func getAndPush() -> VSTexture {
         let texture = get()
         push(texture: texture)
         return texture

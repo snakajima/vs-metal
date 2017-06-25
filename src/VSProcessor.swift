@@ -44,7 +44,7 @@ class VSProcessor: NSObject, MTKViewDelegate {
         let texture = context.pop()
         let cmRender:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()
-            renderer.encode(commandBuffer:commandBuffer, texture:texture, view:view)
+            renderer.encode(commandBuffer:commandBuffer, texture:texture.texture, view:view)
             return commandBuffer
         }()
         

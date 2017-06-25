@@ -43,6 +43,6 @@ class VSMPSFilter: VSNode {
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
         let source = context.pop()
         let destination = context.getAndPush()
-        kernel.encode(commandBuffer: commandBuffer, sourceTexture: source, destinationTexture: destination)
+        kernel.encode(commandBuffer: commandBuffer, sourceTexture: source.texture, destinationTexture: destination.texture)
     }
 }
