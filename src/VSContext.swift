@@ -38,7 +38,6 @@ class VSContext {
     // pool: pool of textures to be reused for stack
     private var stack = [VSTexture]()
     private var pool = [VSTexture]()
-    private var source:VSTexture?
     var hasUpdate = false
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
@@ -51,7 +50,7 @@ class VSContext {
         assert(Thread.current == Thread.main)
         hasUpdate = true
         stack.removeAll() // HACK: for now
-        source = VSTexture(texture:texture, identity:-1)
+        push(texture:VSTexture(texture:texture, identity:-1))
         
         if texture.width==width && texture.height==height {
             return
@@ -73,9 +72,8 @@ class VSContext {
         if let texture = stack.popLast() {
             return texture
         }
-        let ret = source!
-        source = nil
-        return ret
+        print("VSC:pop underflow")
+        return make() // NOTE: Allow underflow
     }
     
     func push(texture:VSTexture) {
@@ -90,6 +88,10 @@ class VSContext {
             }
         }
         print("VSC:get makeTexture", pool.count)
+        return make()
+    }
+        
+    private func make() -> VSTexture {
         let ret = VSTexture(texture:device.makeTexture(descriptor: descriptor), identity:pool.count)
         pool.append(ret)
         return ret
