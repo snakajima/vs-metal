@@ -37,7 +37,7 @@ class VSContext {
     // transient: popped textures to be migrated to pool later
     // pool: pool of textures to be reused for stack
     private var stack = [VSTexture]()
-    private var pool2 = [VSTexture]()
+    private var pool = [VSTexture]()
     private var source:MTLTexture?
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
@@ -79,28 +79,26 @@ class VSContext {
     }
     
     func push(texture:VSTexture) {
-        //print("VSC:push", texture.identity)
         stack.append(texture)
     }
     
-    private func get() -> VSTexture {
-        for texture in pool2 {
+    private func getDestination() -> VSTexture {
+        // Find a texture in the pool, which is not in the stack
+        for texture in pool {
             guard let _ = stack.index(of:texture) else {
-                //print("VSC:get returning", texture.identity)
                 return texture
             }
         }
-        print("VSC:get makeTexture", pool2.count)
-        let ret = VSTexture(texture:device.makeTexture(descriptor: descriptor), identity:pool2.count)
-        pool2.append(ret)
+        print("VSC:get makeTexture", pool.count)
+        let ret = VSTexture(texture:device.makeTexture(descriptor: descriptor), identity:pool.count)
+        pool.append(ret)
         return ret
     }
     
     func encode(nodes:[VSNode], commandBuffer:MTLCommandBuffer) {
         assert(Thread.current == Thread.main)
         for node in nodes {
-            let destination = get()
-            node.encode(commandBuffer:commandBuffer, destination:destination, context:self)
+            node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
         }
     }
 }
