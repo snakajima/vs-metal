@@ -44,7 +44,7 @@ struct VSScript {
                 if let name=attr["name"] as? String,
                     var defaults=attr["default"] as? [Float] {
                     if let values = paramsIn?[name] as? [Float], values.count <= defaults.count {
-                        print("VSC:makeNode overriding", name)
+                        //print("VSC:makeNode overriding", name)
                         for (index, value) in values.enumerated() {
                             defaults[index] = value
                         }
@@ -54,7 +54,7 @@ struct VSScript {
                 }
             }
         }
-        print("VSC:names = ", names)
+        //print("VSC:names = ", names)
 
         switch(name) {
         case "gaussianblur":

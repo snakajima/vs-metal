@@ -62,7 +62,7 @@ class VSContext {
         threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
         threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
 
-        print("VSContext:set", threadGroupCount, texture.usage)
+        //print("VSContext:set", threadGroupCount, texture.usage)
     }
     
     func pop() -> MTLTexture {
@@ -86,6 +86,7 @@ class VSContext {
         if let texture = pool.last {
             return texture
         }
+        print("VSC:get makeTexture")
         return device.makeTexture(descriptor: descriptor)
     }
     
