@@ -95,5 +95,10 @@ class VSContext {
         return texture
     }
 
-
+    func encode(nodes:[VSNode], commandBuffer:MTLCommandBuffer) {
+        for node in nodes {
+            node.encode(commandBuffer:commandBuffer, context:self)
+            self.flush()
+        }
+    }
 }
