@@ -12,7 +12,7 @@ import MetalPerformanceShaders
 
 class VSProcessor: NSObject, MTKViewDelegate {
     private let context:VSContext
-    private let renderer:VSRenderer?
+    private let renderer:VSRenderer
     private let commandQueue: MTLCommandQueue
     private var nodes:[VSNode]
     
@@ -44,7 +44,7 @@ class VSProcessor: NSObject, MTKViewDelegate {
         let texture = context.pop()
         let cmRender:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()
-            renderer!.encode(commandBuffer:commandBuffer, texture:texture, view:view)
+            renderer.encode(commandBuffer:commandBuffer, texture:texture, view:view)
             return commandBuffer
         }()
         
