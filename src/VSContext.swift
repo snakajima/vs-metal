@@ -83,10 +83,6 @@ class VSContext {
         stack.append(texture)
     }
     
-    func flush() {
-        // no op
-    }
-    
     func get() -> VSTexture {
         for texture in pool2 {
             guard let _ = stack.index(of:texture) else {
@@ -100,17 +96,10 @@ class VSContext {
         return ret
     }
     
-    func getAndPush() -> VSTexture {
-        let texture = get()
-        push(texture: texture)
-        return texture
-    }
-
     func encode(nodes:[VSNode], commandBuffer:MTLCommandBuffer) {
         assert(Thread.current == Thread.main)
         for node in nodes {
             node.encode(commandBuffer:commandBuffer, context:self)
-            self.flush()
         }
     }
 }
