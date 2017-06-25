@@ -38,7 +38,7 @@ class VSContext {
     // pool: pool of textures to be reused for stack
     private var stack = [VSTexture]()
     private var pool = [VSTexture]()
-    private var source:MTLTexture?
+    private var source:VSTexture?
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
         self.device = device
@@ -51,7 +51,7 @@ class VSContext {
     func set(texture:MTLTexture) {
         assert(Thread.current == Thread.main)
         stack.removeAll() // HACK: for now
-        source = texture
+        source = VSTexture(texture:texture, identity:-1)
         
         if texture.width==width && texture.height==height {
             return
@@ -67,15 +67,13 @@ class VSContext {
 
         threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
         threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
-
-        //print("VSContext:set", threadGroupCount, texture.usage)
     }
     
     func pop() -> VSTexture {
         if let texture = stack.popLast() {
             return texture
         }
-        return VSTexture(texture:source!, identity:-1)
+        return source!
     }
     
     func push(texture:VSTexture) {
