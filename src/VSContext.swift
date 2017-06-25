@@ -41,6 +41,7 @@ class VSContext {
     
     // Special type of push for the video source
     func set(texture:MTLTexture) {
+        assert(Thread.current == Thread.main)
         stack.removeAll() // HACK: for now
         source = texture
         
@@ -97,6 +98,7 @@ class VSContext {
     }
 
     func encode(nodes:[VSNode], commandBuffer:MTLCommandBuffer) {
+        assert(Thread.current == Thread.main)
         for node in nodes {
             node.encode(commandBuffer:commandBuffer, context:self)
             self.flush()
