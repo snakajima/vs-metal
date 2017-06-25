@@ -18,17 +18,16 @@ class VSFilter: VSNode {
         self.paramBuffers = buffers
     }
         
-    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
-        let destination = context.get() // WARNING:we must call get before any pop
+    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) {
         let encoder = commandBuffer.makeComputeCommandEncoder()
         encoder.setComputePipelineState(pipelineState)
         encoder.setTexture(context.pop().texture, at: 0)
         encoder.setTexture(destination.texture, at: 1)
-        context.push(texture:destination)
         for (index, buffer) in paramBuffers.enumerated() {
             encoder.setBuffer(buffer, offset: 0, at: 2 + index)
         }
         encoder.dispatchThreadgroups(context.threadGroupCount, threadsPerThreadgroup: context.threadGroupSize)
         encoder.endEncoding()
+        context.push(texture:destination)
     }
 }

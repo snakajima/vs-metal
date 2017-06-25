@@ -83,7 +83,7 @@ class VSContext {
         stack.append(texture)
     }
     
-    func get() -> VSTexture {
+    private func get() -> VSTexture {
         for texture in pool2 {
             guard let _ = stack.index(of:texture) else {
                 //print("VSC:get returning", texture.identity)
@@ -99,7 +99,8 @@ class VSContext {
     func encode(nodes:[VSNode], commandBuffer:MTLCommandBuffer) {
         assert(Thread.current == Thread.main)
         for node in nodes {
-            node.encode(commandBuffer:commandBuffer, context:self)
+            let destination = get()
+            node.encode(commandBuffer:commandBuffer, destination:destination, context:self)
         }
     }
 }

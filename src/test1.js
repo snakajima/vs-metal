@@ -8,7 +8,7 @@
     },{
         "name":"gaussianblur",
         "attr":{
-            "sigma" : [2.0]
+            "sigma" : [10.0]
         }
     }]
 }

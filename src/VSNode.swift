@@ -10,6 +10,6 @@ import Foundation
 import MetalPerformanceShaders
 
 protocol VSNode {
-    func encode(commandBuffer:MTLCommandBuffer, context:VSContext)
+    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext)
 }
 
