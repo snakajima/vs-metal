@@ -73,7 +73,9 @@ class VSContext {
         if let texture = stack.popLast() {
             return texture
         }
-        return source!
+        let ret = source!
+        source = nil
+        return ret
     }
     
     func push(texture:VSTexture) {
