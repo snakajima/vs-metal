@@ -39,17 +39,17 @@ class VSContext {
     private var stack = [VSTexture]()
     private var pool = [VSTexture]()
     private var source:VSTexture?
+    var hasUpdate = false
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
         self.device = device
         self.pixelFormat = pixelFormat
     }
     
-    var hasUpdate:Bool { return source==nil }
-    
     // Special type of push for the video source
     func set(texture:MTLTexture) {
         assert(Thread.current == Thread.main)
+        hasUpdate = true
         stack.removeAll() // HACK: for now
         source = VSTexture(texture:texture, identity:-1)
         
@@ -97,6 +97,7 @@ class VSContext {
     
     func encode(nodes:[VSNode], commandBuffer:MTLCommandBuffer) {
         assert(Thread.current == Thread.main)
+        hasUpdate = false
         for node in nodes {
             node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
         }

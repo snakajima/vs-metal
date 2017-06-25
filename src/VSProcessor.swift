@@ -15,6 +15,7 @@ class VSProcessor: NSObject, MTKViewDelegate {
     private let renderer:VSRenderer
     private let commandQueue: MTLCommandQueue
     private var nodes:[VSNode]
+    private var debugCounter = 0
     
     init(context:VSContext, view:MTKView, script:VSScript) {
         self.context = context
@@ -31,8 +32,9 @@ class VSProcessor: NSObject, MTKViewDelegate {
     }
 
     public func draw(in view: MTKView) {
-        if context.hasUpdate {
-            print("VSS:draw texture not updated")
+        debugCounter += 1
+        if !context.hasUpdate {
+            //print("VSS:draw texture not updated", debugCounter)
             return
         }
         let cmCompute:MTLCommandBuffer = {
