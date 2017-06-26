@@ -69,3 +69,25 @@ invert(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write(half4(1.0 - inColor.rgb, inColor.a), gid);
 }
 
+kernel void
+boolean(texture2d<half, access::read>  inTexture  [[texture(0)]],
+      texture2d<half, access::write> outTexture [[texture(1)]],
+      const device float2& range [[ buffer(2) ]],
+      const device float3& weight [[ buffer(3) ]],
+      const device float4& color1 [[ buffer(4) ]],
+      const device float4& color2 [[ buffer(5) ]],
+      uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half3 w = half3(weight / (weight.r + weight.g + weight.b));
+    half4 inColor  = inTexture.read(gid);
+    half d = dot(inColor.rgb, w);
+    half4 outColor = (range.x < d && d < range.y) ? half4(color2) : half4(color1);
+    outTexture.write(outColor, gid);
+}

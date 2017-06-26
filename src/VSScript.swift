@@ -34,7 +34,7 @@ struct VSScript {
     
     private static func makeNode(name:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
         guard let info = context.nodes[name] else {
-            print("VSC:Invalid node name", name)
+            print("### VSScript:makeNode Invalid node name", name)
             return nil
         }
         var params = [String:Any]()
@@ -90,9 +90,16 @@ struct VSScript {
                 return buffer
             })
             let sourceCount = info["sources"] as? Int ?? 1
-            let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name)!
-            let pipelineState = try! context.device.makeComputePipelineState(function: kernel)
-            return VSFilter(pipelineState: pipelineState, buffers: buffers, sourceCount:sourceCount)
+            guard let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name) else {
+                print("### VSScript:makeNode failed to create kernel", name)
+                return nil
+            }
+            do {
+                let pipelineState = try context.device.makeComputePipelineState(function: kernel)
+                return VSFilter(pipelineState: pipelineState, buffers: buffers, sourceCount:sourceCount)
+            } catch {
+                print("### VSScript:makeNode failed to create pipeline state", name)
+            }
         }
         return nil
     }
