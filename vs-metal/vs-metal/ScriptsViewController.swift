@@ -9,7 +9,8 @@
 import UIKit
 
 class ScriptsViewController: UITableViewController {
-    let filenames = ["test0", "test1", "test2", "test3", "test4", "test5", "test6"]
+    let filenames = ["test0", "test1", "test2", "test3", "test4", "test5", "test6",
+                     "gradientmap", "cartoon", "cartoon_hipass", "invalid"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,8 +90,9 @@ class ScriptsViewController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if let vc = segue.destination as? VSVideoSessionController,
-           let indexPath = sender as? IndexPath {
-            vc.urlScript = Bundle.main.url(forResource: filenames[indexPath.row], withExtension: "js")!
+           let indexPath = sender as? IndexPath,
+           let url = Bundle.main.url(forResource: filenames[indexPath.row], withExtension: "js") {
+            vc.urlScript = url
         }
     }
 
