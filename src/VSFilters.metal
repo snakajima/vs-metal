@@ -130,12 +130,11 @@ halftone(texture2d<half, access::read>  inTexture  [[texture(0)]],
         return;
     }
     
-    //half3 w = half3(weight / (weight.r + weight.g + weight.b));
-    //half4 inColor  = inTexture.read(gid);
-    //half v = 1.0 - dot(inColor.rgb, w)
+    half3 w = half3(weight / (weight.r + weight.g + weight.b));
+    half4 inColor  = inTexture.read(gid);
+    half v = (1.0 - dot(inColor.rgb, w)) * scale;
     half2 rem = (half2(gid % uint(radius * 2)) - radius) / radius;
     half d = sqrt(dot(rem, rem));
-    //half d = half(gid.x) / half(outTexture.get_width());
-    outTexture.write(mix(half4(color1), half4(color2), d), gid);
+    outTexture.write((v > d) ? half4(color1) : half4(color2), gid);
 }
 

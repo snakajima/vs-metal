@@ -134,7 +134,7 @@
                 "default":[ 1.0, 1.0, 1.0, 0.0 ],
               },{
                 "name":"radius",
-                "default": [20.0],
+                "default": [5.0],
                 "range":[2.0, 100.0],
               },{
                 "name":"scale",
