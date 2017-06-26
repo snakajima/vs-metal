@@ -113,3 +113,29 @@ gradientmap(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write(mix(half4(color1), half4(color2), d), gid);
 }
 
+kernel void
+halftone(texture2d<half, access::read>  inTexture  [[texture(0)]],
+            texture2d<half, access::write> outTexture [[texture(1)]],
+            const device float3& weight [[ buffer(2) ]],
+            const device float4& color1 [[ buffer(3) ]],
+            const device float4& color2 [[ buffer(4) ]],
+            const device float& radius [[ buffer(5) ]],
+            const device float& scale [[ buffer(6) ]],
+            uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    //half3 w = half3(weight / (weight.r + weight.g + weight.b));
+    //half4 inColor  = inTexture.read(gid);
+    //half v = 1.0 - dot(inColor.rgb, w)
+    half2 rem = (half2(gid % uint(radius * 2)) - radius) / radius;
+    half d = sqrt(dot(rem, rem));
+    //half d = half(gid.x) / half(outTexture.get_width());
+    outTexture.write(mix(half4(color1), half4(color2), d), gid);
+}
+

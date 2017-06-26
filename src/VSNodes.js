@@ -124,21 +124,21 @@
         "title":"Half Tone",
         "description":"Convert to halftone color",
         "attr" : [{
+                "name":"weight",
+                "default":[ 0.299, 0.587, 0.114 ],
+              },{
                 "name":"color1",
                 "default":[ 0.0, 0.0, 0.0, 1.0 ],
               },{
                 "name":"color2",
                 "default":[ 1.0, 1.0, 1.0, 0.0 ],
               },{
-                "name":"weight",
-                "default":[ 0.299, 0.587, 0.114 ],
-              },{
                 "name":"radius",
-                "default": 5.0,
+                "default": [20.0],
                 "range":[2.0, 100.0],
               },{
                 "name":"scale",
-                "default": 1.3,
+                "default": [1.3],
                 "range":[0.1, 2.0],
         }],
     },
