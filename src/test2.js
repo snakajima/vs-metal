@@ -1,5 +1,5 @@
 {
     "pipeline":[{
-        "name":"toone",
+        "name":"invert",
     }]
 }

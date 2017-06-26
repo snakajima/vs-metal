@@ -53,3 +53,19 @@ toone(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write(half4(inColor.rgb * (z / y), inColor.a), gid);
 }
 
+kernel void
+invert(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+
+    half4 inColor  = inTexture.read(gid);
+    outTexture.write(half4(1.0 - inColor.rgb, inColor.a), gid);
+}
+
