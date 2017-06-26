@@ -104,20 +104,42 @@
                 "default":[0.0, 0.0, 0.0, 1.0],
         }],
     },
-    "canny_edge": {
+    "gradientmap": {
         "type":"filter",
-        "title":"Canny Edge Detector",
-        "description":"*Apply after Sobel filter to detect edge",
-        "vertex":"convolve",
-        "attr": [{
-            "name":"threshold",
-            "default":[0.21],
+        "title":"Gradient Map",
+        "description":"Mix two colors using brightness",
+        "attr" : [{
+            "name":"weight",
+            "default":[ 0.299, 0.587, 0.114 ],
         },{
-            "name":"thin",
-            "default":[0.0],
+            "name":"color1",
+            "default":[ 0.0, 0.0, 0.0, 0.0 ],
         },{
-            "name":"color",
-            "default":[0.0, 0.0, 0.0, 1.0]
+            "name":"color2",
+            "default":[ 1.0, 1.0, 1.0, 1.0 ],
+        }],
+    },
+    "halftone": {
+        "type":"filter",
+        "title":"Half Tone",
+        "description":"Convert to halftone color",
+        "attr" : [{
+                "name":"color1",
+                "default":[ 0.0, 0.0, 0.0, 1.0 ],
+              },{
+                "name":"color2",
+                "default":[ 1.0, 1.0, 1.0, 0.0 ],
+              },{
+                "name":"weight",
+                "default":[ 0.299, 0.587, 0.114 ],
+              },{
+                "name":"radius",
+                "default": 5.0,
+                "range":[2.0, 100.0],
+              },{
+                "name":"scale",
+                "default": 1.3,
+                "range":[0.1, 2.0],
         }],
     },
 }

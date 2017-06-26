@@ -91,3 +91,25 @@ boolean(texture2d<half, access::read>  inTexture  [[texture(0)]],
     half4 outColor = (range.x < d && d < range.y) ? half4(color2) : half4(color1);
     outTexture.write(outColor, gid);
 }
+
+kernel void
+gradientmap(texture2d<half, access::read>  inTexture  [[texture(0)]],
+     texture2d<half, access::write> outTexture [[texture(1)]],
+     const device float3& weight [[ buffer(2) ]],
+     const device float4& color1 [[ buffer(3) ]],
+     const device float4& color2 [[ buffer(4) ]],
+     uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half3 w = half3(weight / (weight.r + weight.g + weight.b));
+    half4 inColor  = inTexture.read(gid);
+    half d = dot(inColor.rgb, w);
+    outTexture.write(mix(half4(color1), half4(color2), d), gid);
+}
+
