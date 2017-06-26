@@ -40,6 +40,7 @@ class VSContext {
     private var stack = [VSTexture]()
     private var pool = [VSTexture]()
     var hasUpdate = false
+    var metalTexture:CVMetalTexture?
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
         self.device = device
@@ -47,6 +48,7 @@ class VSContext {
     }
     
     func set(metalTexture:CVMetalTexture) {
+        self.metalTexture = metalTexture // HACK: extra reference (see VSProcessor)
         if let texture = CVMetalTextureGetTexture(metalTexture) {
             set(texture:texture)
         }
