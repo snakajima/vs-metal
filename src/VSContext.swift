@@ -59,24 +59,36 @@ class VSContext {
     // Special type of push for the video source
     private func set(texture:MTLTexture) {
         assert(Thread.current == Thread.main)
+        
+        if width != texture.width || height != texture.height {
+            width = texture.width
+            height = texture.height
+            
+            descriptor.textureType = .type2D
+            descriptor.pixelFormat = pixelFormat
+            descriptor.width = width
+            descriptor.height = height
+            descriptor.usage = [.shaderRead, .shaderWrite]
+            
+            threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
+            threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
+        }
+
         hasUpdate = true
         stack.removeAll() // HACK: for now
-        push(texture:VSTexture(texture:texture, identity:-1))
         
-        if texture.width==width && texture.height==height {
-            return
-        }
-        width = texture.width
-        height = texture.height
+        // HACK: Extra copy
+        let textureCopy = device.makeTexture(descriptor: descriptor)
+        let commandBuffer:MTLCommandBuffer = {
+            let commandBuffer = commandQueue.makeCommandBuffer()
+            let encoder = commandBuffer.makeBlitCommandEncoder()
+            encoder.copy(from: texture, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOriginMake(0, 0, 0), sourceSize: MTLSizeMake(width, height, 1), to: textureCopy, destinationSlice: 0, destinationLevel: 0, destinationOrigin: MTLOriginMake(0, 0, 0))
+            encoder.endEncoding()
+            return commandBuffer
+        }()
+        commandBuffer.commit()
         
-        descriptor.textureType = .type2D
-        descriptor.pixelFormat = pixelFormat
-        descriptor.width = width
-        descriptor.height = height
-        descriptor.usage = [.shaderRead, .shaderWrite]
-
-        threadGroupCount.width = (width + threadGroupSize.width - 1) / threadGroupSize.width
-        threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
+        push(texture:VSTexture(texture:textureCopy, identity:-1))
     }
     
     func pop() -> VSTexture {
