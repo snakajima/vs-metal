@@ -10,7 +10,7 @@ import UIKit
 
 class ScriptsViewController: UITableViewController {
     let filenames = ["test0", "test1", "test2", "test3", "test4", "test5", "test6",
-                     "gradientmap", "cartoon", "cartoon_hipass", "invalid"]
+                     "halftone", "gradientmap", "cartoon", "cartoon_hipass", "invalid"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
