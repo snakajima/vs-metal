@@ -29,7 +29,6 @@
 		74A39DD21EFC4778004713D8 /* VSMPSFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */; };
 		74D3EFCD1EFDD89A0005765A /* VSScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D3EFCC1EFDD89A0005765A /* VSScript.swift */; };
 		74D3EFCF1EFDE41B0005765A /* test2.js in Resources */ = {isa = PBXBuildFile; fileRef = 74D3EFCE1EFDE41B0005765A /* test2.js */; };
-		74D3EFD11F01ABAE0005765A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 74D3EFD01F01ABAE0005765A /* LICENSE.txt */; };
 		74E284E01EFFE4D00045ADFB /* test0.js in Resources */ = {isa = PBXBuildFile; fileRef = 74E284DF1EFFE4D00045ADFB /* test0.js */; };
 		74E284E21F00B9B70045ADFB /* VSBlender.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74E284E11F00B9B70045ADFB /* VSBlender.metal */; };
 		74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */; };
@@ -63,7 +62,7 @@
 		74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSMPSFilter.swift; sourceTree = "<group>"; };
 		74D3EFCC1EFDD89A0005765A /* VSScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSScript.swift; sourceTree = "<group>"; };
 		74D3EFCE1EFDE41B0005765A /* test2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test2.js; sourceTree = "<group>"; };
-		74D3EFD01F01ABAE0005765A /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		74D3EFD21F01AC3F0005765A /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE.txt; path = ../LICENSE.txt; sourceTree = "<group>"; };
 		74E284DF1EFFE4D00045ADFB /* test0.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test0.js; sourceTree = "<group>"; };
 		74E284E11F00B9B70045ADFB /* VSBlender.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSBlender.metal; sourceTree = "<group>"; };
 		74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSRenderer.swift; sourceTree = "<group>"; };
@@ -110,7 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				744733201EF9B533008CD8C5 /* README.md */,
-				74D3EFD01F01ABAE0005765A /* LICENSE.txt */,
+				74D3EFD21F01AC3F0005765A /* LICENSE.txt */,
 				7447330D1EF9B4FF008CD8C5 /* vs-metal */,
 				7447330C1EF9B4FF008CD8C5 /* Products */,
 			);
@@ -226,7 +225,6 @@
 				7428EF2C1EFE2F8D007BECAF /* test3.js in Resources */,
 				7428EF321EFF6FDD007BECAF /* test5.js in Resources */,
 				74E284E01EFFE4D00045ADFB /* test0.js in Resources */,
-				74D3EFD11F01ABAE0005765A /* LICENSE.txt in Resources */,
 				744733191EF9B4FF008CD8C5 /* LaunchScreen.storyboard in Resources */,
 				744733161EF9B4FF008CD8C5 /* Assets.xcassets in Resources */,
 				744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */,
