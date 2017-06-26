@@ -12,19 +12,23 @@ import MetalKit
 class VSFilter: VSNode {
     let pipelineState:MTLComputePipelineState
     let paramBuffers:[MTLBuffer]
+    let sourceCount:Int
     
-    init(pipelineState:MTLComputePipelineState, buffers:[MTLBuffer]) {
+    init(pipelineState:MTLComputePipelineState, buffers:[MTLBuffer], sourceCount:Int) {
         self.pipelineState = pipelineState
         self.paramBuffers = buffers
+        self.sourceCount = sourceCount
     }
         
     func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) {
         let encoder = commandBuffer.makeComputeCommandEncoder()
         encoder.setComputePipelineState(pipelineState)
-        encoder.setTexture(context.pop().texture, at: 0)
-        encoder.setTexture(destination.texture, at: 1)
+        for index in 0..<sourceCount {
+            encoder.setTexture(context.pop().texture, at: index)
+        }
+        encoder.setTexture(destination.texture, at: sourceCount)
         for (index, buffer) in paramBuffers.enumerated() {
-            encoder.setBuffer(buffer, offset: 0, at: 2 + index)
+            encoder.setBuffer(buffer, offset: 0, at: sourceCount + 1 + index)
         }
         encoder.dispatchThreadgroups(context.threadGroupCount, threadsPerThreadgroup: context.threadGroupSize)
         encoder.endEncoding()

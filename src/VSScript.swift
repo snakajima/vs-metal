@@ -89,9 +89,10 @@ struct VSScript {
                 memcpy(buffer.contents(), values, length)
                 return buffer
             })
+            let sourceCount = info["sources"] as? Int ?? 1
             let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name)!
             let pipelineState = try! context.device.makeComputePipelineState(function: kernel)
-            return VSFilter(pipelineState: pipelineState, buffers: buffers)
+            return VSFilter(pipelineState: pipelineState, buffers: buffers, sourceCount:sourceCount)
         }
         return nil
     }

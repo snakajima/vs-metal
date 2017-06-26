@@ -11,5 +11,10 @@
         "name":"swap",
     },{
         "name":"sobel",
+    },{
+        "name":"alpha",
+        "attr":{
+            "ratio": [0.5]
+        }
     }]
 }
