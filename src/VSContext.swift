@@ -21,6 +21,7 @@ struct VSTexture:Equatable {
 
 class VSContext {
     let device:MTLDevice
+    let commandQueue: MTLCommandQueue
     let pixelFormat:MTLPixelFormat
     let threadGroupSize = MTLSizeMake(16,16,1)
     var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
@@ -45,6 +46,7 @@ class VSContext {
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
         self.device = device
         self.pixelFormat = pixelFormat
+        commandQueue = device.makeCommandQueue()
     }
     
     func set(metalTexture:CVMetalTexture) {
