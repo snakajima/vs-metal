@@ -1,5 +1,5 @@
 {
     "pipeline":[{
-        "name":"laplacian",
+        "name":"toone",
     }]
 }

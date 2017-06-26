@@ -58,6 +58,19 @@
         "title":"Laplacian",
         "description":"Laplacian Images",
     },
+    "toone": {
+        "type":"filter",
+        "title":"Toone",
+        "attr" : [{
+                "name":"levels",
+                "default":[4.0],
+                "range":[ 2.0, 8.0 ],
+        },{
+                "name":"weight",
+                "default":[ 0.299, 0.587, 0.114 ],
+        }],
+        "description":"Convert colors to multiple levels",
+    },
     "alpha": {
         "type":"blender",
         "title":"Alpha",
