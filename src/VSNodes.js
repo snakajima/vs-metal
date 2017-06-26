@@ -58,4 +58,14 @@
         "title":"Laplacian",
         "description":"Laplacian Images",
     },
+    "alpha": {
+        "type":"blender",
+        "title":"Alpha",
+        "description":"Alpha blend two layers",
+        "sources":2,
+        "attr": [{
+                "name":"ratio",
+                "default":[1.0],
+        }],
+    },
 }

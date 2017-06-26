@@ -30,6 +30,7 @@
 		74D3EFCD1EFDD89A0005765A /* VSScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D3EFCC1EFDD89A0005765A /* VSScript.swift */; };
 		74D3EFCF1EFDE41B0005765A /* test2.js in Resources */ = {isa = PBXBuildFile; fileRef = 74D3EFCE1EFDE41B0005765A /* test2.js */; };
 		74E284E01EFFE4D00045ADFB /* test0.js in Resources */ = {isa = PBXBuildFile; fileRef = 74E284DF1EFFE4D00045ADFB /* test0.js */; };
+		74E284E21F00B9B70045ADFB /* VSBlender.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74E284E11F00B9B70045ADFB /* VSBlender.metal */; };
 		74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */; };
 		74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBF1EFC828E0039A0CA /* VSNode.swift */; };
 		74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BC11EFC84070039A0CA /* VSFilters.metal */; };
@@ -62,6 +63,7 @@
 		74D3EFCC1EFDD89A0005765A /* VSScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSScript.swift; sourceTree = "<group>"; };
 		74D3EFCE1EFDE41B0005765A /* test2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test2.js; sourceTree = "<group>"; };
 		74E284DF1EFFE4D00045ADFB /* test0.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test0.js; sourceTree = "<group>"; };
+		74E284E11F00B9B70045ADFB /* VSBlender.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSBlender.metal; sourceTree = "<group>"; };
 		74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSRenderer.swift; sourceTree = "<group>"; };
 		74FB9BBF1EFC828E0039A0CA /* VSNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSNode.swift; sourceTree = "<group>"; };
 		74FB9BC11EFC84070039A0CA /* VSFilters.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSFilters.metal; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 			children = (
 				74A39DCB1EF9D106004713D8 /* VSRenderer.metal */,
 				74FB9BC11EFC84070039A0CA /* VSFilters.metal */,
+				74E284E11F00B9B70045ADFB /* VSBlender.metal */,
 			);
 			name = metal;
 			sourceTree = "<group>";
@@ -250,6 +253,7 @@
 				74A39DCE1EFC30EB004713D8 /* VSFilter.swift in Sources */,
 				7480D28B1EFA928B00DAA88E /* VSProcessor.swift in Sources */,
 				74A39DD01EFC31AB004713D8 /* VSContext.swift in Sources */,
+				74E284E21F00B9B70045ADFB /* VSBlender.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
