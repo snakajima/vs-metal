@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MetalKit
 import MetalPerformanceShaders
 
 // A wrapper of MTLTexture so that we can compare
@@ -45,8 +46,14 @@ class VSContext {
         self.pixelFormat = pixelFormat
     }
     
+    func set(metalTexture:CVMetalTexture) {
+        if let texture = CVMetalTextureGetTexture(metalTexture) {
+            set(texture:texture)
+        }
+    }
+    
     // Special type of push for the video source
-    func set(texture:MTLTexture) {
+    private func set(texture:MTLTexture) {
         assert(Thread.current == Thread.main)
         hasUpdate = true
         stack.removeAll() // HACK: for now

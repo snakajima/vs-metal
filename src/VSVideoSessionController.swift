@@ -120,8 +120,7 @@ extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegat
                 var metalTexture:CVMetalTexture? = nil
                 let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.bgra8Unorm, width, height, 0, &metalTexture)
                 if let metalTexture = metalTexture, status == kCVReturnSuccess {
-                    let texture = CVMetalTextureGetTexture(metalTexture)!
-                    context?.set(texture: texture)
+                    context?.set(metalTexture: metalTexture)
                 } else {
                     print("VSVS: failed to create texture")
                 }
