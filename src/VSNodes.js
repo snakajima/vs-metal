@@ -214,4 +214,31 @@
         "description":"Mix two layers using third layer's alpha",
         "sources":3,
     },
+    "color": {
+        "type":"source",
+        "title":"Solid Color",
+        "sources":0,
+        "description":"Generate a colored layer",
+        "attr": [{
+            "name":"color",
+            "default":[1.0, 1.0, 1.0, 1.0]
+        }],
+    },
+    "colors": {
+        "type":"source",
+        "title":"Mix of Two Solid Color",
+        "sources":0,
+        "description":"Generate a colored layer from two colors",
+        "attr": [{
+                 "name":"color1",
+                 "default":[1.0, 1.0, 1.0, 1.0]
+                 },{
+                 "name":"color2",
+                 "default":[0.0, 0.0, 0.0, 1.0]
+                 },{
+                 "name":"ratio",
+                 "default":[0.5]
+                 },{
+         }],
+    },
 }
