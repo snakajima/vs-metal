@@ -193,3 +193,76 @@ canny_edge(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write(half4(half3(color.rgb), d), gid);
 }
 
+kernel void
+tint(texture2d<half, access::read>  inTexture  [[texture(0)]],
+     texture2d<half, access::write> outTexture [[texture(1)]],
+     const device float& ratio [[ buffer(2) ]],
+     const device float4& color [[ buffer(3) ]],
+     uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 inColor  = inTexture.read(gid);
+    outTexture.write(mix(inColor, half4(color), half4(ratio)), gid);
+}
+
+kernel void
+enhancer(texture2d<half, access::read>  inTexture  [[texture(0)]],
+     texture2d<half, access::write> outTexture [[texture(1)]],
+     const device float2& red [[ buffer(2) ]],
+     const device float2& green [[ buffer(3) ]],
+     const device float2& blue [[ buffer(4) ]],
+     uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 inColor  = inTexture.read(gid);
+    half3 outColor = inColor.rgb - half3(red.x, green.x, blue.x);
+    outColor /= half3(red.y-red.x, green.y-green.x, blue.y-blue.x);
+    outTexture.write(half4(outColor, inColor.a), gid);
+}
+
+kernel void
+hue_filter(texture2d<half, access::read>  inTexture  [[texture(0)]],
+         texture2d<half, access::write> outTexture [[texture(1)]],
+         const device float2& hue [[ buffer(2) ]],
+         const device float2& chroma [[ buffer(3) ]],
+         uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 inColor  = inTexture.read(gid);
+    float R = inColor.r;
+    float G = inColor.g;
+    float B = inColor.b;
+    float M = max(inColor.r, max(inColor.g, inColor.b));
+    float m = min(inColor.r, min(inColor.g, inColor.b));
+    float C = M - m;
+    float hue0 = (M == m) ? 0.0 :
+    (M == R) ? (G - B) / C :
+    (M == G) ? (B - R) / C + 2.0 : (R - G) / C + 4.0;
+    hue0 = (hue0 < 0.0) ? hue0 + 6.0 : hue0;
+    hue0 = hue0 * 60.0;
+    hue0 = (hue.x < hue0) ? hue0 : hue0 + 360.0;
+    float high = (hue.x < hue.y) ? hue.y : hue.y + 360.0;
+    half a = (hue0 < high && chroma.x <= C && C <= chroma.y) ? 1.0 : 0.0;
+    //outTexture.write(half4(C, C, C, 1.0), gid);
+    outTexture.write(half4(inColor.rgb, a), gid);
+}
+
+

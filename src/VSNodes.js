@@ -167,4 +167,50 @@
                 "range":[0.1, 2.0],
         }],
     },
+
+    "tint": {
+        "type":"filter",
+        "title":"Tint",
+        "description":"Tint with a color",
+        "attr" : [{
+                "name":"ratio",
+                "default":[0.5],
+                  },{
+                "name":"color",
+                "default":[0.0, 0.0, 0.0, 1.0],
+        }],
+    },
+    "enhancer": {
+        "type":"filter",
+        "title":"Enhancer",
+        "description":"Enhance each color component",
+        "attr" : [{
+                "name":"red",
+                "default":[0.0, 1.0],
+                  },{
+                "name":"green",
+                "default":[0.0, 1.0],
+                  },{
+                "name":"blue",
+                "default":[0.0, 1.0],
+        }],
+    },
+    "hue_filter": {
+        "type":"filter",
+        "title":"Hue Detector",
+        "description":"detect",
+        "attr": [{
+                "name":"hue",
+                "default":[0.0, 180.0],
+                "range":[0.0, 360.0],
+                 },{
+                "name":"chroma",
+                "default":[0.2, 1.0],
+        }],
+    },
+    "mixer": {
+        "type":"mixer",
+        "title":"Mixer",
+        "description":"Mix two layers using third layer's alpha",
+    },
 }

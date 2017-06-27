@@ -10,8 +10,8 @@
 using namespace metal;
 
 kernel void
-alpha(texture2d<half, access::read>  inTexture1  [[texture(0)]],
-                texture2d<half, access::read>  inTexture2  [[texture(1)]],
+alpha(texture2d<half, access::read>  inTexture2  [[texture(0)]],
+                texture2d<half, access::read>  inTexture1  [[texture(1)]],
                 texture2d<half, access::write> outTexture [[texture(2)]],
                 const device float& ratio [[ buffer(3) ]],
                 uint2                          gid         [[thread_position_in_grid]])

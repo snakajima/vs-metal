@@ -27,8 +27,6 @@
     },{
         "name":"boolean",
     },{
-        "name":"swap",
-    },{
         "name":"alpha",
     }]
 }

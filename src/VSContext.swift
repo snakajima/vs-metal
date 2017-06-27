@@ -78,16 +78,16 @@ class VSContext {
             threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
         }
 
-        frameCount += 1
+        frameCount += 1 // debug only
         if (hasUpdate) {
             // Previous texture has not been processed yet. Ignore the new frame.
-            droppedFrameCount += 1
+            droppedFrameCount += 1 // debug only
             return
         }
         hasUpdate = true
         stack.removeAll() // HACK: for now
         
-        // HACK: I am creating an extra copy to work around the clicker bug described in the following stackflow comment.
+        // HACK: I am creating an extra copy to work around the flicker bug described in the following stackflow comment.
         // Extra reference to CVMetalTexture does not solve the problem.
         // https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
         let textureCopy:MTLTexture = {
@@ -111,7 +111,7 @@ class VSContext {
             return texture
         }
         print("VSC:pop underflow")
-        return make() // NOTE: Allow underflow
+        return make() // HACK FOR NOW: Allow underflow
     }
     
     func push(texture:VSTexture) {
