@@ -9,7 +9,7 @@
     },{
         "name":"mono",
     },{
-        "name":"sobel2",
+        "name":"sobel",
     },{
         "name":"canny_edge",
     },{

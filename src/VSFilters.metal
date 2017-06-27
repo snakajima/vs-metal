@@ -139,7 +139,7 @@ halftone(texture2d<half, access::read>  inTexture  [[texture(0)]],
 }
 
 kernel void
-sobel2(texture2d<half, access::read>  inTexture  [[texture(0)]],
+sobel(texture2d<half, access::read>  inTexture  [[texture(0)]],
                 texture2d<half, access::write> outTexture [[texture(1)]],
                 const device float& weight [[ buffer(2) ]],
                 uint2                          gid         [[thread_position_in_grid]])

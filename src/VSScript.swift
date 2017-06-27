@@ -62,7 +62,7 @@ struct VSScript {
                 let kernel = MPSImageGaussianBlur(device: context.device, sigma: sigma[0])
                 return VSMPSFilter(kernel: kernel)
             }
-        case "sobel":
+        case "sobel_mps":
             if let weight = params["weight"] as? [Float], weight.count == 3 {
                 let kernel = MPSImageSobel(device: context.device, linearGrayColorTransform: weight)
                 return VSMPSFilter(kernel: kernel)
