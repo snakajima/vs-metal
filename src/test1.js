@@ -1,13 +1,14 @@
 {
     "variables":{
-        "myratio":[0.4],
+        "myratio":[0.6],
         "green":[0.0, 1.0, 0.0, 1.0],
+        "red":[1.0, 0.0, 0.0, 1.0],
     },
     "pipeline":[{
         "name":"colors",
         "attr":{
             "color1": "green",
-            "color2": [0.0, 0.0, 1.0, 1.0],
+            "color2": "red",
             "ratio": "myratio",
         }
     }]

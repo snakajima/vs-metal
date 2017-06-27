@@ -10,5 +10,4 @@ import Foundation
 
 struct VSRuntime {
     let nodes:[VSNode]
-    let variables:[String:[Float]]
 }

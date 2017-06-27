@@ -116,16 +116,10 @@ struct VSScript {
                 }
             }
         }
-        let variables = json["variables"] as? [String:[Float]] ?? [String:[Float]]()
-        for buffer in context.namedBuffers {
-            if let values = variables[buffer.key] {
-                let length = MemoryLayout.size(ofValue: values[0]) * values.count
-                if length <= buffer.buffer.length {
-                    memcpy(buffer.buffer.contents(), values, length)
-                }
-            }
+        if let variables = json["variables"] as? [String:[Float]] {
+            context.updateNamedBuffers(with: variables)
         }
         
-        return VSRuntime(nodes:nodes, variables:variables)
+        return VSRuntime(nodes:nodes)
     }
 }
