@@ -139,7 +139,7 @@ halftone(texture2d<half, access::read>  inTexture  [[texture(0)]],
 }
 
 kernel void
-sobel(texture2d<half, access::read>  inTexture  [[texture(0)]],
+sobel2(texture2d<half, access::read>  inTexture  [[texture(0)]],
                 texture2d<half, access::write> outTexture [[texture(1)]],
                 const device float& weight [[ buffer(2) ]],
                 uint2                          gid         [[thread_position_in_grid]])
@@ -167,8 +167,9 @@ sobel(texture2d<half, access::read>  inTexture  [[texture(0)]],
 kernel void
 canny_edge(texture2d<half, access::read>  inTexture  [[texture(0)]],
                 texture2d<half, access::write> outTexture [[texture(1)]],
-                const device float3& weight [[ buffer(2) ]],
-                const device float4& color [[ buffer(3) ]],
+                const device float& threshold [[ buffer(2) ]],
+                const device float& thin [[ buffer(3) ]],
+                const device float4& color [[ buffer(4) ]],
                 uint2                          gid         [[thread_position_in_grid]])
 {
     // Check if the pixel is within the bounds of the output texture
@@ -177,9 +178,18 @@ canny_edge(texture2d<half, access::read>  inTexture  [[texture(0)]],
         // Return early if the pixel is out of bounds
         return;
     }
-    
-    half4 inColor  = inTexture.read(gid);
-    half  gray     = dot(inColor.rgb, half3(weight));
-    outTexture.write(half4(gray, gray, gray, inColor.a) * half4(color), gid);
+
+    half3 sobel = inTexture.read(gid).rgb;
+    half d = sobel.z;
+    half dx2 = sobel.x * sobel.x;
+    half dy2 = sobel.y * sobel.y;
+    half n = inTexture.read(uint2(gid.x, gid.y-1)).z;
+    half s = inTexture.read(uint2(gid.x, gid.y+1)).z;
+    half e = inTexture.read(uint2(gid.x+1, gid.y)).z;
+    half w = inTexture.read(uint2(gid.x-1, gid.y)).z;
+    d = (dx2 < dy2 && d < max(e,w) * thin) ? 0.0 : d;
+    d = (dx2 > dy2 && d < max(n,s) * thin) ? 0.0 : d;
+    d = (d < threshold) ? 0.0 : color.a;
+    outTexture.write(half4(half3(color.rgb), d), gid);
 }
 

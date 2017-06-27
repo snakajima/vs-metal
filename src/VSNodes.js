@@ -41,9 +41,33 @@
         "description":"Sobel operator (for Canny Edge Detector)",
         "attr": [{
             "name":"weight",
+            "default":[ 0.299, 0.587, 0.114 ],
+        }]
+    },
+    "sobel2": {
+        "type":"filter",
+        "title":"Sobel",
+        "description":"Sobel operator (for Canny Edge Detector)",
+        "attr": [{
+            "name":"weight",
             "default":[2.0],
             "range":[0.0, 4.0],
         }]
+    },
+    "canny_edge": {
+        "type":"filter",
+        "title":"Canny Edge Detector",
+        "description":"*Apply after Sobel filter to detect edge",
+        "attr": [{
+            "name":"threshold",
+            "default":[0.21],
+        },{
+            "name":"thin",
+            "default":[0.0],
+        },{
+            "name":"color",
+            "default":[0.0, 0.0, 0.0, 1.0]
+        }],
     },
     "pyramid": {
         "type":"filter",
