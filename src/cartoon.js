@@ -9,16 +9,9 @@
     },{
         "name":"mono",
     },{
-        "name":"sobel",
+        "name":"sobel2",
     },{
-        "name":"invert",
-    },{
-        "name":"boolean",
-        "attr":{
-            "range": [0.0, 0.9],
-            "color1": [1.0, 1.0, 1.0, 0.0],
-            "color2": [0.0, 0.0, 0.0, 1.0],
-        }
+        "name":"canny_edge",
     },{
         "name":"swap"
     },{

@@ -60,10 +60,10 @@
         "description":"*Apply after Sobel filter to detect edge",
         "attr": [{
             "name":"threshold",
-            "default":[0.21],
+            "default":[0.15],
         },{
             "name":"thin",
-            "default":[0.0],
+            "default":[0.5],
         },{
             "name":"color",
             "default":[0.0, 0.0, 0.0, 1.0]
