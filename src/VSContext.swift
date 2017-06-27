@@ -141,7 +141,7 @@ class VSContext {
         return ret
     }
     
-    func encode(nodes:[VSNode], commandBuffer:MTLCommandBuffer) {
+    func encode(runtime:VSRuntime, commandBuffer:MTLCommandBuffer) {
         assert(Thread.current == Thread.main)
         hasUpdate = false
         
@@ -152,7 +152,7 @@ class VSContext {
             memcpy(buffer.buffer.contents(), values, length)
         }
         
-        for node in nodes {
+        for node in runtime.nodes {
             node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
         }
     }

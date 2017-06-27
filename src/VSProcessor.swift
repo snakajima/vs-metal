@@ -13,13 +13,13 @@ import MetalPerformanceShaders
 class VSProcessor: NSObject, MTKViewDelegate {
     private let context:VSContext
     private let renderer:VSRenderer
-    private var nodes:[VSNode]
+    private var runtime:VSRuntime
     private var debugCounter = 0
     
     init(context:VSContext, view:MTKView, script:VSScript) {
         self.context = context
         renderer = VSRenderer(context:context)
-        nodes = script.compile(context: context)
+        runtime = script.compile(context: context)
         
         super.init()
         view.delegate = self
@@ -38,7 +38,7 @@ class VSProcessor: NSObject, MTKViewDelegate {
 
         let cmCompute:MTLCommandBuffer = {
             let commandBuffer = context.commandQueue.makeCommandBuffer()
-            context.encode(nodes: nodes, commandBuffer: commandBuffer)
+            context.encode(runtime: runtime, commandBuffer: commandBuffer)
             return commandBuffer
         }()
 

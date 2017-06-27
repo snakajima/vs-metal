@@ -107,7 +107,7 @@ struct VSScript {
         return nil
     }
     
-    func compile(context:VSContext) -> [VSNode]{
+    func compile(context:VSContext) -> VSRuntime {
         var nodes = [VSNode]()
         for item in self.pipeline {
             if let name=item["name"] as? String {
@@ -116,6 +116,6 @@ struct VSScript {
                 }
             }
         }
-        return nodes
+        return VSRuntime(nodes:nodes)
     }
 }
