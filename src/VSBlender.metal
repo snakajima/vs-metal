@@ -28,3 +28,24 @@ alpha(texture2d<half, access::read>  inTexture2  [[texture(0)]],
     outTexture.write(half4(mix(color1.rgb, color2.rgb, half(ratio) * color2.a), color1.a), gid);
 }
 
+kernel void
+mixer(texture2d<half, access::read>  inTexture3  [[texture(0)]],
+      texture2d<half, access::read>  inTexture2  [[texture(1)]],
+      texture2d<half, access::read>  inTexture1  [[texture(2)]],
+      texture2d<half, access::write> outTexture [[texture(3)]],
+      const device float& ratio [[ buffer(4) ]],
+      uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 color1  = inTexture1.read(gid);
+    half4 color2  = inTexture2.read(gid);
+    half4 color3  = inTexture3.read(gid);
+    outTexture.write(mix(color1, color2, color3.a), gid);
+}
+

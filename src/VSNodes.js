@@ -212,5 +212,6 @@
         "type":"mixer",
         "title":"Mixer",
         "description":"Mix two layers using third layer's alpha",
+        "sources":3,
     },
 }
