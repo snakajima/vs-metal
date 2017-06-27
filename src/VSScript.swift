@@ -108,7 +108,6 @@ struct VSScript {
     }
     
     func compile(context:VSContext) -> VSRuntime {
-        let variables = json["variables"] as? [String:[Float]] ?? [String:[Float]]()
         var nodes = [VSNode]()
         for item in self.pipeline {
             if let name=item["name"] as? String {
@@ -117,6 +116,16 @@ struct VSScript {
                 }
             }
         }
+        let variables = json["variables"] as? [String:[Float]] ?? [String:[Float]]()
+        for buffer in context.namedBuffers {
+            if let values = variables[buffer.key] {
+                let length = MemoryLayout.size(ofValue: values[0]) * values.count
+                if length <= buffer.buffer.length {
+                    memcpy(buffer.buffer.contents(), values, length)
+                }
+            }
+        }
+        
         return VSRuntime(nodes:nodes, variables:variables)
     }
 }
