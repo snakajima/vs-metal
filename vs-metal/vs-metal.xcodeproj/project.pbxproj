@@ -11,6 +11,7 @@
 		741847331F01B0EA009A45F9 /* cartoon.js in Resources */ = {isa = PBXBuildFile; fileRef = 741847321F01B0EA009A45F9 /* cartoon.js */; };
 		741847351F01B108009A45F9 /* cartoon_hipass.js in Resources */ = {isa = PBXBuildFile; fileRef = 741847341F01B108009A45F9 /* cartoon_hipass.js */; };
 		741847371F01C1BA009A45F9 /* halftone.js in Resources */ = {isa = PBXBuildFile; fileRef = 741847361F01C1BA009A45F9 /* halftone.js */; };
+		741847391F02CCE4009A45F9 /* red.js in Resources */ = {isa = PBXBuildFile; fileRef = 741847381F02CCE4009A45F9 /* red.js */; };
 		7428EF2A1EFE2E8C007BECAF /* VSVideoSessionController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7428EF291EFE2E8C007BECAF /* VSVideoSessionController.storyboard */; };
 		7428EF2C1EFE2F8D007BECAF /* test3.js in Resources */ = {isa = PBXBuildFile; fileRef = 7428EF2B1EFE2F8D007BECAF /* test3.js */; };
 		7428EF2E1EFF6E51007BECAF /* VSControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7428EF2D1EFF6E51007BECAF /* VSControllers.swift */; };
@@ -45,6 +46,7 @@
 		741847321F01B0EA009A45F9 /* cartoon.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = cartoon.js; sourceTree = "<group>"; };
 		741847341F01B108009A45F9 /* cartoon_hipass.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = cartoon_hipass.js; sourceTree = "<group>"; };
 		741847361F01C1BA009A45F9 /* halftone.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = halftone.js; sourceTree = "<group>"; };
+		741847381F02CCE4009A45F9 /* red.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = red.js; sourceTree = "<group>"; };
 		7428EF291EFE2E8C007BECAF /* VSVideoSessionController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VSVideoSessionController.storyboard; sourceTree = "<group>"; };
 		7428EF2B1EFE2F8D007BECAF /* test3.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test3.js; sourceTree = "<group>"; };
 		7428EF2D1EFF6E51007BECAF /* VSControllers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSControllers.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				742CBFBB1EFDD6930017D38A /* test1.js */,
+				741847381F02CCE4009A45F9 /* red.js */,
 				741847361F01C1BA009A45F9 /* halftone.js */,
 				741847321F01B0EA009A45F9 /* cartoon.js */,
 				74E284DF1EFFE4D00045ADFB /* test0.js */,
@@ -241,6 +244,7 @@
 				744733191EF9B4FF008CD8C5 /* LaunchScreen.storyboard in Resources */,
 				744733161EF9B4FF008CD8C5 /* Assets.xcassets in Resources */,
 				744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */,
+				741847391F02CCE4009A45F9 /* red.js in Resources */,
 				741847351F01B108009A45F9 /* cartoon_hipass.js in Resources */,
 				7428EF301EFF6F9B007BECAF /* test4.js in Resources */,
 				7428EF341EFF7003007BECAF /* test6.js in Resources */,
