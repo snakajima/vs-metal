@@ -62,11 +62,13 @@ struct VSScript {
                 let kernel = MPSImageGaussianBlur(device: context.device, sigma: sigma[0])
                 return VSMPSFilter(kernel: kernel)
             }
+        /* MPSImageSobel is not useful without canny edge
         case "sobel":
             if let weight = params["weight"] as? [Float], weight.count == 3 {
                 let kernel = MPSImageSobel(device: context.device, linearGrayColorTransform: weight)
                 return VSMPSFilter(kernel: kernel)
             }
+        */
         /*
         case "pyramid":
             if let weight = params["weight"] as? [Float], weight.count == 3 {

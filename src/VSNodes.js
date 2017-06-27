@@ -40,8 +40,9 @@
         "title":"Sobel",
         "description":"Sobel operator (for Canny Edge Detector)",
         "attr": [{
-                "name":"weight",
-                "default":[ 0.299, 0.587, 0.114 ],
+            "name":"weight",
+            "default":[2.0],
+            "range":[0.0, 4.0],
         }]
     },
     "pyramid": {

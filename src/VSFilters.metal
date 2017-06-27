@@ -138,3 +138,48 @@ halftone(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write((v > d) ? half4(color1) : half4(color2), gid);
 }
 
+kernel void
+sobel(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                const device float& weight [[ buffer(2) ]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half n = inTexture.read(uint2(gid.x, gid.y-1)).r;
+    half s = inTexture.read(uint2(gid.x, gid.y+1)).r;
+    half e = inTexture.read(uint2(gid.x+1, gid.y)).r;
+    half w = inTexture.read(uint2(gid.x-1, gid.y)).r;
+    half nw = inTexture.read(uint2(gid.x-1, gid.y-1)).r;
+    half ne = inTexture.read(uint2(gid.x+1, gid.y-1)).r;
+    half sw = inTexture.read(uint2(gid.x-1, gid.y+1)).r;
+    half se = inTexture.read(uint2(gid.x+1, gid.y+1)).r;
+    half dx = weight * (n - s) + (nw + ne - se - sw);
+    half dy = weight * (w - e) + (nw + sw - se - ne);
+    outTexture.write(half4((dx + 1.0)/2.0, (dy + 1.0)/2.0, sqrt(dx*dy + dy*dy), 1.0), gid);
+}
+
+kernel void
+canny_edge(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                const device float3& weight [[ buffer(2) ]],
+                const device float4& color [[ buffer(3) ]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 inColor  = inTexture.read(gid);
+    half  gray     = dot(inColor.rgb, half3(weight));
+    outTexture.write(half4(gray, gray, gray, inColor.a) * half4(color), gid);
+}
+
