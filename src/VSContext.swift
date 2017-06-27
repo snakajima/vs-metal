@@ -145,6 +145,14 @@ class VSContext {
         assert(Thread.current == Thread.main)
         hasUpdate = false
         
+        // prototype
+        let date = NSDate().timeIntervalSince1970
+        let ratio = (Float(sin(date * .pi * 2.0)) + 1.0) / 2.0
+        let variables = [
+            "myratio":[ratio]
+        ]
+        updateNamedBuffers(with: variables)
+ 
         for node in runtime.nodes {
             node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
         }
