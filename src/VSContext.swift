@@ -41,11 +41,17 @@ class VSContext {
     private var stack = [VSTexture]()
     private var pool = [VSTexture]()
     var hasUpdate = false
+    private var frameCount = 0
+    private var droppedFrameCount = 0
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
         self.device = device
         self.pixelFormat = pixelFormat
         commandQueue = device.makeCommandQueue()
+    }
+    
+    deinit {
+        print("VCS:frame drop rate = ", Float(droppedFrameCount) / Float(frameCount))
     }
     
     func set(metalTexture:CVMetalTexture) {
@@ -72,21 +78,30 @@ class VSContext {
             threadGroupCount.height = (height + threadGroupSize.height - 1) / threadGroupSize.height
         }
 
+        frameCount += 1
+        if (hasUpdate) {
+            // Previous texture has not been processed yet. Ignore the new frame.
+            droppedFrameCount += 1
+            return
+        }
         hasUpdate = true
         stack.removeAll() // HACK: for now
         
         // HACK: I am creating an extra copy to work around the clicker bug described in the following stackflow comment.
         // Extra reference to CVMetalTexture does not solve the problem.
         // https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
-        let textureCopy = device.makeTexture(descriptor: descriptor)
-        let commandBuffer:MTLCommandBuffer = {
-            let commandBuffer = commandQueue.makeCommandBuffer()
-            let encoder = commandBuffer.makeBlitCommandEncoder()
-            encoder.copy(from: texture, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOriginMake(0, 0, 0), sourceSize: MTLSizeMake(width, height, 1), to: textureCopy, destinationSlice: 0, destinationLevel: 0, destinationOrigin: MTLOriginMake(0, 0, 0))
-            encoder.endEncoding()
-            return commandBuffer
+        let textureCopy:MTLTexture = {
+            let textureCopy = device.makeTexture(descriptor: descriptor)
+            let commandBuffer:MTLCommandBuffer = {
+                let commandBuffer = commandQueue.makeCommandBuffer()
+                let encoder = commandBuffer.makeBlitCommandEncoder()
+                encoder.copy(from: texture, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOriginMake(0, 0, 0), sourceSize: MTLSizeMake(width, height, 1), to: textureCopy, destinationSlice: 0, destinationLevel: 0, destinationOrigin: MTLOriginMake(0, 0, 0))
+                encoder.endEncoding()
+                return commandBuffer
+            }()
+            commandBuffer.commit()
+            return textureCopy
         }()
-        commandBuffer.commit()
         
         push(texture:VSTexture(texture:textureCopy, identity:-1))
     }
