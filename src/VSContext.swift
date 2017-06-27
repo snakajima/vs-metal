@@ -145,11 +145,14 @@ class VSContext {
         assert(Thread.current == Thread.main)
         hasUpdate = false
         
+        // NOTE: No need to do this for each iteration
         for buffer in namedBuffers {
-            // LATER: prototype code
-            let values = [0.6] as [Float]
-            let length = MemoryLayout.size(ofValue: values[0]) * values.count
-            memcpy(buffer.buffer.contents(), values, length)
+            if let values = runtime.variables[buffer.key] {
+                let length = MemoryLayout.size(ofValue: values[0]) * values.count
+                if length <= buffer.buffer.length {
+                    memcpy(buffer.buffer.contents(), values, length)
+                }
+            }
         }
         
         for node in runtime.nodes {

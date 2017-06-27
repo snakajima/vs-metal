@@ -108,6 +108,7 @@ struct VSScript {
     }
     
     func compile(context:VSContext) -> VSRuntime {
+        let variables = json["variables"] as? [String:[Float]] ?? [String:[Float]]()
         var nodes = [VSNode]()
         for item in self.pipeline {
             if let name=item["name"] as? String {
@@ -116,6 +117,6 @@ struct VSScript {
                 }
             }
         }
-        return VSRuntime(nodes:nodes)
+        return VSRuntime(nodes:nodes, variables:variables)
     }
 }
