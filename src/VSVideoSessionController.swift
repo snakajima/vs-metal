@@ -47,6 +47,9 @@ class VSVideoSessionController: UIViewController {
             renderer = VSProcessor(context:context!, view:mtkView, script:script)
         }
         mtkView.device = context!.device
+        
+        // BUGBUG: Attempt to set the background color
+        mtkView.clearColor = MTLClearColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
 
         startVideoCaptureSession()
     }
