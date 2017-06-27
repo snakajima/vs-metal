@@ -41,7 +41,6 @@ class VSContext {
     private var stack = [VSTexture]()
     private var pool = [VSTexture]()
     var hasUpdate = false
-    var metalTexture:CVMetalTexture?
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
         self.device = device
@@ -50,7 +49,6 @@ class VSContext {
     }
     
     func set(metalTexture:CVMetalTexture) {
-        self.metalTexture = metalTexture // HACK: extra reference (see VSProcessor)
         if let texture = CVMetalTextureGetTexture(metalTexture) {
             set(texture:texture)
         }
@@ -77,7 +75,9 @@ class VSContext {
         hasUpdate = true
         stack.removeAll() // HACK: for now
         
-        // HACK: Extra copy
+        // HACK: I am creating an extra copy to work around the clicker bug described in the following stackflow comment.
+        // Extra reference to CVMetalTexture does not solve the problem.
+        // https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
         let textureCopy = device.makeTexture(descriptor: descriptor)
         let commandBuffer:MTLCommandBuffer = {
             let commandBuffer = commandQueue.makeCommandBuffer()

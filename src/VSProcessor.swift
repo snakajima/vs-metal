@@ -15,7 +15,6 @@ class VSProcessor: NSObject, MTKViewDelegate {
     private let renderer:VSRenderer
     private var nodes:[VSNode]
     private var debugCounter = 0
-    private var metalTexture:CVMetalTexture?
     
     init(context:VSContext, view:MTKView, script:VSScript) {
         self.context = context
@@ -37,11 +36,6 @@ class VSProcessor: NSObject, MTKViewDelegate {
             return
         }
 
-        // HACK: I am creating an extra ference to the metal texture just in case
-        // the bug described in the following stackflow comment.
-        // https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
-        self.metalTexture = context.metalTexture // HACK: extra reference
-        
         let cmCompute:MTLCommandBuffer = {
             let commandBuffer = context.commandQueue.makeCommandBuffer()
             context.encode(nodes: nodes, commandBuffer: commandBuffer)
@@ -56,11 +50,6 @@ class VSProcessor: NSObject, MTKViewDelegate {
         }()
         
         cmCompute.commit()
-        
-        cmRender.addCompletedHandler { (_) in
-            self.metalTexture = nil // HACK: release extra reference
-        }
-        
         cmRender.commit()
     }
 }
