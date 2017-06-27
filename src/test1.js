@@ -1,5 +1,5 @@
 {
-    "variables":{
+    "constants":{
         "myratio":[0.2],
         "green":[0.0, 1.0, 0.0, 1.0],
         "red":[1.0, 0.0, 0.0, 1.0],

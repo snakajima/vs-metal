@@ -116,7 +116,7 @@ struct VSScript {
                 }
             }
         }
-        if let variables = json["variables"] as? [String:[Float]] {
+        if let variables = json["constants"] as? [String:[Float]] {
             context.updateNamedBuffers(with: variables)
         }
         
