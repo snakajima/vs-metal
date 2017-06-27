@@ -19,6 +19,11 @@ struct VSTexture:Equatable {
     }
 }
 
+private struct NamedBuffer {
+    let key:String
+    let buffer:MTLBuffer
+}
+
 class VSContext {
     let device:MTLDevice
     let commandQueue: MTLCommandQueue
@@ -31,7 +36,8 @@ class VSContext {
         let json = try! JSONSerialization.jsonObject(with: data)
         return json as! [String:[String:Any]]
     }()
-
+    private var namedBuffers = [NamedBuffer]()
+    
     private var width = 1, height = 1 // to be set later
     private var descriptor = MTLTextureDescriptor()
     
@@ -138,8 +144,21 @@ class VSContext {
     func encode(nodes:[VSNode], commandBuffer:MTLCommandBuffer) {
         assert(Thread.current == Thread.main)
         hasUpdate = false
+        
+        for buffer in namedBuffers {
+            // LATER: prototype code
+            let values = [0.6] as [Float]
+            let length = MemoryLayout.size(ofValue: values[0]) * values.count
+            memcpy(buffer.buffer.contents(), values, length)
+        }
+        
         for node in nodes {
             node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
         }
+    }
+    
+    func registerNamedBuffer(key:String, buffer:MTLBuffer) {
+        print("VSC:registerNamedBuffer", key)
+        namedBuffers.append(NamedBuffer(key:key, buffer:buffer))
     }
 }

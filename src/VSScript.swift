@@ -87,6 +87,9 @@ struct VSScript {
                 let length = MemoryLayout.size(ofValue: values[0]) * values.count
                 let buffer = context.device.makeBuffer(length: (length + 15) / 16 * 16, options: .storageModeShared)
                 memcpy(buffer.contents(), values, length)
+                if let key = paramsIn?[name] as? String {
+                    context.registerNamedBuffer(key: key, buffer: buffer)
+                }
                 return buffer
             })
             let sourceCount = info["sources"] as? Int ?? 1
