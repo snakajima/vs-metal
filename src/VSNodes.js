@@ -40,6 +40,21 @@
             },
         ],
     },
+    "transform": {
+        "type":"filter",
+        "title":"Transform",
+        "description":"Affine transform operation",
+        "attr" : [
+                  {
+                  "name":"abcd",
+                  "default":[ 1.0, 0.0, 0.0, 1.0 ],
+                  },
+                  {
+                  "name":"txty",
+                  "default":[ 0.0, 0.0 ],
+                  },
+                  ],
+    },
     
     "mono": {
         "type":"filter",
@@ -398,4 +413,112 @@
         "description":"Luminosity blend two layers",
     },
 
+    
+    "boxblur": {
+        "type":"filter",
+        "title":"Box Blur",
+        "blur":true,
+        "vertex":"blur",
+        "description":"Box Blur",
+        "attr" : [{
+            "name":"radius",
+            "default":4.0,
+            "range":[1.0, 64.0],
+        }],
+    },
+    "alphamask": {
+        "type":"blender",
+        "title":"Alpha Mask",
+        "description":"Alpha mask one layer with another",
+    },
+    "contrast": {
+        "type":"filter",
+        "title":"Contrast",
+        "description":"Change the contrast",
+        "attr": [{
+            "name":"enhance",
+            "default":0.5,
+        }],
+    },
+
+    "anti_alias": {
+        "type":"filter",
+        "title":"Anti Alias",
+        "description":"Anti Alias",
+        "vertex":"convolve",
+    },
+    "saturate": {
+        "type":"filter",
+        "title":"Saturate",
+        "description":"Saturate/desaturate the color",
+        "attr": [{
+            "name":"ratio",
+                "default":0.5,
+                "range":[-1.0, 1.0],
+                 },{
+            "name":"weight",
+                "default":[0.2126,0.7152,0.0722],
+        }],
+    },
+    "stretch": {
+        "type":"filter",
+        "title":"Stretch",
+        "description":"Stretch x or y direction",
+        "vertex":"stretch",
+        "attr": [{
+            "name":"ratio",
+                "default":[1.0, 1.0],
+                "range":[1.0, 2.0],
+        }],
+    },
+    
+    "tilt_shift": {
+        "type":"filter",
+        "title":"Tilt Shift",
+        "description":"Miniature faking",
+        "blur":true,
+        "orientation":true,
+        "vertex":"blur",
+        "attr" : [{
+            "name":"radius",
+                "default":16.0,
+                "range":[8.0, 24.0],
+                  },{
+            "name":"factor",
+                "default":2.0,
+                "range":[0.5, 3.0],
+                  },{
+            "name":"position",
+                "default":0.5,
+                "range":[0.0, 1.0],
+        }],
+    },
+    "emboss" : {
+        "type":"filter",
+        "title":"Emboss",
+        "description":"*Apply after Sobel filter",
+        "attr": [{
+            "name":"rotation",
+                "default":0.0,
+                "range":[-3.14159265, 3.14159265]
+        }]
+    },
+    "embold": {
+        "type":"filter",
+        "title":"Embold",
+        "blur":true,
+        "vertex":"blur",
+        "description":"Embold",
+        "attr" : [{
+            "name":"radius",
+                "default":4.0,
+                "range":[1.0, 8.0],
+        }],
+    },
+    "invertalpha": {
+        "type":"filter",
+        "title":"Invert Alpha",
+        "description":"Invert the alpha channel",
+    },
+    
 }
