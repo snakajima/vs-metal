@@ -1,9 +1,12 @@
 {
     "pipeline":[{
-        "name":"fork",
+                "name":"previous",
     },{
-        "name":"shift",
+                "name":"alpha",
+                "attr":{
+                    "ratio": 0.8,
+                }
     },{
-        "name":"discard",
+                "name":"fork",
     }]
 }

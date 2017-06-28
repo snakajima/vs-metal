@@ -19,6 +19,11 @@
         "title":"Shift",
         "description":"Shift the topmost layer to the bottom",
     },
+    "previous": {
+        "type":"control",
+        "title":"Previous",
+        "description":"Texture from previous frame",
+    },
     
     "translate": {
         "type":"filter",

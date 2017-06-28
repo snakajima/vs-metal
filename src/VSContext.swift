@@ -128,6 +128,14 @@ class VSContext {
         throw VSContextError.stackOverflow
     }
     
+    func prev() -> VSTexture {
+        if let texture = prevs.popLast() {
+            return texture
+        }
+        print("VSC prev returning source")
+        return sourceTexture!
+    }
+    
     func push(texture:VSTexture) {
         stack.append(texture)
     }

@@ -36,3 +36,10 @@ class VSShift:VSNode {
         context.shift()
     }
 }
+
+class VSPrevious:VSNode {
+    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
+        let texture = context.prev()
+        context.push(texture: texture)
+    }
+}

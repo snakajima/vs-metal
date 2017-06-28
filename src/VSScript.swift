@@ -85,6 +85,8 @@ struct VSScript {
             return VSShift()
         case "discard":
             return VSDiscard()
+        case "previous":
+            return VSPrevious()
         default:
             let buffers = names.map({ (name) -> MTLBuffer in
                 let values = params[name] as! [Float]
