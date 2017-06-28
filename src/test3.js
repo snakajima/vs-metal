@@ -2,10 +2,9 @@
     "pipeline":[{
         "name":"fork",
     },{
-        "name":"translate",
+        "name":"transform",
         "attr":{
-            "tx": [200.0],
-            "ty": [200.0],
+            "abcd": [0.995,0.0998,-0.0998,0.995],
         }
     },{
         "name":"exclusion",

@@ -37,14 +37,24 @@ translate(texture2d<half, access::sample>  inTexture  [[texture(0)]],
                 uint2 gid [[thread_position_in_grid]])
 {
     // Check if the pixel is within the bounds of the output texture
-    uint2 gid2 = uint2(gid.x + tx, gid.y + ty);
-    if((gid2.x >= outTexture.get_width()) || (gid2.y >= outTexture.get_height()))
-    {
-        // Return early if the pixel is out of bounds
-        return;
-    }
+    float2 gid2 = float2(gid.x + tx, gid.y + ty);
     
-    half4 inColor  = inTexture.sample(c_smp, float2(gid2));
+    half4 inColor  = inTexture.sample(c_smp, gid2);
+    outTexture.write(inColor, gid);
+}
+
+kernel void
+transform(texture2d<half, access::sample>  inTexture  [[texture(0)]],
+          texture2d<half, access::write> outTexture [[texture(1)]],
+          const device float4& abcd [[ buffer(2) ]],
+          const device float2& txty [[ buffer(3) ]],
+          uint2 gid [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    float2 gid2 = float2(abcd.r * float(gid.x) + abcd.g * float(gid.y) + txty.x,
+                         abcd.b * float(gid.x) + abcd.a * float(gid.y) + txty.y);
+    
+    half4 inColor  = inTexture.sample(c_smp, gid2);
     outTexture.write(inColor, gid);
 }
 
