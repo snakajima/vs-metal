@@ -50,6 +50,7 @@ class VSContext {
     var hasUpdate = false
     private var frameCount = 0
     private var droppedFrameCount = 0
+    private var sourceTexture:VSTexture?
     
     init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
         self.device = device
@@ -110,7 +111,8 @@ class VSContext {
             return textureCopy
         }()
         
-        push(texture:VSTexture(texture:textureCopy, identity:-1))
+        sourceTexture = VSTexture(texture:textureCopy, identity:-1)
+        push(texture:sourceTexture!)
     }
     
     func pop() -> VSTexture {
@@ -118,7 +120,7 @@ class VSContext {
             return texture
         }
         print("VSC:pop underflow")
-        return make() // HACK FOR NOW: Allow underflow
+        return sourceTexture! // For recurring pipeline
     }
     
     func push(texture:VSTexture) {
