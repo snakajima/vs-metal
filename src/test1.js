@@ -6,7 +6,7 @@
     "variables":{
         "myratio":{
             "type":"sin",
-            "range":[0, 1.0],
+            "range":[0.0, 0.5],
             "interval":2.0
         }
     },
