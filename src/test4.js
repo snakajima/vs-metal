@@ -1,10 +1,25 @@
 {
     "pipeline":[{
-        "name":"gradientmap",
+        "name":"gaussianblur",
         "attr":{
-            "weight": [0.2126, 0.7152, 0.0722],
-            "color1": [0.0, 0.5, 0.5, 1.0],
-            "color2": [1.0, 1.0, 0.0, 1.0]
+            "sigma": [2.0],
         }
+    },{
+        "name":"fork",
+    },{
+        "name":"gaussianblur",
+        "attr":{
+            "sigma": [2.0],
+        }
+    },{
+        "name":"toone",
+    },{
+        "name":"swap"
+    },{
+        "name":"sobel",
+    },{
+        "name":"canny_edge",
+    },{
+        "name":"darken"
     }]
 }

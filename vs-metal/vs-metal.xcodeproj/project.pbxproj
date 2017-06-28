@@ -111,17 +111,17 @@
 			isa = PBXGroup;
 			children = (
 				742CBFBB1EFDD6930017D38A /* test1.js */,
+				74D3EFCE1EFDE41B0005765A /* test2.js */,
+				7428EF2B1EFE2F8D007BECAF /* test3.js */,
+				7428EF2F1EFF6F9B007BECAF /* test4.js */,
 				74E284E51F034E870045ADFB /* blink.js */,
 				741847381F02CCE4009A45F9 /* red.js */,
 				741847361F01C1BA009A45F9 /* halftone.js */,
 				741847321F01B0EA009A45F9 /* cartoon.js */,
 				74E284DF1EFFE4D00045ADFB /* test0.js */,
-				7428EF2F1EFF6F9B007BECAF /* test4.js */,
 				741847301F01B0C2009A45F9 /* gradientmap.js */,
 				7428EF311EFF6FDD007BECAF /* test5.js */,
 				7428EF331EFF7003007BECAF /* test6.js */,
-				74D3EFCE1EFDE41B0005765A /* test2.js */,
-				7428EF2B1EFE2F8D007BECAF /* test3.js */,
 				741847341F01B108009A45F9 /* cartoon_hipass.js */,
 			);
 			name = scripts;

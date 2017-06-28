@@ -1,34 +1,25 @@
 {
     "pipeline":[{
+        "name":"gaussianblur",
+        "attr":{
+            "sigma": [2.0],
+        }
+    },{
         "name":"fork",
     },{
         "name":"gaussianblur",
         "attr":{
-            "sigma": [2.0]
+            "sigma": [2.0],
         }
     },{
         "name":"toone",
     },{
-        "name":"swap",
+        "name":"swap"
     },{
-        "name":"fork",
+        "name":"sobel",
     },{
-        "name":"gaussianblur",
-        "attr":{
-            "sigma": [4.0]
-        }
+        "name":"canny_edge",
     },{
-        "name":"invert",
-    },{
-        "name":"alpha",
-        "attr":{
-            "ratio": [0.5]
-        }
-    },{
-        "name":"boolean",
-    },{
-        "name":"swap",
-    },{
-        "name":"alpha",
+        "name":"screen"
     }]
 }

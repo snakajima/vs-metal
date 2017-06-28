@@ -264,21 +264,25 @@
     },
     "multiply": {
         "type":"blender",
+        "sources":2,
         "title":"Multiply",
         "description":"Multiply-blend two layers",
     },
     "screen": {
         "type":"blender",
+        "sources":2,
         "title":"Screen",
         "description":"Screen-blend two layers",
     },
     "lighten": {
         "type":"blender",
+        "sources":2,
         "title":"Lighten",
         "description":"Lighter-blend two layers",
     },
     "darken": {
         "type":"blender",
+        "sources":2,
         "title":"Darken",
         "description":"Darken-blend two layers",
     },
