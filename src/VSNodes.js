@@ -241,4 +241,45 @@
                  },{
          }],
     },
+
+    "lighter": {
+        "type":"filter",
+        "title":"Lighter",
+        "description":"Make the color lighter",
+        "attr": [{
+                "name":"ratio",
+            "default":0.5,
+            "range":[0.0, 30.0],
+        }],
+    },
+    "hueshift": {
+        "type":"filter",
+        "title":"Hue Shifter",
+        "description":"Shift Hue",
+        "attr": [{
+            "name":"shift",
+            "default":180.0,
+            "range":[0.0, 360.0],
+        }],
+    },
+    "multiply": {
+        "type":"blender",
+        "title":"Multiply",
+        "description":"Multiply-blend two layers",
+    },
+    "screen": {
+        "type":"blender",
+        "title":"Screen",
+        "description":"Screen-blend two layers",
+    },
+    "lighten": {
+        "type":"blender",
+        "title":"Lighten",
+        "description":"Lighter-blend two layers",
+    },
+    "darken": {
+        "type":"blender",
+        "title":"Darken",
+        "description":"Darken-blend two layers",
+    },
 }
