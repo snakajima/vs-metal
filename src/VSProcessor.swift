@@ -55,5 +55,6 @@ class VSProcessor: NSObject, MTKViewDelegate {
         } catch let error {
             print("#### ERROR #### VSProcessor:draw", error)
         }
+        context.flush()
     }
 }

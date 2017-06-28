@@ -179,6 +179,10 @@ class VSContext {
         }
     }
     
+    func flush() {
+        stack.removeAll()
+    }
+    
     func registerNamedBuffer(key:String, buffer:MTLBuffer) {
         print("VSC:registerNamedBuffer", key)
         namedBuffers.append(NamedBuffer(key:key, buffer:buffer))
