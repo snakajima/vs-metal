@@ -286,4 +286,42 @@
         "title":"Darken",
         "description":"Darken-blend two layers",
     },
+
+    "overlay": {
+        "type":"blender",
+        "sources":2,
+        "title":"Overlay",
+        "description":"Muitply or screen blend two layers",
+    },
+    "colordodge": {
+        "type":"blender",
+        "sources":2,
+        "title":"Color Dodge",
+        "description":"Color dodge blend two layers",
+    },
+    "colorburn": {
+        "type":"blender",
+        "sources":2,
+        "title":"Color Burn",
+        "description":"Color burn blend two layers",
+    },
+    "hardlight": {
+        "type":"blender",
+        "sources":2,
+        "title":"Hard Light",
+        "description":"Hard light blend two layers",
+    },
+    "softlight": {
+        "type":"blender",
+        "sources":2,
+        "title":"Soft Light",
+        "description":"Soft light blend two layers",
+    },
+    "difference": {
+        "type":"blender",
+        "sources":2,
+        "title":"Difference",
+        "description":"Difference blend two layers",
+    },
+
 }

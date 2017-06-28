@@ -20,6 +20,6 @@
     },{
         "name":"canny_edge",
     },{
-        "name":"screen"
+        "name":"colordodge"
     }]
 }
