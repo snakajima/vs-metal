@@ -1,13 +1,8 @@
 {
     "pipeline":[{
-                "name":"fork",
-                },{
-                "name":"translate",
+                "name":"hueshift",
                 "attr":{
-                "tx": [200.0],
-                "ty": [200.0],
+                    "shift": [120.0],
                 }
-                },{
-                "name":"darken",
-                }]
+    }]
 }

@@ -9,6 +9,8 @@
 #include <metal_stdlib>
 using namespace metal;
 
+constexpr sampler c_smp(coord::pixel, address::clamp_to_zero, filter::nearest);
+
 kernel void
 color(texture2d<half, access::write> outTexture [[texture(0)]],
       const device float4& color [[ buffer(1) ]],
@@ -28,7 +30,7 @@ colors(texture2d<half, access::write> outTexture [[texture(0)]],
 }
 
 kernel void
-translate(texture2d<half, access::read>  inTexture  [[texture(0)]],
+translate(texture2d<half, access::sample>  inTexture  [[texture(0)]],
                 texture2d<half, access::write> outTexture [[texture(1)]],
                 const device float& tx [[ buffer(2) ]],
                 const device float& ty [[ buffer(3) ]],
@@ -42,7 +44,7 @@ translate(texture2d<half, access::read>  inTexture  [[texture(0)]],
         return;
     }
     
-    half4 inColor  = inTexture.read(gid2);
+    half4 inColor  = inTexture.sample(c_smp, float2(gid2));
     outTexture.write(inColor, gid);
 }
 
