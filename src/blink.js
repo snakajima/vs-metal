@@ -11,6 +11,8 @@
         }
     },
     "pipeline":[{
+        "name":"discard"
+    },{
         "name":"colors",
         "attr":{
             "color1": "green",

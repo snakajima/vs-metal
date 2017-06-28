@@ -9,6 +9,11 @@
         "title":"Swap",
         "description":"Swap two topmost layers",
     },
+    "discard": {
+        "type":"control",
+        "title":"Discard",
+        "description":"Discard the top most layer",
+    },
     
     "translate": {
         "type":"filter",

@@ -93,7 +93,7 @@ class VSContext {
             return
         }
         hasUpdate = true
-        stack.removeAll() // HACK: for now
+        assert(stack.count < 10) // to detect texture leak (a few is fine for recurring pipeline)
         
         // HACK: I am creating an extra copy to work around the flicker bug described in the following stackflow comment.
         // Extra reference to CVMetalTexture does not solve the problem.

@@ -24,3 +24,9 @@ class VSSwap:VSNode {
         context.push(texture:texture2)
     }
 }
+
+class VSDiscard:VSNode {
+    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) {
+        let _ = context.pop()
+    }
+}
