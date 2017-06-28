@@ -316,9 +316,44 @@ hueshift(texture2d<half, access::read>  inTexture  [[texture(0)]],
         return;
     }
     
-    half4 inColor  = inTexture.read(gid);
-    inColor.rgb = sin(clamp(inColor.rgb * half(ratio), half(0.0), half(1.0)) * M_PI/2.0);
-    outTexture.write(half4(inColor), gid);
+    half4 RGBA0  = inTexture.read(gid);
+    float R0 = RGBA0.r;
+    float G0 = RGBA0.g;
+    float B0 = RGBA0.b;
+    float M0 = max(R0, max(G0, B0));
+    float m0 = min(R0, min(G0, B0));
+    float C0 = M0 - m0;
+    float H0 = (M0 == m0) ? 0.0 :
+                        (M0 == R0) ? (G0 - B0) / C0 :
+                        (M0 == G0) ? (B0 - R0) / C0 + 2.0 : (R0 - G0) / C0 + 4.0;
+    H0 = (H0 < 0.0) ? H0 + 6.0 : H0;
+    float L0 = (M0 + m0) / 2.0;
+    float S0 = M0 - m0;
+    S0 = (L0 == 0.0 || S0 == 0.0) ? 0.0 :
+         S0 / ((L0 < 0.5) ? (M0 + m0) : (2.0 - M0 - m0));
+
+    float L = L0;
+    float H = H0 + shift / 60.0;
+    float S = S0;
+    H = (H < 6.0) ? H : H - 6.0;
+
+    float R = L;
+    float G = L;
+    float B = L;
+    float v = (L < 0.5) ? L * (1.0 + S) : (L + S - L * S);
+    float m = L + L - v;
+    float sv = (v - m) / v;
+    float sex = floor(H);
+    float fract = H - sex;
+    float vsf = v * sv * fract;
+    float mid1 = m + vsf;
+    float mid2 = v - vsf;
+    
+    R = (sex == 4.0) ? mid1 : (sex == 0.0 || sex == 5.0) ? v : (sex == 1.0) ? mid2 : m;
+    G = (sex == 0.0) ? mid1 : (sex == 1.0 || sex == 2.0) ? v : (sex == 3.0) ? mid2 : m;
+    B = (sex == 2.0) ? mid1 : (sex == 3.0 || sex == 4.0) ? v : (sex == 5.0) ? mid2 : m;
+
+    outTexture.write(half4(R, G, B, RGBA0.a), gid);
 }
 
 
