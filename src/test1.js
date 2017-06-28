@@ -1,15 +1,13 @@
 {
-    "variables":{
-        "myshift":{
-            "type":"sin",
-            "range":[0.0, 180.0],
-            "interval":2.0
-        }
-    },
     "pipeline":[{
-        "name":"hueshift",
+        "name":"fork",
+    },{
+        "name":"translate",
         "attr":{
-            "shift":"myshift"
+            "tx": [200.0],
+            "ty": [200.0],
         }
+    },{
+        "name":"difference",
     }]
 }
