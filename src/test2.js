@@ -20,6 +20,6 @@
     },{
         "name":"canny_edge",
     },{
-        "name":"overlay"
+        "name":"hardlight"
     }]
 }

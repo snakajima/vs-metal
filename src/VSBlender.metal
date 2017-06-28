@@ -165,7 +165,7 @@ colordodge(texture2d<half, access::read>  inTexture2  [[texture(0)]],
     
     half4 color1  = inTexture1.read(gid);
     half4 color2  = inTexture2.read(gid);
-    outTexture.write(half4(color1.rgb / (c_white, color2.rgb), color1.a), gid);
+    outTexture.write(half4(color1.rgb / (c_white - color2.rgb), color1.a), gid);
 }
 
 kernel void
@@ -184,7 +184,7 @@ colorburn(texture2d<half, access::read>  inTexture2  [[texture(0)]],
     
     half4 color1  = inTexture1.read(gid);
     half4 color2  = inTexture2.read(gid);
-    outTexture.write(half4(min(color1.rgb, color2.rgb), color1.a), gid);
+    outTexture.write(half4(c_white - (c_white - color1.rgb) / color2.rgb, color1.a), gid);
 }
 
 kernel void
@@ -201,9 +201,12 @@ hardlight(texture2d<half, access::read>  inTexture2  [[texture(0)]],
         return;
     }
     
-    half4 color1  = inTexture1.read(gid);
-    half4 color2  = inTexture2.read(gid);
-    outTexture.write(half4(min(color1.rgb, color2.rgb), color1.a), gid);
+    half4 F  = inTexture1.read(gid);
+    half4 B  = inTexture2.read(gid);
+    half r = (B.r < 0.5) ? (2.0 * F.r * B.r) : (1.0 - (1.0-2.0*(B.r-0.5))*(1.0-F.r));
+    half g = (B.g < 0.5) ? (2.0 * F.g * B.g) : (1.0 - (1.0-2.0*(B.g-0.5))*(1.0-F.g));
+    half b = (B.b < 0.5) ? (2.0 * F.b * B.b) : (1.0 - (1.0-2.0*(B.b-0.5))*(1.0-F.b));
+    outTexture.write(half4(r, g, b, B.a), gid);
 }
 
 kernel void
@@ -220,9 +223,12 @@ softlight(texture2d<half, access::read>  inTexture2  [[texture(0)]],
         return;
     }
     
-    half4 color1  = inTexture1.read(gid);
-    half4 color2  = inTexture2.read(gid);
-    outTexture.write(half4(min(color1.rgb, color2.rgb), color1.a), gid);
+    half4 A  = inTexture1.read(gid);
+    half4 B  = inTexture2.read(gid);
+    half r = (B.r < 0.5) ? A.r * (B.r + 0.5) : 1.0 - (1.0 - A.r) * (1.0 - (B.r - 0.5));
+    half b = (B.b < 0.5) ? A.b * (B.b + 0.5) : 1.0 - (1.0 - A.b) * (1.0 - (B.b - 0.5));
+    half g = (B.g < 0.5) ? A.g * (B.g + 0.5) : 1.0 - (1.0 - A.g) * (1.0 - (B.g - 0.5));
+    outTexture.write(half4(r, g, b, B.a), gid);
 }
 
 kernel void
@@ -241,5 +247,5 @@ difference(texture2d<half, access::read>  inTexture2  [[texture(0)]],
     
     half4 color1  = inTexture1.read(gid);
     half4 color2  = inTexture2.read(gid);
-    outTexture.write(half4(min(color1.rgb, color2.rgb), color1.a), gid);
+    outTexture.write(half4(abs(color2.rgb - color1.rgb), color2.a), gid);
 }

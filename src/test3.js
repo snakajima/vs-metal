@@ -20,6 +20,6 @@
     },{
         "name":"canny_edge",
     },{
-        "name":"colordodge"
+        "name":"softlight"
     }]
 }
