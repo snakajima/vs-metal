@@ -40,8 +40,8 @@ class VSMPSFilter: VSNode {
         kernel = MPSImageGaussianBlur(device: context.device, sigma: sigma[0])
     }
 
-    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) {
-        let source = context.pop()
+    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
+        let source = try context.pop()
         kernel.encode(commandBuffer: commandBuffer, sourceTexture: source.texture, destinationTexture: destination.texture)
         context.push(texture:destination)
     }

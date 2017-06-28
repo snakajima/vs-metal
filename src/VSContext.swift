@@ -24,6 +24,10 @@ private struct NamedBuffer {
     let buffer:MTLBuffer
 }
 
+enum VSContextError:Error {
+    case stackOverflow
+}
+
 class VSContext {
     let device:MTLDevice
     let commandQueue: MTLCommandQueue
@@ -115,12 +119,12 @@ class VSContext {
         push(texture:sourceTexture!)
     }
     
-    func pop() -> VSTexture {
+    func pop() throws -> VSTexture {
         if let texture = stack.popLast() {
             return texture
         }
         print("VSC:pop underflow")
-        return sourceTexture! // For recurring pipeline
+        throw VSContextError.stackOverflow
     }
     
     func push(texture:VSTexture) {
@@ -150,7 +154,7 @@ class VSContext {
         return ret
     }
     
-    func encode(runtime:VSRuntime, commandBuffer:MTLCommandBuffer) {
+    func encode(runtime:VSRuntime, commandBuffer:MTLCommandBuffer) throws {
         assert(Thread.current == Thread.main)
         hasUpdate = false
         
@@ -171,7 +175,7 @@ class VSContext {
         updateNamedBuffers(with: vars)
  
         for node in runtime.nodes {
-            node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
+            try node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
         }
     }
     
