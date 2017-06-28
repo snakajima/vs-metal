@@ -283,4 +283,42 @@ hue_filter(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write(half4(inColor.rgb, a), gid);
 }
 
+#define M_PI 3.14159265
+
+kernel void
+lighter(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                const device float& ratio [[ buffer(2) ]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 inColor  = inTexture.read(gid);
+    inColor.rgb = sin(clamp(inColor.rgb * half(ratio), half(0.0), half(1.0)) * M_PI/2.0);
+    outTexture.write(half4(inColor), gid);
+}
+
+kernel void
+hueshift(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                const device float& shift [[ buffer(2) ]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 inColor  = inTexture.read(gid);
+    inColor.rgb = sin(clamp(inColor.rgb * half(ratio), half(0.0), half(1.0)) * M_PI/2.0);
+    outTexture.write(half4(inColor), gid);
+}
+
 

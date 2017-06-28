@@ -1,8 +1,4 @@
 {
-    "constants":{
-        "green":[0.0, 1.0, 0.0, 1.0],
-        "red":[1.0, 0.0, 0.0, 1.0],
-    },
     "variables":{
         "myratio":{
             "type":"sin",
@@ -11,10 +7,8 @@
         }
     },
     "pipeline":[{
-        "name":"colors",
+        "name":"lighter",
         "attr":{
-            "color1": "green",
-            "color2": "red",
             "ratio": "myratio",
         }
     }]

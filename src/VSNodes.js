@@ -247,8 +247,8 @@
         "title":"Lighter",
         "description":"Make the color lighter",
         "attr": [{
-                "name":"ratio",
-            "default":0.5,
+            "name":"ratio",
+            "default":[0.5],
             "range":[0.0, 30.0],
         }],
     },
@@ -258,7 +258,7 @@
         "description":"Shift Hue",
         "attr": [{
             "name":"shift",
-            "default":180.0,
+            "default":[180.0],
             "range":[0.0, 360.0],
         }],
     },
