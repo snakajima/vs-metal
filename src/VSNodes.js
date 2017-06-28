@@ -14,6 +14,11 @@
         "title":"Discard",
         "description":"Discard the top most layer",
     },
+    "shift": {
+        "type":"control",
+        "title":"Shift",
+        "description":"Shift the topmost layer to the bottom",
+    },
     
     "translate": {
         "type":"filter",

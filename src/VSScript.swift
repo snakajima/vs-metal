@@ -81,6 +81,8 @@ struct VSScript {
             return VSFork()
         case "swap":
             return VSSwap()
+        case "shift":
+            return VSShift()
         case "discard":
             return VSDiscard()
         default:

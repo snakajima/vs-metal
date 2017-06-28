@@ -127,6 +127,12 @@ class VSContext {
         stack.append(texture)
     }
     
+    func shift() {
+        if let texture = stack.popLast() {
+            stack.insert(texture, at: 0)
+        }
+    }
+    
     private func getDestination() -> VSTexture {
         // Find a texture in the pool, which is not in the stack
         for texture in pool {

@@ -30,3 +30,9 @@ class VSDiscard:VSNode {
         let _ = context.pop()
     }
 }
+
+class VSShift:VSNode {
+    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) {
+        context.shift()
+    }
+}
