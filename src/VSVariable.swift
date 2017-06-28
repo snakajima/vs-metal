@@ -14,14 +14,15 @@ protocol VSVariable {
 
 class VSTimer:VSVariable {
     let key:String
-    let ratio = 5.0
+    let interval:Double
     init(key:String, params:[String:Any]) {
         self.key = key
+        self.interval = params["interval"] as? Double ?? 1.0
     }
     
     func apply(callback:(String, [Float])->()) {
         let date = NSDate().timeIntervalSince1970
-        let value = (Float(sin(date * .pi * self.ratio)) + 1.0) / 2.0
+        let value = (Float(sin(date * .pi / self.interval)) + 1.0) / 2.0
         callback(key, [value])
     }
 }

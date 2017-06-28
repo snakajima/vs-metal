@@ -124,7 +124,14 @@ struct VSScript {
         if let variables = json["variables"] as? [String:[String:Any]] {
             for (key, params) in variables {
                 print("key=", key, params)
-                vars.append(VSTimer(key: key, params: params))
+                if let type = params["type"] as? String {
+                    switch(type) {
+                    case "sin":
+                        vars.append(VSTimer(key: key, params: params))
+                    default:
+                        break
+                    }
+                }
             }
         }
         context.variables = vars
