@@ -51,6 +51,7 @@ class VSContext {
     // pool: pool of textures to be reused for stack
     private var stack = [VSTexture]()
     private var pool = [VSTexture]()
+    private var prevs = [VSTexture]() // layers from previous session
     var hasUpdate = false
     private var frameCount = 0
     private var droppedFrameCount = 0
@@ -140,7 +141,7 @@ class VSContext {
     private func getDestination() -> VSTexture {
         // Find a texture in the pool, which is not in the stack
         for texture in pool {
-            guard let _ = stack.index(of:texture) else {
+            if !stack.contains(texture) && !prevs.contains(texture) {
                 return texture
             }
         }
@@ -180,6 +181,7 @@ class VSContext {
     }
     
     func flush() {
+        prevs = stack
         stack.removeAll()
     }
     
