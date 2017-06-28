@@ -8,6 +8,6 @@
             "ty": [200.0],
         }
     },{
-        "name":"hardlight",
+        "name":"exclusion",
     }]
 }

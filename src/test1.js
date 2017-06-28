@@ -1,12 +1,13 @@
 {
     "pipeline":[{
-                "name":"previous",
-    },{
-                "name":"alpha",
-                "attr":{
-                    "ratio": [0.8],
-                }
-    },{
                 "name":"fork",
-    }]
+                },{
+                "name":"translate",
+                "attr":{
+                "tx": [200.0],
+                "ty": [200.0],
+                }
+                },{
+                "name":"darken",
+                }]
 }

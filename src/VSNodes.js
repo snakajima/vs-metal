@@ -363,7 +363,7 @@
         "description":"Enlarge the difference between two layers",
         "attr": [{
             "name":"ratio",
-            "default": 0.5,
+            "default": [0.5],
             "range":[0.0, 10.0],
         }],
     },

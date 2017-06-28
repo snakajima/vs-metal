@@ -1,9 +1,13 @@
 {
     "pipeline":[{
-        "name":"fork",
-    },{
-        "name":"previous",
-    },{
-        "name":"difference",
-    }]
+                "name":"fork",
+                },{
+                "name":"translate",
+                "attr":{
+                "tx": [200.0],
+                "ty": [200.0],
+                }
+                },{
+                "name":"differentiate",
+                }]
 }

@@ -8,6 +8,6 @@
             "ty": [200.0],
         }
     },{
-        "name":"softlight",
+        "name":"hue",
     }]
 }
