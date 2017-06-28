@@ -116,9 +116,18 @@ struct VSScript {
                 }
             }
         }
-        if let variables = json["constants"] as? [String:[Float]] {
-            context.updateNamedBuffers(with: variables)
+        if let constants = json["constants"] as? [String:[Float]] {
+            context.updateNamedBuffers(with: constants)
         }
+        
+        var vars = [VSVariable]()
+        if let variables = json["variables"] as? [String:[String:Any]] {
+            for (key, params) in variables {
+                print("key=", key, params)
+                vars.append(VSTimer(key: key, params: params))
+            }
+        }
+        context.variables = vars
         
         return VSRuntime(nodes:nodes)
     }

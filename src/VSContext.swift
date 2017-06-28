@@ -37,6 +37,7 @@ class VSContext {
         return json as! [String:[String:Any]]
     }()
     private var namedBuffers = [NamedBuffer]()
+    var variables = [VSVariable]()
     
     private var width = 1, height = 1 // to be set later
     private var descriptor = MTLTextureDescriptor()
@@ -146,12 +147,20 @@ class VSContext {
         hasUpdate = false
         
         // prototype
+        /*
         let date = NSDate().timeIntervalSince1970
         let ratio = (Float(sin(date * .pi * 2.0)) + 1.0) / 2.0
         let variables = [
             "myratio":[ratio]
         ]
-        updateNamedBuffers(with: variables)
+        */
+        var vars = [String:[Float]]()
+        for variable in variables {
+            variable.apply(callback: { (key, values) in
+                vars[key] = values
+            })
+        }
+        updateNamedBuffers(with: vars)
  
         for node in runtime.nodes {
             node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
