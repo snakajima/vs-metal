@@ -27,6 +27,26 @@ colors(texture2d<half, access::write> outTexture [[texture(0)]],
     outTexture.write(half4(mix(color1, color2, ratio)), gid);
 }
 
+kernel void
+translate(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                const device float& tx [[ buffer(2) ]],
+                const device float& ty [[ buffer(3) ]],
+                uint2 gid [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    uint2 gid2 = uint2(gid.x + tx, gid.y + ty);
+    if((gid2.x >= outTexture.get_width()) || (gid2.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 inColor  = inTexture.read(gid2);
+    outTexture.write(inColor, gid);
+}
+
+
 // Rec 709 LUMA values for grayscale image conversion
 //constant half3 kRec709Luma = half3(0.2126, 0.7152, 0.0722);
 

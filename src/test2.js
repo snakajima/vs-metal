@@ -1,25 +1,13 @@
 {
     "pipeline":[{
-        "name":"gaussianblur",
-        "attr":{
-            "sigma": [2.0],
-        }
-    },{
         "name":"fork",
     },{
-        "name":"gaussianblur",
+        "name":"translate",
         "attr":{
-            "sigma": [2.0],
+            "tx": [200.0],
+            "ty": [200.0],
         }
     },{
-        "name":"toone",
-    },{
-        "name":"swap"
-    },{
-        "name":"sobel",
-    },{
-        "name":"canny_edge",
-    },{
-        "name":"hardlight"
+        "name":"multiply",
     }]
 }

@@ -9,6 +9,23 @@
         "title":"Swap",
         "description":"Swap two topmost layers",
     },
+    
+    "translate": {
+        "type":"filter",
+        "title":"Translate",
+        "description":"Shift the position",
+        "attr" : [
+            {
+                "name":"tx",
+                "default":[ 0.0 ],
+            },
+            {
+                "name":"ty",
+                "default":[ 0.0 ],
+            },
+        ],
+    },
+    
     "mono": {
         "type":"filter",
         "title":"Monochrome",
@@ -322,6 +339,48 @@
         "sources":2,
         "title":"Difference",
         "description":"Difference blend two layers",
+    },
+    
+    "differentiate": {
+        "type":"blender",
+        "sources":2,
+        "title":"Differentiate",
+        "description":"Enlarge the difference between two layers",
+        "attr": [{
+            "name":"ratio",
+            "default": 0.5,
+            "range":[0.0, 10.0],
+        }],
+    },
+    "exclusion": {
+        "type":"blender",
+        "sources":2,
+        "title":"Exclusion",
+        "description":"Exclusion blend two layers",
+    },
+    "hue": {
+        "type":"blender",
+        "sources":2,
+        "title":"Hue",
+        "description":"Hue blend two layers",
+    },
+    "saturation": {
+        "type":"blender",
+        "sources":2,
+        "title":"Saturation",
+        "description":"Saturation blend two layers",
+    },
+    "colorblend": {
+        "type":"blender",
+        "sources":2,
+        "title":"Color",
+        "description":"Color blend two layers",
+    },
+    "luminosity": {
+        "type":"blender",
+        "sources":2,
+        "title":"Luminosity",
+        "description":"Luminosity blend two layers",
     },
 
 }
