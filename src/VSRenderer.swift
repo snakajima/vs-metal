@@ -16,8 +16,8 @@ class VSRenderer {
         let position:vector_float2
         let textureCoordinate:vector_float2
     }
-    var vertexData:[VSVertex]
-    let dataSize:Int
+    var vertexData = [VSVertex]()
+    var dataSize:Int = 0
     
     // width/height are texture's, not view's
     init(context:VSContext) {
@@ -26,16 +26,6 @@ class VSRenderer {
         let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
         let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
 
-        let vertexData:[VSVertex] = [
-            VSVertex(position:[-1.0, -1.0], textureCoordinate:[1.0, 0.0]),
-            VSVertex(position:[1.0,  -1.0], textureCoordinate:[1.0, 1.0]),
-            VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
-            VSVertex(position:[1.0, -1.0], textureCoordinate:[1.0, 1.0]),
-            VSVertex(position:[1.0,  1.0], textureCoordinate:[0.0, 1.0]),
-            VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
-            ]
-        self.vertexData = vertexData
-        self.dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
         
         // compile them into a pipeline state object
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
@@ -46,6 +36,31 @@ class VSRenderer {
     }
     
     func encode(commandBuffer:MTLCommandBuffer, texture:MTLTexture, view: MTKView) {
+        if dataSize == 0 {
+            // Very first time
+            let viewSize = view.bounds.size
+            let viewRatio = viewSize.height / viewSize.width
+            let size = CGSize(width:texture.height, height:texture.width)
+            let ratio = size.height / size.width
+            var x = 1.0 as Float
+            var y = 1.0 as Float
+            if viewRatio < ratio {
+                // needs to trim width
+                x = Float(viewRatio / ratio)
+            } else {
+                y = Float(ratio / viewRatio)
+            }
+            self.vertexData = [
+                VSVertex(position:[-x, -y], textureCoordinate:[x, 0.0]),
+                VSVertex(position:[x,  -y], textureCoordinate:[x, y]),
+                VSVertex(position:[-x,  y], textureCoordinate:[0.0, 0.0]),
+                VSVertex(position:[x, -y], textureCoordinate:[x, y]),
+                VSVertex(position:[x,  y], textureCoordinate:[0.0, y]),
+                VSVertex(position:[-x,  y], textureCoordinate:[0.0, 0.0]),
+                ]
+            self.dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
+        }
+        
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
             let pipelineState = self.pipelineState,
             let drawable = view.currentDrawable else {
