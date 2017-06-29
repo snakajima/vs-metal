@@ -14,7 +14,6 @@ class VSProcessor: NSObject, MTKViewDelegate {
     private let context:VSContext
     private let renderer:VSRenderer
     private var runtime:VSRuntime
-    private var debugCounter = 0
     
     init(context:VSContext, view:MTKView, script:VSScript) {
         self.context = context
@@ -30,21 +29,18 @@ class VSProcessor: NSObject, MTKViewDelegate {
     }
 
     public func draw(in view: MTKView) {
-        debugCounter += 1
         if !context.hasUpdate {
-            //print("VSS:draw texture not updated", debugCounter)
-            return
+            return // no update
         }
 
         do {
             let commandBufferCompute = context.commandQueue.makeCommandBuffer()
             try context.encode(runtime: runtime, commandBuffer: commandBufferCompute)
+            commandBufferCompute.commit()
             
             let texture = try context.pop()
             let commandBufferRender = context.commandQueue.makeCommandBuffer()
             renderer.encode(commandBuffer:commandBufferRender, texture:texture.texture, view:view)
-            
-            commandBufferCompute.commit()
             commandBufferRender.commit()
         } catch let error {
             print("#### ERROR #### VSProcessor:draw", error)
