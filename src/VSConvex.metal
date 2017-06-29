@@ -118,4 +118,25 @@ canny_edge(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write(half4(half3(color.rgb), d), gid);
 }
 
+kernel void
+emboss(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                const device float& rotation [[ buffer(2) ]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+
+    half3 sobel = inTexture.read(gid).rgb;
+    half dx = sobel.x * 2.0 - 1.0;
+    half dy = sobel.y * 2.0 - 1.0;
+    half d = atan2(dy, dx);
+    half v = sin(d + rotation) / 2.0 + 0.5;
+    outTexture.write(half4(v, v, v, sobel.z), gid);
+}
+
 

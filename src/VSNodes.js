@@ -456,6 +456,22 @@
         }],
     },
     
+    "emboss" : {
+        "type":"filter",
+        "title":"Emboss",
+        "description":"*Apply after Sobel filter",
+        "attr": [{
+            "name":"rotation",
+                "default":[0.0],
+                "range":[-3.14159265, 3.14159265]
+        }]
+    },
+    "invertalpha": {
+        "type":"filter",
+        "title":"Invert Alpha",
+        "description":"Invert the alpha channel",
+    },
+    
     "tilt_shift": {
         "type":"filter",
         "title":"Tilt Shift",
@@ -477,32 +493,4 @@
                 "range":[0.0, 1.0],
         }],
     },
-    "emboss" : {
-        "type":"filter",
-        "title":"Emboss",
-        "description":"*Apply after Sobel filter",
-        "attr": [{
-            "name":"rotation",
-                "default":0.0,
-                "range":[-3.14159265, 3.14159265]
-        }]
-    },
-    "embold": {
-        "type":"filter",
-        "title":"Embold",
-        "blur":true,
-        "vertex":"blur",
-        "description":"Embold",
-        "attr" : [{
-            "name":"radius",
-                "default":4.0,
-                "range":[1.0, 8.0],
-        }],
-    },
-    "invertalpha": {
-        "type":"filter",
-        "title":"Invert Alpha",
-        "description":"Invert the alpha channel",
-    },
-    
 }
