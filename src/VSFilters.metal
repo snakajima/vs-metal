@@ -9,55 +9,6 @@
 #include <metal_stdlib>
 using namespace metal;
 
-constexpr sampler c_smp(coord::pixel, address::clamp_to_zero, filter::nearest);
-
-kernel void
-color(texture2d<half, access::write> outTexture [[texture(0)]],
-      const device float4& color [[ buffer(1) ]],
-     uint2                          gid         [[thread_position_in_grid]])
-{
-    outTexture.write(half4(color), gid);
-}
-
-kernel void
-colors(texture2d<half, access::write> outTexture [[texture(0)]],
-      const device float4& color1 [[ buffer(1) ]],
-      const device float4& color2 [[ buffer(2) ]],
-      const device float& ratio [[ buffer(3) ]],
-      uint2                          gid         [[thread_position_in_grid]])
-{
-    outTexture.write(half4(mix(color1, color2, ratio)), gid);
-}
-
-kernel void
-translate(texture2d<half, access::sample>  inTexture  [[texture(0)]],
-                texture2d<half, access::write> outTexture [[texture(1)]],
-                const device float& tx [[ buffer(2) ]],
-                const device float& ty [[ buffer(3) ]],
-                uint2 gid [[thread_position_in_grid]])
-{
-    // Check if the pixel is within the bounds of the output texture
-    float2 gid2 = float2(gid.x + tx, gid.y + ty);
-    
-    half4 inColor  = inTexture.sample(c_smp, gid2);
-    outTexture.write(inColor, gid);
-}
-
-kernel void
-transform(texture2d<half, access::sample>  inTexture  [[texture(0)]],
-          texture2d<half, access::write> outTexture [[texture(1)]],
-          const device float4& abcd [[ buffer(2) ]],
-          const device float2& txty [[ buffer(3) ]],
-          uint2 gid [[thread_position_in_grid]])
-{
-    // Check if the pixel is within the bounds of the output texture
-    float2 gid2 = float2(abcd.r * float(gid.x) + abcd.g * float(gid.y) + txty.x,
-                         abcd.b * float(gid.x) + abcd.a * float(gid.y) + txty.y);
-    
-    half4 inColor  = inTexture.sample(c_smp, gid2);
-    outTexture.write(inColor, gid);
-}
-
 
 // Rec 709 LUMA values for grayscale image conversion
 //constant half3 kRec709Luma = half3(0.2126, 0.7152, 0.0722);
