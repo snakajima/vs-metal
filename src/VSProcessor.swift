@@ -37,21 +37,15 @@ class VSProcessor: NSObject, MTKViewDelegate {
         }
 
         do {
-            let cmCompute:MTLCommandBuffer = try {
-                let commandBuffer = context.commandQueue.makeCommandBuffer()
-                try context.encode(runtime: runtime, commandBuffer: commandBuffer)
-                return commandBuffer
-            }()
+            let commandBufferCompute = context.commandQueue.makeCommandBuffer()
+            try context.encode(runtime: runtime, commandBuffer: commandBufferCompute)
             
             let texture = try context.pop()
-            let cmRender:MTLCommandBuffer = {
-                let commandBuffer = context.commandQueue.makeCommandBuffer()
-                renderer.encode(commandBuffer:commandBuffer, texture:texture.texture, view:view)
-                return commandBuffer
-            }()
+            let commandBufferRender = context.commandQueue.makeCommandBuffer()
+            renderer.encode(commandBuffer:commandBufferRender, texture:texture.texture, view:view)
             
-            cmCompute.commit()
-            cmRender.commit()
+            commandBufferCompute.commit()
+            commandBufferRender.commit()
         } catch let error {
             print("#### ERROR #### VSProcessor:draw", error)
         }

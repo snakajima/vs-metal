@@ -14,7 +14,6 @@ class VSVideoSessionController: UIViewController {
     // Public properties to be specified by the callers
     var useFrontCamera = true
     var fps:Int?
-    var context:VSContext?
     var urlScript:URL?
 
     // Calculated properties
@@ -33,6 +32,7 @@ class VSVideoSessionController: UIViewController {
         return cache!
     }()
     fileprivate var renderer:VSProcessor?
+    fileprivate var context:VSContext?
 
     override func viewDidLoad() {
         super.viewDidLoad()
