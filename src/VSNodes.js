@@ -422,6 +422,7 @@
     },
     "alphamask": {
         "type":"blender",
+        "sources":2,
         "title":"Alpha Mask",
         "description":"Alpha mask one layer with another",
     },
