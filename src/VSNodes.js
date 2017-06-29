@@ -432,7 +432,7 @@
         "description":"Change the contrast",
         "attr": [{
             "name":"enhance",
-            "default":0.5,
+            "default":[0.5],
         }],
     },
 

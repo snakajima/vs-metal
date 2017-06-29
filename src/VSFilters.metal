@@ -284,4 +284,23 @@ hueshift(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write(half4(R, G, B, RGBA0.a), gid);
 }
 
+kernel void
+contrast(texture2d<half, access::read>  inTexture  [[texture(0)]],
+     texture2d<half, access::write> outTexture [[texture(1)]],
+     const device float& enhance [[ buffer(2) ]],
+     uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 inColor  = inTexture.read(gid);
+    half3 RGB = inColor.rgb - half3(0.5);
+    RGB = sin(clamp(RGB * M_PI * half(enhance), half(-M_PI/2.0), half(M_PI/2.0))) / 0.5 + half3(0.5, 0.5, 0.5);
+    outTexture.write(half4(RGB, inColor.a), gid);
+}
+
 
