@@ -48,8 +48,7 @@ class VSVideoSessionController: UIViewController {
         }
         mtkView.device = context!.device
         
-        // BUGBUG: Attempt to set the background color
-        mtkView.clearColor = MTLClearColor(red: 0.0, green: 1.0, blue: 0.0, alpha: 1.0)
+        mtkView.clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
 
         startVideoCaptureSession()
     }
@@ -116,17 +115,16 @@ class VSVideoSessionController: UIViewController {
 extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegate,
                                    AVCaptureVideoDataOutputSampleBufferDelegate {
     public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-        if captureOutput is AVCaptureVideoDataOutput {
-            if let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-                let width = CVPixelBufferGetWidth(pixelBuffer)
-                let height = CVPixelBufferGetHeight(pixelBuffer)
-                var metalTexture:CVMetalTexture? = nil
-                let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.bgra8Unorm, width, height, 0, &metalTexture)
-                if let metalTexture = metalTexture, status == kCVReturnSuccess {
-                    context?.set(metalTexture: metalTexture)
-                } else {
-                    print("VSVS: failed to create texture")
-                }
+        if captureOutput is AVCaptureVideoDataOutput,
+           let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+            let width = CVPixelBufferGetWidth(pixelBuffer)
+            let height = CVPixelBufferGetHeight(pixelBuffer)
+            var metalTexture:CVMetalTexture? = nil
+            let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.bgra8Unorm, width, height, 0, &metalTexture)
+            if let metalTexture = metalTexture, status == kCVReturnSuccess {
+                context?.set(metalTexture: metalTexture)
+            } else {
+                print("VSVS: failed to create texture")
             }
         } else {
             //print("capture", captureOutput)
