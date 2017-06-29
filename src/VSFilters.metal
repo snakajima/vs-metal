@@ -303,4 +303,24 @@ contrast(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write(half4(RGB, inColor.a), gid);
 }
 
+kernel void
+saturate(texture2d<half, access::read>  inTexture  [[texture(0)]],
+     texture2d<half, access::write> outTexture [[texture(1)]],
+     const device float& ratio [[ buffer(2) ]],
+     const device float3& weight [[ buffer(3) ]],
+     uint2                gid [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 inColor  = inTexture.read(gid);
+    half d = dot(inColor.rgb, half3(weight));
+    outTexture.write(half4(mix(inColor.rgb, half3(d), -half(ratio)), inColor.a), gid);
+}
+
+
 

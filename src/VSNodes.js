@@ -448,7 +448,7 @@
         "description":"Saturate/desaturate the color",
         "attr": [{
             "name":"ratio",
-                "default":0.5,
+                "default":[0.5],
                 "range":[-1.0, 1.0],
                  },{
             "name":"weight",
