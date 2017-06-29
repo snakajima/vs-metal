@@ -414,17 +414,11 @@
     },
 
     
-    "boxblur": {
+    "blur": {
         "type":"filter",
-        "title":"Box Blur",
+        "title":"Blur",
         "blur":true,
-        "vertex":"blur",
-        "description":"Box Blur",
-        "attr" : [{
-            "name":"radius",
-            "default":4.0,
-            "range":[1.0, 64.0],
-        }],
+        "description":"lur",
     },
     "alphamask": {
         "type":"blender",

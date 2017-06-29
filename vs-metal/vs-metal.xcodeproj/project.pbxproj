@@ -40,6 +40,7 @@
 		74E284E21F00B9B70045ADFB /* VSBlender.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74E284E11F00B9B70045ADFB /* VSBlender.metal */; };
 		74E284E41F0336D50045ADFB /* VSVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284E31F0336D50045ADFB /* VSVariable.swift */; };
 		74E284E61F034E870045ADFB /* blink.js in Resources */ = {isa = PBXBuildFile; fileRef = 74E284E51F034E870045ADFB /* blink.js */; };
+		74E284E81F0515A20045ADFB /* VSConvex.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74E284E71F0515A20045ADFB /* VSConvex.metal */; };
 		74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */; };
 		74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBF1EFC828E0039A0CA /* VSNode.swift */; };
 		74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BC11EFC84070039A0CA /* VSFilters.metal */; };
@@ -83,6 +84,7 @@
 		74E284E11F00B9B70045ADFB /* VSBlender.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSBlender.metal; sourceTree = "<group>"; };
 		74E284E31F0336D50045ADFB /* VSVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSVariable.swift; sourceTree = "<group>"; };
 		74E284E51F034E870045ADFB /* blink.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = blink.js; sourceTree = "<group>"; };
+		74E284E71F0515A20045ADFB /* VSConvex.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSConvex.metal; sourceTree = "<group>"; };
 		74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSRenderer.swift; sourceTree = "<group>"; };
 		74FB9BBF1EFC828E0039A0CA /* VSNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSNode.swift; sourceTree = "<group>"; };
 		74FB9BC11EFC84070039A0CA /* VSFilters.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSFilters.metal; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 			children = (
 				74A39DCB1EF9D106004713D8 /* VSRenderer.metal */,
 				74FB9BC11EFC84070039A0CA /* VSFilters.metal */,
+				74E284E71F0515A20045ADFB /* VSConvex.metal */,
 				74E284E11F00B9B70045ADFB /* VSBlender.metal */,
 			);
 			name = metal;
@@ -280,6 +283,7 @@
 				7480D2931EFE2C5B00DAA88E /* ScriptsViewController.swift in Sources */,
 				74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */,
 				74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */,
+				74E284E81F0515A20045ADFB /* VSConvex.metal in Sources */,
 				7428EF2E1EFF6E51007BECAF /* VSControllers.swift in Sources */,
 				7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */,
 				74D3EFCD1EFDD89A0005765A /* VSScript.swift in Sources */,

@@ -189,61 +189,6 @@ halftone(texture2d<half, access::read>  inTexture  [[texture(0)]],
 }
 
 kernel void
-sobel(texture2d<half, access::read>  inTexture  [[texture(0)]],
-                texture2d<half, access::write> outTexture [[texture(1)]],
-                const device float& weight [[ buffer(2) ]],
-                uint2                          gid         [[thread_position_in_grid]])
-{
-    // Check if the pixel is within the bounds of the output texture
-    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
-    {
-        // Return early if the pixel is out of bounds
-        return;
-    }
-    
-    half n = inTexture.read(uint2(gid.x, gid.y-1)).r;
-    half s = inTexture.read(uint2(gid.x, gid.y+1)).r;
-    half e = inTexture.read(uint2(gid.x+1, gid.y)).r;
-    half w = inTexture.read(uint2(gid.x-1, gid.y)).r;
-    half nw = inTexture.read(uint2(gid.x-1, gid.y-1)).r;
-    half ne = inTexture.read(uint2(gid.x+1, gid.y-1)).r;
-    half sw = inTexture.read(uint2(gid.x-1, gid.y+1)).r;
-    half se = inTexture.read(uint2(gid.x+1, gid.y+1)).r;
-    half dx = weight * (n - s) + (nw + ne - se - sw);
-    half dy = weight * (w - e) + (nw + sw - se - ne);
-    outTexture.write(half4((dx + 1.0)/2.0, (dy + 1.0)/2.0, sqrt(dx*dy + dy*dy), 1.0), gid);
-}
-
-kernel void
-canny_edge(texture2d<half, access::read>  inTexture  [[texture(0)]],
-                texture2d<half, access::write> outTexture [[texture(1)]],
-                const device float& threshold [[ buffer(2) ]],
-                const device float& thin [[ buffer(3) ]],
-                const device float4& color [[ buffer(4) ]],
-                uint2                          gid         [[thread_position_in_grid]])
-{
-    // Check if the pixel is within the bounds of the output texture
-    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
-    {
-        // Return early if the pixel is out of bounds
-        return;
-    }
-
-    half3 sobel = inTexture.read(gid).rgb;
-    half d = sobel.z;
-    half dx2 = sobel.x * sobel.x;
-    half dy2 = sobel.y * sobel.y;
-    half n = inTexture.read(uint2(gid.x, gid.y-1)).z;
-    half s = inTexture.read(uint2(gid.x, gid.y+1)).z;
-    half e = inTexture.read(uint2(gid.x+1, gid.y)).z;
-    half w = inTexture.read(uint2(gid.x-1, gid.y)).z;
-    d = (dx2 < dy2 && d < max(e,w) * thin) ? 0.0 : d;
-    d = (dx2 > dy2 && d < max(n,s) * thin) ? 0.0 : d;
-    d = (d < threshold) ? 0.0 : color.a;
-    outTexture.write(half4(half3(color.rgb), d), gid);
-}
-
-kernel void
 tint(texture2d<half, access::read>  inTexture  [[texture(0)]],
      texture2d<half, access::write> outTexture [[texture(1)]],
      const device float& ratio [[ buffer(2) ]],
