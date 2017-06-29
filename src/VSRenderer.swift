@@ -51,11 +51,11 @@ class VSRenderer {
                 y = Float(ratio / viewRatio)
             }
             self.vertexData = [
-                VSVertex(position:[-x, -y], textureCoordinate:[x, 0.0]),
-                VSVertex(position:[x,  -y], textureCoordinate:[x, y]),
+                VSVertex(position:[-x, -y], textureCoordinate:[1.0, 0.0]),
+                VSVertex(position:[x,  -y], textureCoordinate:[1.0, 1.0]),
                 VSVertex(position:[-x,  y], textureCoordinate:[0.0, 0.0]),
-                VSVertex(position:[x, -y], textureCoordinate:[x, y]),
-                VSVertex(position:[x,  y], textureCoordinate:[0.0, y]),
+                VSVertex(position:[x, -y], textureCoordinate:[1.0, 1.0]),
+                VSVertex(position:[x,  y], textureCoordinate:[0.0, 1.0]),
                 VSVertex(position:[-x,  y], textureCoordinate:[0.0, 0.0]),
                 ]
             self.dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
