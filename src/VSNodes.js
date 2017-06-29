@@ -466,7 +466,7 @@
                 "range":[-3.14159265, 3.14159265]
         }]
     },
-    "invertalpha": {
+    "invert_alpha": {
         "type":"filter",
         "title":"Invert Alpha",
         "description":"Invert the alpha channel",

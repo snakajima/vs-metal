@@ -1,22 +1,19 @@
 {
-    "variables":{
-        "myratio":{
-            "type":"sin",
-            "range":[0.0, 1.0],
-            "interval":1.0
-        }
-    },
     "pipeline":[{
         "name":"fork",
     },{
-        "name":"gaussian_blur",
-        "attr":{
-            "sigma": 10.0,
-        }
+        "name":"mono",
+    },{
+        "name":"swap",
+    },{
+        "name":"hue_filter",
+                "attr":{
+                "hue": [345.0, 7.5],
+                "chroma": [0.15, 1.0],
+                }
+    },{
+        "name":"invert_alpha",
     },{
         "name":"alpha",
-        "attr":{
-            "ratio": "myratio",
-        }
     }]
 }
