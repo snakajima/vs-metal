@@ -31,8 +31,9 @@ class VSVideoSessionController: UIViewController {
         CVMetalTextureCacheCreate(nil, nil, self.context!.device, nil, &cache)
         return cache!
     }()
-    fileprivate var renderer:VSProcessor?
-    fileprivate var context:VSContext?
+    fileprivate var context:VSContext!
+    fileprivate var renderer:VSRenderer!
+    fileprivate var runtime:VSRuntime!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,11 +45,12 @@ class VSVideoSessionController: UIViewController {
 
         context = VSContext(device: MTLCreateSystemDefaultDevice()!, pixelFormat: mtkView.colorPixelFormat)
         if let url = urlScript, let script = VSScript.make(url: url) {
-            renderer = VSProcessor(context:context!, view:mtkView, script:script)
+            renderer = VSRenderer(context:context)
+            runtime = script.compile(context: context)
         }
-        mtkView.device = context!.device
-        
+        mtkView.device = context.device
         mtkView.clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        mtkView.delegate = self
 
         startVideoCaptureSession()
     }
@@ -129,6 +131,32 @@ extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegat
         } else {
             //print("capture", captureOutput)
         }
+    }
+}
+
+extension VSVideoSessionController : MTKViewDelegate {
+    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
+        // nothing to do
+    }
+    
+    public func draw(in view: MTKView) {
+        if !context.hasUpdate {
+            return // no update
+        }
+        
+        do {
+            let commandBufferCompute = context.commandQueue.makeCommandBuffer()
+            try context.encode(runtime: runtime, commandBuffer: commandBufferCompute)
+            commandBufferCompute.commit()
+            
+            let texture = try context.pop()
+            let commandBufferRender = context.commandQueue.makeCommandBuffer()
+            renderer.encode(commandBuffer:commandBufferRender, texture:texture.texture, view:view)
+            commandBufferRender.commit()
+        } catch let error {
+            print("#### ERROR #### VSProcessor:draw", error)
+        }
+        context.flush()
     }
 }
 
