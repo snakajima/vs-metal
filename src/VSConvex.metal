@@ -35,6 +35,34 @@ blur(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write(outColor, gid);
 }
 
+// NOTE: Identical to blur
+kernel void
+anti_alias(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                const device float& weight [[ buffer(2) ]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+
+    half4 inColor = inTexture.read(uint2(gid.x, gid.y-1));
+    half4 n = inTexture.read(uint2(gid.x, gid.y-1));
+    half4 s = inTexture.read(uint2(gid.x, gid.y+1));
+    half4 e = inTexture.read(uint2(gid.x+1, gid.y));
+    half4 w = inTexture.read(uint2(gid.x-1, gid.y));
+    half4 nw = inTexture.read(uint2(gid.x-1, gid.y-1));
+    half4 ne = inTexture.read(uint2(gid.x+1, gid.y-1));
+    half4 sw = inTexture.read(uint2(gid.x-1, gid.y+1));
+    half4 se = inTexture.read(uint2(gid.x+1, gid.y+1));
+    half4 outColor = (inColor + n + s + e + w + nw + ne + sw + se) / 9.0;
+    outTexture.write(outColor, gid);
+}
+
+
 kernel void
 sobel(texture2d<half, access::read>  inTexture  [[texture(0)]],
                 texture2d<half, access::write> outTexture [[texture(1)]],

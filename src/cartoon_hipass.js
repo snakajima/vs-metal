@@ -26,6 +26,9 @@
         }
     },{
         "name":"boolean",
+        "attr":{
+            "range": [0.0, 0.49]
+        }
     },{
         "name":"alpha",
     }]
