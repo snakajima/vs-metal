@@ -94,7 +94,7 @@ boolean(texture2d<half, access::read>  inTexture  [[texture(0)]],
 }
 
 kernel void
-gradientmap(texture2d<half, access::read>  inTexture  [[texture(0)]],
+gradient_map(texture2d<half, access::read>  inTexture  [[texture(0)]],
      texture2d<half, access::write> outTexture [[texture(1)]],
      const device float3& weight [[ buffer(2) ]],
      const device float4& color1 [[ buffer(3) ]],

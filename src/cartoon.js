@@ -1,13 +1,13 @@
 {
     "pipeline":[{
-        "name":"gaussianblur",
+        "name":"gaussian_blur",
         "attr":{
             "sigma": [2.0],
         }
     },{
         "name":"fork",
     },{
-        "name":"gaussianblur",
+        "name":"gaussian_blur",
         "attr":{
             "sigma": [2.0],
         }

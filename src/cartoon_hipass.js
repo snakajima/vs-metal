@@ -2,9 +2,9 @@
     "pipeline":[{
         "name":"fork",
     },{
-        "name":"gaussianblur",
+        "name":"gaussian_blur",
         "attr":{
-            "sigma": [2.0]
+            "sigma": [4.0]
         }
     },{
         "name":"toone",
@@ -13,7 +13,7 @@
     },{
         "name":"fork",
     },{
-        "name":"gaussianblur",
+        "name":"gaussian_blur",
         "attr":{
             "sigma": [4.0]
         }

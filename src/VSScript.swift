@@ -57,7 +57,7 @@ struct VSScript {
         //print("VSC:names = ", names)
 
         switch(name) {
-        case "gaussianblur":
+        case "gaussian_blur":
             if let sigma = params["sigma"] as? [Float], sigma.count == 1 {
                 let kernel = MPSImageGaussianBlur(device: context.device, sigma: sigma[0])
                 return VSMPSFilter(kernel: kernel)

@@ -1,6 +1,6 @@
 {
     "pipeline":[{
-        "name":"gaussianblur",
+        "name":"gaussian_blur",
                "attr":{
                   "sigma": [3.0],
                }

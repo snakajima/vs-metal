@@ -71,7 +71,7 @@
             },
         ],
     },
-    "gaussianblur": {
+    "gaussian_blur": {
         "type":"filter",
         "title":"Gaussian Blur",
         "description":"Gaussian Blur",
@@ -176,7 +176,7 @@
                 "default":[0.0, 0.0, 0.0, 1.0],
         }],
     },
-    "gradientmap": {
+    "gradient_map": {
         "type":"filter",
         "title":"Gradient Map",
         "description":"Mix two colors using brightness",
@@ -453,17 +453,6 @@
                  },{
             "name":"weight",
                 "default":[0.2126,0.7152,0.0722],
-        }],
-    },
-    "stretch": {
-        "type":"filter",
-        "title":"Stretch",
-        "description":"Stretch x or y direction",
-        "vertex":"stretch",
-        "attr": [{
-            "name":"ratio",
-                "default":[1.0, 1.0],
-                "range":[1.0, 2.0],
         }],
     },
     
