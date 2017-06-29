@@ -1,5 +1,5 @@
 //
-//  VSRenderer.swift
+//  VSProcessor.swift
 //  vs-metal
 //
 //  Created by satoshi on 6/21/17.

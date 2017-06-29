@@ -16,15 +16,8 @@ class VSRenderer {
         let position:vector_float2
         let textureCoordinate:vector_float2
     }
-    static let vertexData:[VSVertex] = [
-        VSVertex(position:[-1.0, -1.0], textureCoordinate:[1.0, 0.0]),
-        VSVertex(position:[1.0,  -1.0], textureCoordinate:[1.0, 1.0]),
-        VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
-        VSVertex(position:[1.0, -1.0], textureCoordinate:[1.0, 1.0]),
-        VSVertex(position:[1.0,  1.0], textureCoordinate:[0.0, 1.0]),
-        VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
-        ]
-    let dataSize = VSRenderer.vertexData.count * MemoryLayout.size(ofValue: VSRenderer.vertexData[0])
+    var vertexData:[VSVertex]
+    let dataSize:Int
     
     // width/height are texture's, not view's
     init(context:VSContext) {
@@ -32,6 +25,17 @@ class VSRenderer {
         let defaultLibrary = context.device.newDefaultLibrary()!
         let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
         let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
+
+        let vertexData:[VSVertex] = [
+            VSVertex(position:[-1.0, -1.0], textureCoordinate:[1.0, 0.0]),
+            VSVertex(position:[1.0,  -1.0], textureCoordinate:[1.0, 1.0]),
+            VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
+            VSVertex(position:[1.0, -1.0], textureCoordinate:[1.0, 1.0]),
+            VSVertex(position:[1.0,  1.0], textureCoordinate:[0.0, 1.0]),
+            VSVertex(position:[-1.0,  1.0], textureCoordinate:[0.0, 0.0]),
+            ]
+        self.vertexData = vertexData
+        self.dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
         
         // compile them into a pipeline state object
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
@@ -50,11 +54,11 @@ class VSRenderer {
         }
         let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         encoder.setRenderPipelineState(pipelineState)
-        encoder.setVertexBytes(VSRenderer.vertexData, length: dataSize, at: 0)
+        encoder.setVertexBytes(vertexData, length: dataSize, at: 0)
         encoder.setFragmentTexture(texture, at: 0)
         encoder.drawPrimitives(type: .triangle, vertexStart: 0,
-                               vertexCount: VSRenderer.vertexData.count,
-                               instanceCount: VSRenderer.vertexData.count/3)
+                               vertexCount: vertexData.count,
+                               instanceCount: vertexData.count/3)
         encoder.endEncoding()
         commandBuffer.present(drawable)
     }
