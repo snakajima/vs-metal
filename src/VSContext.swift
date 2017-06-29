@@ -31,7 +31,7 @@ enum VSContextError:Error {
 class VSContext {
     let device:MTLDevice
     let commandQueue: MTLCommandQueue
-    let pixelFormat:MTLPixelFormat
+    var pixelFormat = MTLPixelFormat.bgra8Unorm
     let threadGroupSize = MTLSizeMake(16,16,1)
     var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
     let nodes:[String:[String:Any]] = {
@@ -57,9 +57,8 @@ class VSContext {
     private var droppedFrameCount = 0
     private var sourceTexture:VSTexture?
     
-    init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
+    init(device:MTLDevice) {
         self.device = device
-        self.pixelFormat = pixelFormat
         commandQueue = device.makeCommandQueue()
     }
     

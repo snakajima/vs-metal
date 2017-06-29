@@ -28,11 +28,13 @@ class VSVideoSessionController: UIViewController {
     // Metal properties
     fileprivate lazy var textureCache:CVMetalTextureCache = {
         var cache:CVMetalTextureCache? = nil
-        CVMetalTextureCacheCreate(nil, nil, self.context!.device, nil, &cache)
+        CVMetalTextureCacheCreate(nil, nil, self.context.device, nil, &cache)
         return cache!
     }()
-    fileprivate var context:VSContext!
-    fileprivate var renderer:VSRenderer!
+    
+    // VideoShader properties
+    fileprivate var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
+    lazy fileprivate var renderer:VSRenderer = VSRenderer(context:self.context)
     fileprivate var runtime:VSRuntime!
 
     override func viewDidLoad() {
@@ -43,16 +45,15 @@ class VSVideoSessionController: UIViewController {
             return
         }
 
-        context = VSContext(device: MTLCreateSystemDefaultDevice()!, pixelFormat: mtkView.colorPixelFormat)
         if let url = urlScript, let script = VSScript.make(url: url) {
-            renderer = VSRenderer(context:context)
             runtime = script.compile(context: context)
+            context.pixelFormat = mtkView.colorPixelFormat
+            mtkView.device = context.device
+            mtkView.clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+            mtkView.delegate = self
+            
+            startVideoCaptureSession()
         }
-        mtkView.device = context.device
-        mtkView.clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        mtkView.delegate = self
-
-        startVideoCaptureSession()
     }
 
     private func addCamera(session:AVCaptureSession) throws -> Bool {
@@ -119,12 +120,12 @@ extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegat
     public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         if captureOutput is AVCaptureVideoDataOutput,
            let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-            let width = CVPixelBufferGetWidth(pixelBuffer)
-            let height = CVPixelBufferGetHeight(pixelBuffer)
+            let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
             var metalTexture:CVMetalTexture? = nil
-            let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil, MTLPixelFormat.bgra8Unorm, width, height, 0, &metalTexture)
+            let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil,
+                                                                   context.pixelFormat, width, height, 0, &metalTexture)
             if let metalTexture = metalTexture, status == kCVReturnSuccess {
-                context?.set(metalTexture: metalTexture)
+                context.set(metalTexture: metalTexture)
             } else {
                 print("VSVS: failed to create texture")
             }
@@ -136,27 +137,25 @@ extension VSVideoSessionController : AVCaptureAudioDataOutputSampleBufferDelegat
 
 extension VSVideoSessionController : MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        // nothing to do
+        // noop
     }
     
     public func draw(in view: MTKView) {
-        if !context.hasUpdate {
-            return // no update
+        if context.hasUpdate {
+            do {
+                let commandBufferCompute = context.commandQueue.makeCommandBuffer()
+                try context.encode(runtime: runtime, commandBuffer: commandBufferCompute)
+                commandBufferCompute.commit()
+                
+                let texture = try context.pop()
+                let commandBufferRender = context.commandQueue.makeCommandBuffer()
+                renderer.encode(commandBuffer:commandBufferRender, texture:texture.texture, view:view)
+                commandBufferRender.commit()
+            } catch let error {
+                print("#### ERROR #### VSProcessor:draw", error)
+            }
+            context.flush()
         }
-        
-        do {
-            let commandBufferCompute = context.commandQueue.makeCommandBuffer()
-            try context.encode(runtime: runtime, commandBuffer: commandBufferCompute)
-            commandBufferCompute.commit()
-            
-            let texture = try context.pop()
-            let commandBufferRender = context.commandQueue.makeCommandBuffer()
-            renderer.encode(commandBuffer:commandBufferRender, texture:texture.texture, view:view)
-            commandBufferRender.commit()
-        } catch let error {
-            print("#### ERROR #### VSProcessor:draw", error)
-        }
-        context.flush()
     }
 }
 
