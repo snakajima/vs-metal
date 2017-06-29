@@ -471,6 +471,16 @@
         "title":"Invert Alpha",
         "description":"Invert the alpha channel",
     },
+    "mosaic" : {
+        "type":"filter",
+        "title":"Mosaic",
+        "description":"Apply Mosaic filter",
+        "attr": [{
+                 "name":"size",
+                 "default":[30.0],
+                 "range":[2.0, 100.0]
+                 }]
+    },
     
     "tilt_shift": {
         "type":"filter",
