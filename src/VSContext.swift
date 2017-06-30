@@ -24,14 +24,8 @@ enum VSContextError:Error {
 }
 
 class VSContext {
-    private struct NamedBuffer {
-        let key:String
-        let buffer:MTLBuffer
-    }
-    
     // Public properties for apps
     let device:MTLDevice
-    let commandQueue: MTLCommandQueue
     var hasUpdate = false
     var pixelFormat = MTLPixelFormat.bgra8Unorm
 
@@ -39,6 +33,12 @@ class VSContext {
     let threadGroupSize = MTLSizeMake(16,16,1)
     var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
     
+    private struct NamedBuffer {
+        let key:String
+        let buffer:MTLBuffer
+    }
+    
+    private let commandQueue: MTLCommandQueue
     private var namedBuffers = [NamedBuffer]()
     private var width = 1, height = 1 // to be set later
     private var descriptor = MTLTextureDescriptor()
@@ -158,7 +158,6 @@ class VSContext {
     
     func encode(commandBuffer:MTLCommandBuffer, runtime:VSRuntime) throws -> MTLCommandBuffer {
         assert(Thread.current == Thread.main)
-        hasUpdate = false
         
         // prototype
         /*
@@ -184,6 +183,7 @@ class VSContext {
     }
     
     func flush() {
+        hasUpdate = false
         prevs = stack
         stack.removeAll()
     }
