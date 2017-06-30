@@ -8,6 +8,7 @@
 import Foundation
 import MetalKit
 
+// Abstruct struct for makeNode()
 struct VSControllers {
     static private let mapping:[String:VSNode] = [
         "fork":     VSFork(),

@@ -71,51 +71,30 @@ struct VSScript {
         
         if let node = VSControllers.makeNode(name: name) {
             return node
+        } else if let node = VSMPSFilter.makeNode(name: name, params: params, context: context) {
+            return node
         }
 
-        switch(name) {
-        case "gaussian_blur":
-            if let sigma = params["sigma"] as? [Float], sigma.count == 1 {
-                let kernel = MPSImageGaussianBlur(device: context.device, sigma: sigma[0])
-                return VSMPSFilter(kernel: kernel)
+        let buffers = names.map({ (name) -> MTLBuffer in
+            let values = params[name] as! [Float]
+            let length = MemoryLayout.size(ofValue: values[0]) * values.count
+            let buffer = context.device.makeBuffer(length: (length + 15) / 16 * 16, options: .storageModeShared)
+            memcpy(buffer.contents(), values, length)
+            if let key = paramsIn?[name] as? String {
+                context.registerNamedBuffer(key: key, buffer: buffer)
             }
-        case "sobel_mps":
-            if let weight = params["weight"] as? [Float], weight.count == 3 {
-                let kernel = MPSImageSobel(device: context.device, linearGrayColorTransform: weight)
-                return VSMPSFilter(kernel: kernel)
-            }
-        /*
-        case "pyramid":
-            if let weight = params["weight"] as? [Float], weight.count == 3 {
-                let kernel = MPSImagePyramid(device: device)
-                return VSMPSFilter(kernel: kernel)
-            }
-        */
-        case "laplacian":
-            let kernel = MPSImageLaplacian()
-            return VSMPSFilter(kernel: kernel)
-        default:
-            let buffers = names.map({ (name) -> MTLBuffer in
-                let values = params[name] as! [Float]
-                let length = MemoryLayout.size(ofValue: values[0]) * values.count
-                let buffer = context.device.makeBuffer(length: (length + 15) / 16 * 16, options: .storageModeShared)
-                memcpy(buffer.contents(), values, length)
-                if let key = paramsIn?[name] as? String {
-                    context.registerNamedBuffer(key: key, buffer: buffer)
-                }
-                return buffer
-            })
-            let sourceCount = info["sources"] as? Int ?? 1
-            guard let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name) else {
-                print("### VSScript:makeNode failed to create kernel", name)
-                return nil
-            }
-            do {
-                let pipelineState = try context.device.makeComputePipelineState(function: kernel)
-                return VSFilter(pipelineState: pipelineState, buffers: buffers, sourceCount:sourceCount)
-            } catch {
-                print("### VSScript:makeNode failed to create pipeline state", name)
-            }
+            return buffer
+        })
+        let sourceCount = info["sources"] as? Int ?? 1
+        guard let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name) else {
+            print("### VSScript:makeNode failed to create kernel", name)
+            return nil
+        }
+        do {
+            let pipelineState = try context.device.makeComputePipelineState(function: kernel)
+            return VSFilter(pipelineState: pipelineState, buffers: buffers, sourceCount:sourceCount)
+        } catch {
+            print("### VSScript:makeNode failed to create pipeline state", name)
         }
         return nil
     }

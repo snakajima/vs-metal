@@ -11,6 +11,34 @@ import MetalPerformanceShaders
 
 struct VSMPSFilter: VSNode {
     private let kernel:MPSUnaryImageKernel
+
+    static func makeNode(name:String, params:[String:Any], context:VSContext) -> VSNode? {
+        switch(name) {
+        case "gaussian_blur":
+            if let sigma = params["sigma"] as? [Float], sigma.count == 1 {
+                let kernel = MPSImageGaussianBlur(device: context.device, sigma: sigma[0])
+                return VSMPSFilter(kernel: kernel)
+            }
+        case "sobel_mps":
+            if let weight = params["weight"] as? [Float], weight.count == 3 {
+                let kernel = MPSImageSobel(device: context.device, linearGrayColorTransform: weight)
+                return VSMPSFilter(kernel: kernel)
+            }
+            /*
+             case "pyramid":
+             if let weight = params["weight"] as? [Float], weight.count == 3 {
+             let kernel = MPSImagePyramid(device: device)
+             return VSMPSFilter(kernel: kernel)
+             }
+             */
+        case "laplacian":
+            let kernel = MPSImageLaplacian()
+            return VSMPSFilter(kernel: kernel)
+        default:
+            break
+        }
+        return nil
+    }
     
     init(kernel:MPSUnaryImageKernel) {
         self.kernel = kernel
