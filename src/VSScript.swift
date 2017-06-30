@@ -126,21 +126,21 @@ struct VSScript {
             context.updateNamedBuffers(with: constants)
         }
         
-        var vars = [VSVariable]()
+        var dynamicVariables = [VSDynamicVariable]()
         if let variables = json["variables"] as? [String:[String:Any]] {
             for (key, params) in variables {
                 print("key=", key, params)
                 if let type = params["type"] as? String {
                     switch(type) {
                     case "sin":
-                        vars.append(VSTimer(key: key, params: params))
+                        dynamicVariables.append(VSTimer(key: key, params: params))
                     default:
                         break
                     }
                 }
             }
         }
-        context.variables = vars
+        context.dynamicVariables = dynamicVariables
         
         return VSRuntime(nodes:nodes)
     }

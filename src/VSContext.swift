@@ -44,7 +44,7 @@ class VSContext {
         let json = try! JSONSerialization.jsonObject(with: data)
         return json as! [String:[String:Any]]
     }()
-    var variables = [VSVariable]()
+    var dynamicVariables = [VSDynamicVariable]()
     
     private var namedBuffers = [NamedBuffer]()
     private var width = 1, height = 1 // to be set later
@@ -175,13 +175,13 @@ class VSContext {
             "myratio":[ratio]
         ]
         */
-        var vars = [String:[Float]]()
-        for variable in variables {
-            variable.apply(callback: { (key, values) in
-                vars[key] = values
+        var dictionary = [String:[Float]]()
+        for dynamicVariable in dynamicVariables {
+            dynamicVariable.apply(callback: { (key, values) in
+                dictionary[key] = values
             })
         }
-        updateNamedBuffers(with: vars)
+        updateNamedBuffers(with: dictionary)
  
         for node in runtime.nodes {
             try node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
@@ -198,9 +198,9 @@ class VSContext {
         namedBuffers.append(NamedBuffer(key:key, buffer:buffer))
     }
     
-    func updateNamedBuffers(with variables:[String:[Float]]) {
+    func updateNamedBuffers(with dictionary:[String:[Float]]) {
         for buffer in namedBuffers {
-            if let values = variables[buffer.key] {
+            if let values = dictionary[buffer.key] {
                 let length = MemoryLayout.size(ofValue: values[0]) * values.count
                 if length <= buffer.buffer.length {
                     memcpy(buffer.buffer.contents(), values, length)

@@ -1,5 +1,5 @@
 //
-//  VSVariable.swift
+//  VSDynamicVariable.swift
 //  vs-metal
 //
 //  Created by satoshi on 6/27/17.
@@ -8,11 +8,11 @@
 
 import Foundation
 
-protocol VSVariable {
+protocol VSDynamicVariable {
     func apply(callback:(String, [Float])->())
 }
 
-class VSTimer:VSVariable {
+class VSTimer:VSDynamicVariable {
     let key:String
     let interval:Double
     let range:[Float]
