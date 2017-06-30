@@ -10,6 +10,7 @@ import Foundation
 import MetalKit
 
 class VSRenderer {
+    private let context:VSContext
     private var pipelineState: MTLRenderPipelineState?
     
     struct VSVertex {
@@ -21,11 +22,12 @@ class VSRenderer {
     
     // width/height are texture's, not view's
     init(context:VSContext) {
+        self.context = context
+        
         // load vertex & fragment shaders
         let defaultLibrary = context.device.newDefaultLibrary()!
         let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
         let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
-
         
         // compile them into a pipeline state object
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
@@ -35,7 +37,8 @@ class VSRenderer {
         pipelineState = try! context.device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
-    func encode(commandBuffer:MTLCommandBuffer, texture:VSTexture, view: MTKView) -> MTLCommandBuffer {
+    func encode(commandBuffer:MTLCommandBuffer, view: MTKView) throws -> MTLCommandBuffer {
+        let texture = try context.pop()
         if dataSize == 0 {
             // Very first time
             let viewSize = view.bounds.size

@@ -15,42 +15,36 @@ class VSVideoSessionController: UIViewController {
     var urlScript:URL?
 
     // VideoShader properties
-    fileprivate var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
-    lazy fileprivate var renderer:VSRenderer = VSRenderer(context:self.context)
-    lazy fileprivate var session:VSCaptureSession = VSCaptureSession(context: self.context)
-    fileprivate var runtime:VSRuntime!
+    var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
+    var runtime:VSRuntime!
+    lazy var session:VSCaptureSession = VSCaptureSession(context: self.context)
+    lazy var renderer:VSRenderer = VSRenderer(context:self.context)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let mtkView = self.view as? MTKView,
-              let url = urlScript,
-              let script = VSScript.make(url: url) else {
-            print("VSVS: something is wrong")
-            return
+        if let mtkView = self.view as? MTKView,
+           let url = urlScript,
+           let script = VSScript.make(url: url) {
+            runtime = script.compile(context: context)
+            context.pixelFormat = mtkView.colorPixelFormat
+            mtkView.device = context.device
+            mtkView.delegate = self
+            session.start()
         }
-
-        runtime = script.compile(context: context)
-        context.pixelFormat = mtkView.colorPixelFormat
-        mtkView.device = context.device
-        mtkView.clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        mtkView.delegate = self
-        session.start()
     }
 }
 
 extension VSVideoSessionController : MTKViewDelegate {
-    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
-        // noop
-    }
+    public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
     
     public func draw(in view: MTKView) {
         if context.hasUpdate {
             do {
                 try context.encode(commandBuffer: context.makeCommandBuffer(), runtime: runtime)
                            .commit()
-                renderer.encode(commandBuffer:context.makeCommandBuffer(), texture:try context.pop(), view:view)
-                        .commit()
+                try renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view)
+                           .commit()
             } catch let error {
                 print("#### ERROR #### VSProcessor:draw", error)
             }
