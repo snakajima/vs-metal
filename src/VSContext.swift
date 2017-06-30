@@ -38,12 +38,6 @@ class VSContext {
     // Semi-public properties for VSScript, filters and possibly third-party extensions
     let threadGroupSize = MTLSizeMake(16,16,1)
     var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
-    let nodes:[String:[String:Any]] = {
-        let url = Bundle.main.url(forResource: "VSNodes", withExtension: "js")!
-        let data = try! Data(contentsOf: url)
-        let json = try! JSONSerialization.jsonObject(with: data)
-        return json as! [String:[String:Any]]
-    }()
     
     private var namedBuffers = [NamedBuffer]()
     private var width = 1, height = 1 // to be set later

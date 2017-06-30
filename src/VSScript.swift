@@ -33,7 +33,7 @@ struct VSScript {
     }
     
     private static func makeNode(name:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
-        guard let info = context.nodes[name] else {
+        guard let info = VSNodes.getNodeInfo(name: name) else {
             print("### VSScript:makeNode Invalid node name", name)
             return nil
         }
