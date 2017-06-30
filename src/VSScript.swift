@@ -21,22 +21,22 @@ struct VSScript {
         return VSScript.nodes[name]
     }
 
-    private let json:[String:Any]
-    private init(json:[String:Any]) {
-        self.json = json
+    private let pipeline:[[String:Any]]
+    private let constants:[String:[Float]]
+    private let variables:[String:[String:Any]]
+    
+    init(json:[String:Any], pipeline:[[String:Any]]) {
+        self.pipeline = pipeline
+        self.constants = json["constants"] as? [String:[Float]] ?? [String:[Float]]()
+        self.variables = json["variables"] as? [String:[String:Any]] ?? [String:[String:Any]]()
     }
 
-    var pipeline:[[String:Any]] {
-        // pre-validated by make
-        return json["pipeline"] as! [[String:Any]]
-    }
-    
     static func make(url:URL) -> VSScript? {
         do {
             let data = try Data(contentsOf: url)
             if let json = try JSONSerialization.jsonObject(with: data) as? [String:Any],
-               let _ = json["pipeline"] as? [[String:Any]] {
-                return VSScript(json: json)
+               let pipeline = json["pipeline"] as? [[String:Any]] {
+                return VSScript(json:json, pipeline: pipeline)
             }
         } catch {
         }
@@ -133,21 +133,17 @@ struct VSScript {
                 }
             }
         }
-        if let constants = json["constants"] as? [String:[Float]] {
-            context.updateNamedBuffers(with: constants)
-        }
+        context.updateNamedBuffers(with: self.constants)
         
         var dynamicVariables = [VSDynamicVariable]()
-        if let variables = json["variables"] as? [String:[String:Any]] {
-            for (key, params) in variables {
-                print("key=", key, params)
-                if let type = params["type"] as? String {
-                    switch(type) {
-                    case "sin":
-                        dynamicVariables.append(VSTimer(key: key, params: params))
-                    default:
-                        break
-                    }
+        for (key, params) in self.variables {
+            print("key=", key, params)
+            if let type = params["type"] as? String {
+                switch(type) {
+                case "sin":
+                    dynamicVariables.append(VSTimer(key: key, params: params))
+                default:
+                    break
                 }
             }
         }
