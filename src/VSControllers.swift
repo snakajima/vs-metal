@@ -8,6 +8,19 @@
 import Foundation
 import MetalKit
 
+struct VSControllers {
+    static private let mapping:[String:VSNode] = [
+        "fork":     VSFork(),
+        "swap":     VSSwap(),
+        "discard":  VSDiscard(),
+        "shift":    VSShift(),
+        "previous": VSPrevious(),
+    ]
+    static func makeNode(name:String) -> VSNode? {
+        return mapping[name]
+    }
+}
+
 struct VSFork:VSNode {
     func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
         let texture = try context.pop()

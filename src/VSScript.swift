@@ -68,6 +68,10 @@ struct VSScript {
                 }
             }
         }
+        
+        if let node = VSControllers.makeNode(name: name) {
+            return node
+        }
 
         switch(name) {
         case "gaussian_blur":
@@ -90,16 +94,6 @@ struct VSScript {
         case "laplacian":
             let kernel = MPSImageLaplacian()
             return VSMPSFilter(kernel: kernel)
-        case "fork":
-            return VSFork()
-        case "swap":
-            return VSSwap()
-        case "shift":
-            return VSShift()
-        case "discard":
-            return VSDiscard()
-        case "previous":
-            return VSPrevious()
         default:
             let buffers = names.map({ (name) -> MTLBuffer in
                 let values = params[name] as! [Float]
