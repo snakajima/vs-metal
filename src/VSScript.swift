@@ -55,16 +55,16 @@ struct VSScript {
         var attributeNames = [String]()
         if let attrs = info["attr"] as? [[String:Any]] {
             for attr in attrs {
-                if let name=attr["name"] as? String,
+                if let attributeName=attr["name"] as? String,
                     var defaults=attr["default"] as? [Float] {
-                    if let values = paramsIn?[name] as? [Float], values.count <= defaults.count {
+                    if let values = paramsIn?[attributeName] as? [Float], values.count <= defaults.count {
                         //print("VSC:makeNode overriding", name)
                         for (index, value) in values.enumerated() {
                             defaults[index] = value
                         }
                     }
-                    attributeNames.append(name)
-                    params[name] = defaults
+                    attributeNames.append(attributeName)
+                    params[attributeName] = defaults
                 }
             }
         }
