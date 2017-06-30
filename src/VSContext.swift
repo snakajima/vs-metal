@@ -29,9 +29,13 @@ enum VSContextError:Error {
 }
 
 class VSContext {
+    // Public properties for apps
     let device:MTLDevice
     let commandQueue: MTLCommandQueue
+    var hasUpdate = false
     var pixelFormat = MTLPixelFormat.bgra8Unorm
+
+    // Semi-public properties for VSScript, filters and possibly third-party extensions
     let threadGroupSize = MTLSizeMake(16,16,1)
     var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
     let nodes:[String:[String:Any]] = {
@@ -40,22 +44,19 @@ class VSContext {
         let json = try! JSONSerialization.jsonObject(with: data)
         return json as! [String:[String:Any]]
     }()
-    private var namedBuffers = [NamedBuffer]()
     var variables = [VSVariable]()
     
+    private var namedBuffers = [NamedBuffer]()
     private var width = 1, height = 1 // to be set later
     private var descriptor = MTLTextureDescriptor()
-    
-    // stack: texture stack for the video pipeline
-    // transient: popped textures to be migrated to pool later
-    // pool: pool of textures to be reused for stack
-    private var stack = [VSTexture]()
-    private var pool = [VSTexture]()
-    private var prevs = [VSTexture]() // layers from previous session
-    var hasUpdate = false
-    private var frameCount = 0
-    private var droppedFrameCount = 0
     private var sourceTexture:VSTexture?
+    
+    private var stack = [VSTexture]() // main texture stack
+    private var pool = [VSTexture]()  // texture pool for reuse
+    private var prevs = [VSTexture]() // layers from previous session
+    
+    private var frameCount = 0  // only for debugging
+    private var droppedFrameCount = 0 // only for debugging
     
     init(device:MTLDevice) {
         self.device = device
