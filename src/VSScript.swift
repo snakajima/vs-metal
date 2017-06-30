@@ -46,9 +46,9 @@ struct VSScript {
         return nil
     }
     
-    private static func makeNode(name:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
-        guard let info = VSScript.getNodeInfo(name: name) else {
-            print("### VSScript:makeNode Invalid node name", name)
+    private static func makeNode(nodeName:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
+        guard let info = VSScript.getNodeInfo(name: nodeName) else {
+            print("### VSScript:makeNode Invalid node name", nodeName)
             return nil
         }
         var params = [String:Any]()
@@ -69,9 +69,9 @@ struct VSScript {
             }
         }
         
-        if let node = VSControllers.makeNode(name: name) {
+        if let node = VSControllers.makeNode(name: nodeName) {
             return node
-        } else if let node = VSMPSFilter.makeNode(name: name, params: params, context: context) {
+        } else if let node = VSMPSFilter.makeNode(name: nodeName, params: params, context: context) {
             return node
         }
 
@@ -86,15 +86,15 @@ struct VSScript {
             return buffer
         })
         let sourceCount = info["sources"] as? Int ?? 1
-        guard let kernel = context.device.newDefaultLibrary()!.makeFunction(name: name) else {
-            print("### VSScript:makeNode failed to create kernel", name)
+        guard let kernel = context.device.newDefaultLibrary()!.makeFunction(name: nodeName) else {
+            print("### VSScript:makeNode failed to create kernel", nodeName)
             return nil
         }
         do {
             let pipelineState = try context.device.makeComputePipelineState(function: kernel)
             return VSFilter(pipelineState: pipelineState, buffers: buffers, sourceCount:sourceCount)
         } catch {
-            print("### VSScript:makeNode failed to create pipeline state", name)
+            print("### VSScript:makeNode failed to create pipeline state", nodeName)
         }
         return nil
     }
@@ -103,7 +103,7 @@ struct VSScript {
         var nodes = [VSNode]()
         for item in self.pipeline {
             if let name=item["name"] as? String {
-                if let node = VSScript.makeNode(name: name, params: item["attr"] as? [String:Any], context:context) {
+                if let node = VSScript.makeNode(nodeName: name, params: item["attr"] as? [String:Any], context:context) {
                     nodes.append(node)
                 }
             }
