@@ -10,7 +10,7 @@ import Foundation
 import MetalPerformanceShaders
 
 struct VSScript {
-    private static let nodes:[String:[String:Any]] = {
+    private static let nodeInfos:[String:[String:Any]] = {
         let url = Bundle.main.url(forResource: "VSNodes", withExtension: "js")!
         let data = try! Data(contentsOf: url)
         let json = try! JSONSerialization.jsonObject(with: data)
@@ -18,7 +18,7 @@ struct VSScript {
     }()
     
     static func getNodeInfo(name:String) -> [String:Any]? {
-        return VSScript.nodes[name]
+        return VSScript.nodeInfos[name]
     }
 
     private let pipeline:[[String:Any]]
@@ -31,7 +31,10 @@ struct VSScript {
         self.variables = json["variables"] as? [String:[String:Any]] ?? [String:[String:Any]]()
     }
 
-    static func make(url:URL) -> VSScript? {
+    static func load(from:URL?) -> VSScript? {
+        guard let url = from else {
+            return nil
+        }
         do {
             let data = try Data(contentsOf: url)
             if let json = try JSONSerialization.jsonObject(with: data) as? [String:Any],
@@ -65,7 +68,6 @@ struct VSScript {
                 }
             }
         }
-        //print("VSC:names = ", names)
 
         switch(name) {
         case "gaussian_blur":

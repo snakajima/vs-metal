@@ -24,8 +24,7 @@ class VSVideoSessionController: UIViewController {
         super.viewDidLoad()
 
         if let mtkView = self.view as? MTKView,
-           let url = urlScript,
-           let script = VSScript.make(url: url) {
+           let script = VSScript.load(from: urlScript) {
             runtime = script.compile(context: context)
             context.pixelFormat = mtkView.colorPixelFormat
             mtkView.device = context.device
