@@ -52,7 +52,7 @@ struct VSScript {
             return nil
         }
         var params = [String:Any]()
-        var names = [String]()
+        var attributeNames = [String]()
         if let attrs = info["attr"] as? [[String:Any]] {
             for attr in attrs {
                 if let name=attr["name"] as? String,
@@ -63,7 +63,7 @@ struct VSScript {
                             defaults[index] = value
                         }
                     }
-                    names.append(name)
+                    attributeNames.append(name)
                     params[name] = defaults
                 }
             }
@@ -75,7 +75,7 @@ struct VSScript {
             return node
         }
 
-        let buffers = names.map({ (name) -> MTLBuffer in
+        let buffers = attributeNames.map({ (name) -> MTLBuffer in
             let values = params[name] as! [Float]
             let length = MemoryLayout.size(ofValue: values[0]) * values.count
             let buffer = context.device.makeBuffer(length: (length + 15) / 16 * 16, options: .storageModeShared)
