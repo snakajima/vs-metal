@@ -17,26 +17,25 @@ class VSVideoSessionController: UIViewController {
     // VideoShader properties
     fileprivate var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     lazy fileprivate var renderer:VSRenderer = VSRenderer(context:self.context)
+    lazy fileprivate var session:VSCaptureSession = VSCaptureSession(context: self.context)
     fileprivate var runtime:VSRuntime!
-    lazy private var session:VSCaptureSession = VSCaptureSession(context: self.context)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let mtkView = self.view as? MTKView else {
-            print("VSVS: view is not an MTKView")
+        guard let mtkView = self.view as? MTKView,
+              let url = urlScript,
+              let script = VSScript.make(url: url) else {
+            print("VSVS: something is wrong")
             return
         }
 
-        if let url = urlScript, let script = VSScript.make(url: url) {
-            runtime = script.compile(context: context)
-            context.pixelFormat = mtkView.colorPixelFormat
-            mtkView.device = context.device
-            mtkView.clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-            mtkView.delegate = self
-
-            session.start()
-        }
+        runtime = script.compile(context: context)
+        context.pixelFormat = mtkView.colorPixelFormat
+        mtkView.device = context.device
+        mtkView.clearColor = MTLClearColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+        mtkView.delegate = self
+        session.start()
     }
 }
 

@@ -12,10 +12,10 @@ import AVFoundation
 class VSCaptureSession: NSObject {
     var cameraPosition = AVCaptureDevicePosition.front
     var fps:Int?
+    var preset = AVCaptureSessionPreset1280x720
 
+    fileprivate var session:AVCaptureSession?
     fileprivate let context:VSContext
-    private var session:AVCaptureSession?
-    private var camera:AVCaptureDevice?
     fileprivate lazy var textureCache:CVMetalTextureCache = {
         var cache:CVMetalTextureCache? = nil
         CVMetalTextureCacheCreate(nil, nil, self.context.device, nil, &cache)
@@ -30,12 +30,9 @@ class VSCaptureSession: NSObject {
         let s = AVCaptureDeviceDiscoverySession(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera],
                                                 mediaType: AVMediaTypeVideo, position: self.cameraPosition)
         guard let camera = s?.devices[0] else {
-            self.camera = nil
             return false
         }
         
-        self.camera = camera
-        let preset = AVCaptureSessionPreset1280x720
         if camera.supportsAVCaptureSessionPreset(preset) {
             session.sessionPreset = preset
         }
@@ -54,6 +51,7 @@ class VSCaptureSession: NSObject {
         let session = AVCaptureSession()
         self.session = nil
         do {
+            /* LATER: for audio pipeline
             if let microphone = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio) {
                 let audioInput = try AVCaptureDeviceInput(device: microphone)
                 let audioOutput = AVCaptureAudioDataOutput()
@@ -61,6 +59,7 @@ class VSCaptureSession: NSObject {
                 session.addInput(audioInput)
                 session.addOutput(audioOutput)
             }
+            */
             guard try addCamera(session:session) else {
                 print("VSVS: no camera on this device")
                 return
@@ -71,12 +70,10 @@ class VSCaptureSession: NSObject {
             ]
             videoOutput.setSampleBufferDelegate(self, queue: .main)
             session.addOutput(videoOutput)
-            
-            let imageOutput = AVCapturePhotoOutput()
-            session.addOutput(imageOutput)
-            
-            self.session = session
+
+            //session.addOutput(AVCapturePhotoOutput())
             session.startRunning()
+            self.session = session
         } catch {
             print("VSVS: failed to start the video capture session")
         }
