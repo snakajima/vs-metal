@@ -13,9 +13,10 @@ protocol VSDynamicVariable {
 }
 
 struct VSTimer:VSDynamicVariable {
-    let key:String
-    let interval:Double
-    let range:[Float]
+    private let key:String
+    private let interval:Double
+    private let range:[Float]
+    
     init(key:String, params:[String:Any]) {
         self.key = key
         self.interval = params["interval"] as? Double ?? 1.0

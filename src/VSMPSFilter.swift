@@ -10,7 +10,7 @@ import Foundation
 import MetalPerformanceShaders
 
 struct VSMPSFilter: VSNode {
-    let kernel:MPSUnaryImageKernel
+    private let kernel:MPSUnaryImageKernel
     
     init(kernel:MPSUnaryImageKernel) {
         self.kernel = kernel

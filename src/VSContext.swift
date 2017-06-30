@@ -19,16 +19,16 @@ struct VSTexture:Equatable {
     }
 }
 
-private struct NamedBuffer {
-    let key:String
-    let buffer:MTLBuffer
-}
-
 enum VSContextError:Error {
     case stackOverflow
 }
 
 class VSContext {
+    private struct NamedBuffer {
+        let key:String
+        let buffer:MTLBuffer
+    }
+    
     // Public properties for apps
     let device:MTLDevice
     let commandQueue: MTLCommandQueue

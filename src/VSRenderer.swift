@@ -13,12 +13,12 @@ class VSRenderer {
     private let context:VSContext
     private var pipelineState: MTLRenderPipelineState?
     
-    struct VSVertex {
+    private struct VSVertex {
         let position:vector_float2
         let textureCoordinate:vector_float2
     }
-    var vertexData = [VSVertex]()
-    var dataSize:Int = 0
+    private var vertexData = [VSVertex]()
+    private var dataSize:Int = 0
     
     // width/height are texture's, not view's
     init(context:VSContext) {
