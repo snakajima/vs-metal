@@ -12,7 +12,7 @@ protocol VSDynamicVariable {
     func apply(callback:(String, [Float])->())
 }
 
-class VSTimer:VSDynamicVariable {
+struct VSTimer:VSDynamicVariable {
     let key:String
     let interval:Double
     let range:[Float]

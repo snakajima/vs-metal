@@ -9,7 +9,7 @@
 import Foundation
 import MetalKit
 
-class VSFilter: VSNode {
+struct VSFilter: VSNode {
     let pipelineState:MTLComputePipelineState
     let paramBuffers:[MTLBuffer]
     let sourceCount:Int

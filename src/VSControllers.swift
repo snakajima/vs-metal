@@ -8,7 +8,7 @@
 import Foundation
 import MetalKit
 
-class VSFork:VSNode {
+struct VSFork:VSNode {
     func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
         let texture = try context.pop()
         context.push(texture:texture)
@@ -16,7 +16,7 @@ class VSFork:VSNode {
     }
 }
 
-class VSSwap:VSNode {
+struct VSSwap:VSNode {
     func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
         let texture1 = try context.pop()
         let texture2 = try context.pop()
@@ -25,19 +25,19 @@ class VSSwap:VSNode {
     }
 }
 
-class VSDiscard:VSNode {
+struct VSDiscard:VSNode {
     func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
         let _ = try context.pop()
     }
 }
 
-class VSShift:VSNode {
+struct VSShift:VSNode {
     func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
         context.shift()
     }
 }
 
-class VSPrevious:VSNode {
+struct VSPrevious:VSNode {
     func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
         let texture = context.prev()
         context.push(texture: texture)
