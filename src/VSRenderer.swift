@@ -35,12 +35,12 @@ class VSRenderer {
         pipelineState = try! context.device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
-    func encode(commandBuffer:MTLCommandBuffer, texture:MTLTexture, view: MTKView) {
+    func encode(commandBuffer:MTLCommandBuffer, texture:VSTexture, view: MTKView) {
         if dataSize == 0 {
             // Very first time
             let viewSize = view.bounds.size
             let viewRatio = viewSize.height / viewSize.width
-            let size = CGSize(width:texture.height, height:texture.width)
+            let size = CGSize(width:texture.texture.height, height:texture.texture.width)
             let ratio = size.height / size.width
             var x = 1.0 as Float
             var y = 1.0 as Float
@@ -70,7 +70,7 @@ class VSRenderer {
         let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         encoder.setRenderPipelineState(pipelineState)
         encoder.setVertexBytes(vertexData, length: dataSize, at: 0)
-        encoder.setFragmentTexture(texture, at: 0)
+        encoder.setFragmentTexture(texture.texture, at: 0)
         encoder.drawPrimitives(type: .triangle, vertexStart: 0,
                                vertexCount: vertexData.count,
                                instanceCount: vertexData.count/3)
