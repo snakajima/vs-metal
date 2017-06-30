@@ -156,7 +156,7 @@ class VSContext {
         return ret
     }
     
-    func encode(runtime:VSRuntime, commandBuffer:MTLCommandBuffer) throws {
+    func encode(commandBuffer:MTLCommandBuffer, runtime:VSRuntime) throws -> MTLCommandBuffer {
         assert(Thread.current == Thread.main)
         hasUpdate = false
         
@@ -179,11 +179,17 @@ class VSContext {
         for node in runtime.nodes {
             try node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
         }
+        
+        return commandBuffer
     }
     
     func flush() {
         prevs = stack
         stack.removeAll()
+    }
+    
+    func makeCommandBuffer() -> MTLCommandBuffer {
+        return commandQueue.makeCommandBuffer()
     }
     
     func registerNamedBuffer(key:String, buffer:MTLBuffer) {

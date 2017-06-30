@@ -35,7 +35,7 @@ class VSRenderer {
         pipelineState = try! context.device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
-    func encode(commandBuffer:MTLCommandBuffer, texture:VSTexture, view: MTKView) {
+    func encode(commandBuffer:MTLCommandBuffer, texture:VSTexture, view: MTKView) -> MTLCommandBuffer {
         if dataSize == 0 {
             // Very first time
             let viewSize = view.bounds.size
@@ -62,10 +62,10 @@ class VSRenderer {
         }
         
         guard let renderPassDescriptor = view.currentRenderPassDescriptor,
-            let pipelineState = self.pipelineState,
-            let drawable = view.currentDrawable else {
-                print("VSR:draw something is wrong")
-                return
+              let pipelineState = self.pipelineState,
+              let drawable = view.currentDrawable else {
+            print("VSR:draw something is wrong")
+            return commandBuffer
         }
         let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         encoder.setRenderPipelineState(pipelineState)
@@ -76,5 +76,7 @@ class VSRenderer {
                                instanceCount: vertexData.count/3)
         encoder.endEncoding()
         commandBuffer.present(drawable)
+        
+        return commandBuffer
     }
 }
