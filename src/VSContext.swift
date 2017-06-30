@@ -44,7 +44,6 @@ class VSContext {
         let json = try! JSONSerialization.jsonObject(with: data)
         return json as! [String:[String:Any]]
     }()
-    var dynamicVariables = [VSDynamicVariable]()
     
     private var namedBuffers = [NamedBuffer]()
     private var width = 1, height = 1 // to be set later
@@ -176,7 +175,7 @@ class VSContext {
         ]
         */
         var dictionary = [String:[Float]]()
-        for dynamicVariable in dynamicVariables {
+        for dynamicVariable in runtime.dynamicVariables {
             dynamicVariable.apply(callback: { (key, values) in
                 dictionary[key] = values
             })

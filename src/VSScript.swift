@@ -140,8 +140,7 @@ struct VSScript {
                 }
             }
         }
-        context.dynamicVariables = dynamicVariables
         
-        return VSRuntime(nodes:nodes)
+        return VSRuntime(nodes:nodes, dynamicVariables:dynamicVariables)
     }
 }
