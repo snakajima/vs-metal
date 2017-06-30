@@ -10,6 +10,17 @@ import Foundation
 import MetalPerformanceShaders
 
 struct VSScript {
+    private static let nodes:[String:[String:Any]] = {
+        let url = Bundle.main.url(forResource: "VSNodes", withExtension: "js")!
+        let data = try! Data(contentsOf: url)
+        let json = try! JSONSerialization.jsonObject(with: data)
+        return json as! [String:[String:Any]]
+    }()
+    
+    static func getNodeInfo(name:String) -> [String:Any]? {
+        return VSScript.nodes[name]
+    }
+
     private let json:[String:Any]
     private init(json:[String:Any]) {
         self.json = json
@@ -33,7 +44,7 @@ struct VSScript {
     }
     
     private static func makeNode(name:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
-        guard let info = VSNodes.getNodeInfo(name: name) else {
+        guard let info = VSScript.getNodeInfo(name: name) else {
             print("### VSScript:makeNode Invalid node name", name)
             return nil
         }

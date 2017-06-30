@@ -19,7 +19,7 @@ class VSMPSFilter: VSNode {
     init(name:String, params paramsIn:[String:Any], context:VSContext) {
         var params:[String:Any] = {
             var params = [String:Any]()
-            if let info = VSNodes.getNodeInfo(name: name),
+            if let info = VSScript.getNodeInfo(name: name),
                 let attrs = info["attr"] as? [[String:Any]] {
                 for attr in attrs {
                     if let name=attr["name"] as? String,
