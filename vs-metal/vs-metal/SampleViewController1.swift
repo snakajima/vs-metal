@@ -24,6 +24,8 @@ class SampleViewController1: UIViewController {
         super.viewDidLoad()
 
         if let mtkView = self.view as? MTKView {
+            mtkView.device = context.device
+            mtkView.delegate = self
             let script = VSScript()
                             .gaussian_blur(sigma: 2.0)
                             .fork()
@@ -31,13 +33,12 @@ class SampleViewController1: UIViewController {
                             .toone()
                             .swap()
                             .sobel()
-                            .canny_edge()
+                            .canny_edge(threshhold: 0.19, thin: 0.5)
                             .anti_alias()
                             .alpha()
             runtime = script.compile(context: context)
+            
             context.pixelFormat = mtkView.colorPixelFormat
-            mtkView.device = context.device
-            mtkView.delegate = self
             session.start()
         }
     }

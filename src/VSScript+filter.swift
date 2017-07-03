@@ -24,8 +24,8 @@ extension VSScript {
         return self
     }
 
-    func canny_edge() -> VSScript {
-        append(node: ["name":"canny_edge"])
+    func canny_edge(threshhold:Float, thin:Float) -> VSScript {
+        append(node: ["name":"canny_edge", "attr":["threshhold":[threshhold], "thin":[thin]]])
         return self
     }
 
@@ -35,7 +35,7 @@ extension VSScript {
     }
     
     func gaussian_blur(sigma:Float) -> VSScript {
-        append(node: ["name":"gaussian_blur", "attr":["sigma":sigma]])
+        append(node: ["name":"gaussian_blur", "attr":["sigma":[sigma]]])
         return self
     }
     
