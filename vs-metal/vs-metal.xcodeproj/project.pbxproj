@@ -47,6 +47,7 @@
 		74E284EE1F09C9800045ADFB /* VSScript+filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284ED1F09C9800045ADFB /* VSScript+filter.swift */; };
 		74E284F01F09F6C30045ADFB /* SampleViewController1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */; };
 		74E284F41F09F8500045ADFB /* SampleViewController1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */; };
+		74E284F61F09FB790045ADFB /* VSScript+controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284F51F09FB790045ADFB /* VSScript+controller.swift */; };
 		74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */; };
 		74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBF1EFC828E0039A0CA /* VSNode.swift */; };
 		74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BC11EFC84070039A0CA /* VSFilters.metal */; };
@@ -97,6 +98,7 @@
 		74E284ED1F09C9800045ADFB /* VSScript+filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VSScript+filter.swift"; sourceTree = "<group>"; };
 		74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleViewController1.swift; sourceTree = "<group>"; };
 		74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SampleViewController1.storyboard; sourceTree = "<group>"; };
+		74E284F51F09FB790045ADFB /* VSScript+controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VSScript+controller.swift"; sourceTree = "<group>"; };
 		74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSRenderer.swift; sourceTree = "<group>"; };
 		74FB9BBF1EFC828E0039A0CA /* VSNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSNode.swift; sourceTree = "<group>"; };
 		74FB9BC11EFC84070039A0CA /* VSFilters.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSFilters.metal; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				74A39DCD1EFC30EB004713D8 /* VSFilter.swift */,
 				74D3EFCC1EFDD89A0005765A /* VSScript.swift */,
 				74E284ED1F09C9800045ADFB /* VSScript+filter.swift */,
+				74E284F51F09FB790045ADFB /* VSScript+controller.swift */,
 				7428EF2D1EFF6E51007BECAF /* VSControllers.swift */,
 				74FB9BBF1EFC828E0039A0CA /* VSNode.swift */,
 				74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */,
@@ -314,6 +317,7 @@
 				745D3A9A1F06E614009DD359 /* VSCaptureSession.swift in Sources */,
 				74E284E41F0336D50045ADFB /* VSDynamicVariable.swift in Sources */,
 				74A39DCC1EF9D106004713D8 /* VSRenderer.metal in Sources */,
+				74E284F61F09FB790045ADFB /* VSScript+controller.swift in Sources */,
 				74A39DCE1EFC30EB004713D8 /* VSFilter.swift in Sources */,
 				74A39DD01EFC31AB004713D8 /* VSContext.swift in Sources */,
 				741847411F05CAC8009A45F9 /* VSVideoSessionController.swift in Sources */,

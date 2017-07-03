@@ -26,7 +26,14 @@ class SampleViewController1: UIViewController {
         if let mtkView = self.view as? MTKView {
             let script = VSScript()
                             .gaussian_blur(sigma: 2.0)
+                            .fork()
+                            .gaussian_blur(sigma: 2.0)
                             .toone()
+                            .swap()
+                            .sobel()
+                            .canny_edge()
+                            .anti_alias()
+                            .alpha()
             runtime = script.compile(context: context)
             context.pixelFormat = mtkView.colorPixelFormat
             mtkView.device = context.device
