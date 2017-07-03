@@ -9,6 +9,7 @@
 import Foundation
 import MetalPerformanceShaders
 
+/// An object represents a VideoShader script.
 class VSScript {
     private static let nodeInfos:[String:[String:Any]] = {
         let url = Bundle.main.url(forResource: "VSNodes", withExtension: "js")!
@@ -17,7 +18,7 @@ class VSScript {
         return json as! [String:[String:Any]]
     }()
     
-    static func getNodeInfo(name:String) -> [String:Any]? {
+    private static func getNodeInfo(name:String) -> [String:Any]? {
         return VSScript.nodeInfos[name]
     }
 
@@ -25,12 +26,13 @@ class VSScript {
     private let constants:[String:[Float]]
     private let variables:[String:[String:Any]]
     
-    init(json:[String:Any], pipeline:[[String:Any]]) {
+    private init(json:[String:Any], pipeline:[[String:Any]]) {
         self.pipeline = pipeline
         self.constants = json["constants"] as? [String:[Float]] ?? [String:[Float]]()
         self.variables = json["variables"] as? [String:[String:Any]] ?? [String:[String:Any]]()
     }
     
+    /// Initialize an empty script object
     init() {
         self.pipeline = [[String:Any]]()
         self.constants = [String:[Float]]()
