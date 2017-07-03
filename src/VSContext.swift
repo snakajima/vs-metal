@@ -113,6 +113,10 @@ class VSContext {
         push(texture:sourceTexture!)
     }
     
+    /// Pop a texture from the texture stack
+    ///
+    /// - Returns: a texture to be processed by Metal
+    /// - Throws: VSContextError.stackOverflow when the stack is empty
     func pop() throws -> VSTexture {
         if let texture = stack.popLast() {
             return texture
