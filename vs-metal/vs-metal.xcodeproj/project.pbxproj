@@ -45,6 +45,8 @@
 		74E284EA1F0517A50045ADFB /* VSSource.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74E284E91F0517A50045ADFB /* VSSource.metal */; };
 		74E284EC1F0517DA0045ADFB /* VSTransform.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74E284EB1F0517DA0045ADFB /* VSTransform.metal */; };
 		74E284EE1F09C9800045ADFB /* VSScript+filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284ED1F09C9800045ADFB /* VSScript+filter.swift */; };
+		74E284F01F09F6C30045ADFB /* SampleViewController1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */; };
+		74E284F41F09F8500045ADFB /* SampleViewController1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */; };
 		74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */; };
 		74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBF1EFC828E0039A0CA /* VSNode.swift */; };
 		74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BC11EFC84070039A0CA /* VSFilters.metal */; };
@@ -93,6 +95,8 @@
 		74E284E91F0517A50045ADFB /* VSSource.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSSource.metal; sourceTree = "<group>"; };
 		74E284EB1F0517DA0045ADFB /* VSTransform.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSTransform.metal; sourceTree = "<group>"; };
 		74E284ED1F09C9800045ADFB /* VSScript+filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VSScript+filter.swift"; sourceTree = "<group>"; };
+		74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleViewController1.swift; sourceTree = "<group>"; };
+		74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SampleViewController1.storyboard; sourceTree = "<group>"; };
 		74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSRenderer.swift; sourceTree = "<group>"; };
 		74FB9BBF1EFC828E0039A0CA /* VSNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSNode.swift; sourceTree = "<group>"; };
 		74FB9BC11EFC84070039A0CA /* VSFilters.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSFilters.metal; sourceTree = "<group>"; };
@@ -169,6 +173,8 @@
 				7447330E1EF9B4FF008CD8C5 /* AppDelegate.swift */,
 				7418473E1F05CAC8009A45F9 /* VSVideoSessionController.storyboard */,
 				7418473F1F05CAC8009A45F9 /* VSVideoSessionController.swift */,
+				74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */,
+				74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */,
 				7480D2921EFE2C5B00DAA88E /* ScriptsViewController.swift */,
 				744733121EF9B4FF008CD8C5 /* Main.storyboard */,
 				744733151EF9B4FF008CD8C5 /* Assets.xcassets */,
@@ -273,6 +279,7 @@
 				744733161EF9B4FF008CD8C5 /* Assets.xcassets in Resources */,
 				74E284E61F034E870045ADFB /* blink.js in Resources */,
 				744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */,
+				74E284F41F09F8500045ADFB /* SampleViewController1.storyboard in Resources */,
 				7418473D1F04525C009A45F9 /* motionblur.js in Resources */,
 				741847391F02CCE4009A45F9 /* red.js in Resources */,
 				741847351F01B108009A45F9 /* cartoon_hipass.js in Resources */,
@@ -310,6 +317,7 @@
 				74A39DCE1EFC30EB004713D8 /* VSFilter.swift in Sources */,
 				74A39DD01EFC31AB004713D8 /* VSContext.swift in Sources */,
 				741847411F05CAC8009A45F9 /* VSVideoSessionController.swift in Sources */,
+				74E284F01F09F6C30045ADFB /* SampleViewController1.swift in Sources */,
 				74E284EC1F0517DA0045ADFB /* VSTransform.metal in Sources */,
 				74E284E21F00B9B70045ADFB /* VSBlender.metal in Sources */,
 			);

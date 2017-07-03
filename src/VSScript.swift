@@ -9,7 +9,7 @@
 import Foundation
 import MetalPerformanceShaders
 
-struct VSScript {
+class VSScript {
     private static let nodeInfos:[String:[String:Any]] = {
         let url = Bundle.main.url(forResource: "VSNodes", withExtension: "js")!
         let data = try! Data(contentsOf: url)
@@ -37,7 +37,7 @@ struct VSScript {
         self.variables = [String:[String:Any]]()
     }
     
-    mutating func append(node:[String:Any]) {
+    func append(node:[String:Any]) {
         pipeline.append(node)
     }
 

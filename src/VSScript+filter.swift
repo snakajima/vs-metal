@@ -9,12 +9,12 @@
 import Foundation
 
 extension VSScript {
-    mutating func mono() -> VSScript {
+    func mono() -> VSScript {
         append(node: ["name":"mono"])
         return self
     }
     
-    mutating func gaussian_blur(sigma:Float) -> VSScript {
+    func gaussian_blur(sigma:Float) -> VSScript {
         append(node: ["name":"gaussian_blur", "attr":["sigma":sigma]])
         return self
     }
