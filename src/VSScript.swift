@@ -21,7 +21,7 @@ struct VSScript {
         return VSScript.nodeInfos[name]
     }
 
-    private let pipeline:[[String:Any]]
+    private var pipeline:[[String:Any]]
     private let constants:[String:[Float]]
     private let variables:[String:[String:Any]]
     
@@ -29,6 +29,16 @@ struct VSScript {
         self.pipeline = pipeline
         self.constants = json["constants"] as? [String:[Float]] ?? [String:[Float]]()
         self.variables = json["variables"] as? [String:[String:Any]] ?? [String:[String:Any]]()
+    }
+    
+    init() {
+        self.pipeline = [[String:Any]]()
+        self.constants = [String:[Float]]()
+        self.variables = [String:[String:Any]]()
+    }
+    
+    mutating func append(node:[String:Any]) {
+        pipeline.append(node)
     }
 
     static func load(from:URL?) -> VSScript? {
@@ -46,7 +56,7 @@ struct VSScript {
         return nil
     }
     
-    private static func makeNode(nodeName:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
+    static func makeNode(nodeName:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
         guard let info = VSScript.getNodeInfo(name: nodeName) else {
             print("### VSScript:makeNode Invalid node name", nodeName)
             return nil
