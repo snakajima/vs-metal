@@ -10,38 +10,31 @@ import Foundation
 
 extension VSScript {
     func mono() -> VSScript {
-        append(node: ["name":"mono"])
-        return self
+        return append(node: ["name":"mono"])
     }
 
     func toone() -> VSScript {
-        append(node: ["name":"toone"])
-        return self
+        return append(node: ["name":"toone"])
     }
 
     func sobel() -> VSScript {
-        append(node: ["name":"sobel"])
-        return self
+        return append(node: ["name":"sobel"])
     }
 
     func canny_edge(threshhold:Float, thin:Float) -> VSScript {
-        append(node: ["name":"canny_edge", "attr":["threshhold":[threshhold], "thin":[thin]]])
-        return self
+        return append(node: ["name":"canny_edge", "attr":["threshhold":[threshhold], "thin":[thin]]])
     }
 
     func anti_alias() -> VSScript {
-        append(node: ["name":"anti_alias"])
-        return self
+        return append(node: ["name":"anti_alias"])
     }
     
     func gaussian_blur(sigma:Float) -> VSScript {
-        append(node: ["name":"gaussian_blur", "attr":["sigma":[sigma]]])
-        return self
+        return append(node: ["name":"gaussian_blur", "attr":["sigma":[sigma]]])
     }
     
     func alpha() -> VSScript {
-        append(node: ["name":"alpha"])
-        return self
+        return append(node: ["name":"alpha"])
     }
 }
 

@@ -37,10 +37,19 @@ class VSScript {
         self.variables = [String:[String:Any]]()
     }
     
-    func append(node:[String:Any]) {
+    /// Append a node to the script object
+    ///
+    /// - Parameter node: A node with "name" and optional "attr" properties
+    /// - Returns: the script object itself
+    func append(node:[String:Any]) -> VSScript {
         pipeline.append(node)
+        return self
     }
 
+    /// Create a script object from the specified script file.
+    ///
+    /// - Parameter from: the URL of the script file
+    /// - Returns: a script object
     static func load(from:URL?) -> VSScript? {
         guard let url = from else {
             return nil
@@ -56,7 +65,7 @@ class VSScript {
         return nil
     }
     
-    static func makeNode(nodeName:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
+    private static func makeNode(nodeName:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
         guard let info = VSScript.getNodeInfo(name: nodeName) else {
             print("### VSScript:makeNode Invalid node name", nodeName)
             return nil
@@ -109,6 +118,10 @@ class VSScript {
         return nil
     }
     
+    /// Generate a runtime from the script and initialize the pipeline context.
+    ///
+    /// - Parameter context: pipeline context
+    /// - Returns: a runtime generated from the script
     func compile(context:VSContext) -> VSRuntime {
         var nodes = [VSNode]()
         for item in self.pipeline {

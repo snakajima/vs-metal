@@ -10,27 +10,22 @@ import Foundation
 
 extension VSScript {
     func fork() -> VSScript {
-        append(node: ["name":"fork"])
-        return self
+        return append(node: ["name":"fork"])
     }
 
     func swap() -> VSScript {
-        append(node: ["name":"swap"])
-        return self
+        return append(node: ["name":"swap"])
     }
 
     func discard() -> VSScript {
-        append(node: ["name":"discard"])
-        return self
+        return append(node: ["name":"discard"])
     }
 
     func shift() -> VSScript {
-        append(node: ["name":"shift"])
-        return self
+        return append(node: ["name":"shift"])
     }
 
     func previous() -> VSScript {
-        append(node: ["name":"previous"])
-        return self
+        return append(node: ["name":"previous"])
     }
 }
