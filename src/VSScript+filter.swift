@@ -13,6 +13,11 @@ extension VSScript {
         append(node: ["name":"mono"])
         return self
     }
+
+    func toone() -> VSScript {
+        append(node: ["name":"toone"])
+        return self
+    }
     
     func gaussian_blur(sigma:Float) -> VSScript {
         append(node: ["name":"gaussian_blur", "attr":["sigma":sigma]])

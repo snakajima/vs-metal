@@ -113,7 +113,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nmf-5d-Dbe" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-668" y="752"/>
+            <point key="canvasLocation" x="-962" y="41"/>
         </scene>
         <!--SampleViewController1-->
         <scene sceneID="MKv-5I-NuY">
@@ -121,7 +121,7 @@
                 <viewControllerPlaceholder storyboardName="SampleViewController1" id="OJS-nL-5pf" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bji-Az-Hxn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="299" y="598"/>
+            <point key="canvasLocation" x="-962" y="518"/>
         </scene>
         <!--VSVideoSessionController-->
         <scene sceneID="EHK-JM-ARo">
@@ -129,7 +129,7 @@
                 <viewControllerPlaceholder storyboardName="VSVideoSessionController" id="MvK-8H-Bri" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gai-AV-R3U" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="484" y="-148"/>
+            <point key="canvasLocation" x="585" y="41"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gcl-b7-oB9">
@@ -145,7 +145,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JKt-Gx-Rjl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1084" y="41"/>
+            <point key="canvasLocation" x="-1836" y="41"/>
         </scene>
     </scenes>
 </document>
