@@ -17,7 +17,7 @@
 		741847401F05CAC8009A45F9 /* VSVideoSessionController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7418473E1F05CAC8009A45F9 /* VSVideoSessionController.storyboard */; };
 		741847411F05CAC8009A45F9 /* VSVideoSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7418473F1F05CAC8009A45F9 /* VSVideoSessionController.swift */; };
 		7428EF2C1EFE2F8D007BECAF /* test3.js in Resources */ = {isa = PBXBuildFile; fileRef = 7428EF2B1EFE2F8D007BECAF /* test3.js */; };
-		7428EF2E1EFF6E51007BECAF /* VSControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7428EF2D1EFF6E51007BECAF /* VSControllers.swift */; };
+		7428EF2E1EFF6E51007BECAF /* VSController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7428EF2D1EFF6E51007BECAF /* VSController.swift */; };
 		7428EF301EFF6F9B007BECAF /* test4.js in Resources */ = {isa = PBXBuildFile; fileRef = 7428EF2F1EFF6F9B007BECAF /* test4.js */; };
 		7428EF321EFF6FDD007BECAF /* test5.js in Resources */ = {isa = PBXBuildFile; fileRef = 7428EF311EFF6FDD007BECAF /* test5.js */; };
 		7428EF341EFF7003007BECAF /* test6.js in Resources */ = {isa = PBXBuildFile; fileRef = 7428EF331EFF7003007BECAF /* test6.js */; };
@@ -65,7 +65,7 @@
 		7418473E1F05CAC8009A45F9 /* VSVideoSessionController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = VSVideoSessionController.storyboard; sourceTree = "<group>"; };
 		7418473F1F05CAC8009A45F9 /* VSVideoSessionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSVideoSessionController.swift; sourceTree = "<group>"; };
 		7428EF2B1EFE2F8D007BECAF /* test3.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test3.js; sourceTree = "<group>"; };
-		7428EF2D1EFF6E51007BECAF /* VSControllers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSControllers.swift; sourceTree = "<group>"; };
+		7428EF2D1EFF6E51007BECAF /* VSController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSController.swift; sourceTree = "<group>"; };
 		7428EF2F1EFF6F9B007BECAF /* test4.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test4.js; sourceTree = "<group>"; };
 		7428EF311EFF6FDD007BECAF /* test5.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test5.js; sourceTree = "<group>"; };
 		7428EF331EFF7003007BECAF /* test6.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test6.js; sourceTree = "<group>"; };
@@ -201,7 +201,7 @@
 				74D3EFCC1EFDD89A0005765A /* VSScript.swift */,
 				74E284ED1F09C9800045ADFB /* VSScript+filter.swift */,
 				74E284F51F09FB790045ADFB /* VSScript+controller.swift */,
-				7428EF2D1EFF6E51007BECAF /* VSControllers.swift */,
+				7428EF2D1EFF6E51007BECAF /* VSController.swift */,
 				74FB9BBF1EFC828E0039A0CA /* VSNode.swift */,
 				74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */,
 				74A39DCF1EFC31AB004713D8 /* VSContext.swift */,
@@ -310,7 +310,7 @@
 				74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */,
 				74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */,
 				74E284E81F0515A20045ADFB /* VSConvex.metal in Sources */,
-				7428EF2E1EFF6E51007BECAF /* VSControllers.swift in Sources */,
+				7428EF2E1EFF6E51007BECAF /* VSController.swift in Sources */,
 				7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */,
 				74D3EFCD1EFDD89A0005765A /* VSScript.swift in Sources */,
 				7418473B1F030729009A45F9 /* VSRuntime.swift in Sources */,

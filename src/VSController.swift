@@ -1,5 +1,5 @@
 //
-//  VSControllers.swift
+//  VSController.swift
 //  vs-metal
 //
 //  Created by SATOSHI NAKAJIMA on 6/23/17.
@@ -9,7 +9,7 @@ import Foundation
 import MetalKit
 
 // Abstruct struct for makeNode()
-struct VSControllers {
+struct VSController {
     static private let mapping:[String:VSNode] = [
         "fork":     VSFork(),
         "swap":     VSSwap(),

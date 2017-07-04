@@ -92,7 +92,7 @@ class VSScript {
             }
         }
         
-        if let node = VSControllers.makeNode(name: nodeName) {
+        if let node = VSController.makeNode(name: nodeName) {
             return node
         } else if let node = VSMPSFilter.makeNode(name: nodeName, params: params, context: context) {
             return node
@@ -109,17 +109,7 @@ class VSScript {
             return buffer
         })
         let sourceCount = info["sources"] as? Int ?? 1
-        guard let kernel = context.device.newDefaultLibrary()!.makeFunction(name: nodeName) else {
-            print("### VSScript:makeNode failed to create kernel", nodeName)
-            return nil
-        }
-        do {
-            let pipelineState = try context.device.makeComputePipelineState(function: kernel)
-            return VSFilter(pipelineState: pipelineState, buffers: buffers, sourceCount:sourceCount)
-        } catch {
-            print("### VSScript:makeNode failed to create pipeline state", nodeName)
-        }
-        return nil
+        return VSFilter.makeNode(name: nodeName, buffers: buffers, sourceCount: sourceCount, context: context)
     }
     
     /// Generate a runtime from the script and initialize the pipeline context.
