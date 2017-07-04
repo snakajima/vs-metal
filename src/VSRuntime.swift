@@ -26,13 +26,13 @@ struct VSRuntime {
         self.dynamicVariables = dynamicVariables
     }
 
-    /// Encode the video pipeline into
+    /// Encode the video pipeline instructions into the specified command buffer
     ///
     /// - Parameters:
     ///   - commandBuffer: the command buffer to encode to
     ///   - context: the pipeline context
     /// - Returns: the specified command buffer
-    /// - Throws: VSContextError.underUnderflow when the stack is empty
+    /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws -> MTLCommandBuffer {
         assert(Thread.current == Thread.main)
         
