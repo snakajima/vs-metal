@@ -8,6 +8,13 @@
 import Foundation
 import MetalKit
 
+/// VSController is a concrete implemtation of VSNode prototol, which represents a controller node.
+/// A controller node manipulates the texture stack, and there are five variations:
+/// - fork: Duplicate the top most texture
+/// - swap:
+/// - discard:
+/// - shift:
+/// - previous:
 struct VSController : VSNode {
     private var encoder:((MTLCommandBuffer, VSContext) throws -> (Void))
 

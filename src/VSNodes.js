@@ -2,7 +2,7 @@
     "fork": {
         "type":"control",
         "title":"Duplicate",
-        "description":"Duplicate the topmost layer",
+        "description":"Duplicate the topmost texture",
     },
     "swap": {
         "type":"control",
