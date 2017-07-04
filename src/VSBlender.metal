@@ -576,3 +576,25 @@ luminosity(texture2d<half, access::read>  inTexture2  [[texture(0)]],
     outTexture.write(half4(R, G, B, RGBA0.a), gid);
 }
 
+kernel void
+delta(texture2d<half, access::read>  inTexture2  [[texture(0)]],
+                texture2d<half, access::read>  inTexture1  [[texture(1)]],
+                texture2d<half, access::write> outTexture [[texture(2)]],
+                const device float& delta [[ buffer(3) ]],
+                const device float4& color1 [[ buffer(4) ]],
+                const device float4& color2 [[ buffer(5) ]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half3 colorA  = inTexture1.read(gid).rgb;
+    half3 colorB  = inTexture2.read(gid).rgb;
+    half d = distance(colorA, colorB);
+    outTexture.write(half4((d < delta) ? color1 : color2), gid);
+}
+

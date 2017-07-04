@@ -48,6 +48,7 @@
 		74E284F01F09F6C30045ADFB /* SampleViewController1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */; };
 		74E284F41F09F8500045ADFB /* SampleViewController1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */; };
 		74E284F61F09FB790045ADFB /* VSScript+controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284F51F09FB790045ADFB /* VSScript+controller.swift */; };
+		74E284F81F0B5D250045ADFB /* motion_detector.js in Resources */ = {isa = PBXBuildFile; fileRef = 74E284F71F0B5D250045ADFB /* motion_detector.js */; };
 		74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */; };
 		74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBF1EFC828E0039A0CA /* VSNode.swift */; };
 		74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BC11EFC84070039A0CA /* VSFilters.metal */; };
@@ -99,6 +100,7 @@
 		74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleViewController1.swift; sourceTree = "<group>"; };
 		74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SampleViewController1.storyboard; sourceTree = "<group>"; };
 		74E284F51F09FB790045ADFB /* VSScript+controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VSScript+controller.swift"; sourceTree = "<group>"; };
+		74E284F71F0B5D250045ADFB /* motion_detector.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = motion_detector.js; sourceTree = "<group>"; };
 		74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSRenderer.swift; sourceTree = "<group>"; };
 		74FB9BBF1EFC828E0039A0CA /* VSNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSNode.swift; sourceTree = "<group>"; };
 		74FB9BC11EFC84070039A0CA /* VSFilters.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSFilters.metal; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				742CBFBB1EFDD6930017D38A /* test1.js */,
+				74E284F71F0B5D250045ADFB /* motion_detector.js */,
 				74D3EFCE1EFDE41B0005765A /* test2.js */,
 				7428EF2B1EFE2F8D007BECAF /* test3.js */,
 				7428EF2F1EFF6F9B007BECAF /* test4.js */,
@@ -283,6 +286,7 @@
 				74E284E61F034E870045ADFB /* blink.js in Resources */,
 				744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */,
 				74E284F41F09F8500045ADFB /* SampleViewController1.storyboard in Resources */,
+				74E284F81F0B5D250045ADFB /* motion_detector.js in Resources */,
 				7418473D1F04525C009A45F9 /* motionblur.js in Resources */,
 				741847391F02CCE4009A45F9 /* red.js in Resources */,
 				741847351F01B108009A45F9 /* cartoon_hipass.js in Resources */,

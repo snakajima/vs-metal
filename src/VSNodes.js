@@ -481,6 +481,22 @@
                  "range":[2.0, 100.0]
                  }]
     },
+    "delta": {
+        "type":"blender",
+        "title":"Delta Detector",
+        "sources":2,
+        "description":"Detect delta between two textures",
+        "attr": [{
+            "name":"delta",
+            "default":[0.333],
+        },{
+            "name":"color1",
+            "default":[1.0, 1.0, 1.0, 1.0],
+        },{
+            "name":"color2",
+            "default":[0.0, 0.0, 0.0, 1.0],
+        }],
+    },
     
     "tilt_shift": {
         "type":"filter",
