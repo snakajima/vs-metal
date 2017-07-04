@@ -143,7 +143,7 @@ class VSContext {
         }
     }
     
-    private func getDestination() -> VSTexture {
+    func getDestination() -> VSTexture {
         // Find a texture in the pool, which is not in the stack
         for texture in pool {
             if !stack.contains(texture) && !prevs.contains(texture) {
@@ -159,7 +159,8 @@ class VSContext {
         pool.append(ret)
         return ret
     }
-    
+
+/*
     func encode(commandBuffer:MTLCommandBuffer, runtime:VSRuntime) throws -> MTLCommandBuffer {
         assert(Thread.current == Thread.main)
         
@@ -177,6 +178,7 @@ class VSContext {
         
         return commandBuffer
     }
+*/
     
     func flush() {
         hasUpdate = false

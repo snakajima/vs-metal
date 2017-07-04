@@ -50,7 +50,7 @@ extension SampleViewController1 : MTKViewDelegate {
     public func draw(in view: MTKView) {
         if context.hasUpdate {
             do {
-                try context.encode(commandBuffer: context.makeCommandBuffer(), runtime: runtime)
+                try runtime.encode(commandBuffer: context.makeCommandBuffer(), context: context)
                            .commit()
                 try renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view)
                            .commit()
