@@ -12,7 +12,7 @@ import MetalPerformanceShaders
 /// VSNode is a protocol for objects in the video pipeline must conform to.
 protocol VSNode {
     /// Either encode appropriate GPU instructions into the command buffer (VSFilter and VSMPSFilter)
-    /// or manipulate texture stack (VSFork, VSSwap, VSDiscard, VSShift and VSPrevious).
+    /// or manipulate texture stack (VSController).
     ///
     /// - Parameters:
     ///   - commandBuffer: The command buffer to encode to
