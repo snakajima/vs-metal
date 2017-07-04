@@ -9,19 +9,30 @@
 import Foundation
 import Metal
 
-/// A runtime object generated from a VSScript object (by calling its compile() method).
-/// It contains an array of VSNode objects, and an array of objects that conform to VSDynamicVariable protocol
+/// A runtime object which represents a video pipeline. 
+/// It contains an array of VSNode objects, and an array of objects that conform to VSDynamicVariable protocol.
+/// It is generated from a VSScript object by calling its compile() method.
 struct VSRuntime {
-    /// an array of VSNode objects
     private let nodes:[VSNode]
-    /// an array of objects that conform to VSDynamicVariable protocol
     private let dynamicVariables:[VSDynamicVariable]
     
+    /// Initializer
+    ///
+    /// - Parameters:
+    ///   - nodes: an array of VSNode objects to be processed in the video pipeline
+    ///   - dynamicVariables: an array of objects that alters dynamic variables
     init(nodes:[VSNode], dynamicVariables:[VSDynamicVariable]) {
         self.nodes = nodes
         self.dynamicVariables = dynamicVariables
     }
 
+    /// Encode the video pipeline into
+    ///
+    /// - Parameters:
+    ///   - commandBuffer: the command buffer to encode to
+    ///   - context: the pipeline context
+    /// - Returns: the specified command buffer
+    /// - Throws: VSContextError.underUnderflow when the stack is empty
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws -> MTLCommandBuffer {
         assert(Thread.current == Thread.main)
         

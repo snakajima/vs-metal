@@ -20,7 +20,7 @@ struct VSTexture:Equatable {
 }
 
 enum VSContextError:Error {
-    case stackOverflow
+    case stackUnderflow // pop() was called when the stack is empty
 }
 
 class VSContext {
@@ -116,13 +116,13 @@ class VSContext {
     /// Pop a texture from the texture stack
     ///
     /// - Returns: a texture to be processed by Metal
-    /// - Throws: VSContextError.stackOverflow when the stack is empty
+    /// - Throws: VSContextError.underUnderflow when the stack is empty
     func pop() throws -> VSTexture {
         if let texture = stack.popLast() {
             return texture
         }
         print("VSC:pop underflow")
-        throw VSContextError.stackOverflow
+        throw VSContextError.stackUnderflow
     }
     
     func prev() -> VSTexture {
