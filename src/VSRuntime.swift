@@ -45,7 +45,7 @@ struct VSRuntime {
         context.updateNamedBuffers(with: dictionary)
  
         for node in nodes {
-            try node.encode(commandBuffer:commandBuffer, destination:context.getDestination(), context:context)
+            try node.encode(commandBuffer:commandBuffer, context:context)
         }
         
         return commandBuffer

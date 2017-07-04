@@ -16,10 +16,9 @@ protocol VSNode {
     ///
     /// - Parameters:
     ///   - commandBuffer: The command buffer to encode to
-    ///   - destination: the target texture to render to
     ///   - context: the video pipeline context
     /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
-    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws
 }
 
 

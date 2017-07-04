@@ -23,7 +23,7 @@ struct VSControllers {
 }
 
 struct VSFork:VSNode {
-    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
         let texture = try context.pop()
         context.push(texture:texture)
         context.push(texture:texture)
@@ -31,7 +31,7 @@ struct VSFork:VSNode {
 }
 
 struct VSSwap:VSNode {
-    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
         let texture1 = try context.pop()
         let texture2 = try context.pop()
         context.push(texture:texture1)
@@ -40,19 +40,19 @@ struct VSSwap:VSNode {
 }
 
 struct VSDiscard:VSNode {
-    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
         let _ = try context.pop()
     }
 }
 
 struct VSShift:VSNode {
-    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
         context.shift()
     }
 }
 
 struct VSPrevious:VSNode {
-    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
         let texture = context.prev()
         context.push(texture: texture)
     }

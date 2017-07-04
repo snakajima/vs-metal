@@ -20,12 +20,13 @@ struct VSFilter: VSNode {
         self.sourceCount = sourceCount
     }
         
-    func encode(commandBuffer:MTLCommandBuffer, destination:VSTexture, context:VSContext) throws {
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
         let encoder = commandBuffer.makeComputeCommandEncoder()
         encoder.setComputePipelineState(pipelineState)
         for index in 0..<sourceCount {
             encoder.setTexture(try context.pop().texture, at: index)
         }
+        let destination = context.getDestination()
         encoder.setTexture(destination.texture, at: sourceCount)
         for (index, buffer) in paramBuffers.enumerated() {
             encoder.setBuffer(buffer, offset: 0, at: sourceCount + 1 + index)
