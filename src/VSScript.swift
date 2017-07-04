@@ -9,7 +9,9 @@
 import Foundation
 import MetalPerformanceShaders
 
-/// An object represents a VideoShader script.
+/// An object represents a VideoShader script, which describes the video pipeline. 
+/// It has to be compiled into a VSRuntime object (by calling its compile() method)
+/// to process the video. 
 class VSScript {
     private static let nodeInfos:[String:[String:Any]] = {
         let url = Bundle.main.url(forResource: "VSNodes", withExtension: "js")!

@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// A runtime object generated from a VSScript object. 
+/// A runtime object generated from a VSScript object (by calling its compile() method).
 /// It contains an array of VSNode objects, and an array of objects that conform to VSDynamicVariable protocol
 struct VSRuntime {
     /// an array of VSNode objects
