@@ -41,10 +41,11 @@ struct VSFilter: VSNode {
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
         let encoder = commandBuffer.makeComputeCommandEncoder()
         encoder.setComputePipelineState(pipelineState)
+        let destination = context.getDestination() // must be called before any stack operation
+        
         for index in 0..<sourceCount {
             encoder.setTexture(try context.pop().texture, at: index)
         }
-        let destination = context.getDestination()
         encoder.setTexture(destination.texture, at: sourceCount)
         for (index, buffer) in paramBuffers.enumerated() {
             encoder.setBuffer(buffer, offset: 0, at: sourceCount + 1 + index)
