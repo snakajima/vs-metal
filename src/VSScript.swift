@@ -69,7 +69,8 @@ class VSScript {
         return nil
     }
     
-    private static func makeNode(nodeName:String, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
+    private static func makeNode(nodeName name:String?, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
+        guard let nodeName = name else { return nil }
         guard let info = VSScript.getNodeInfo(name: nodeName) else {
             print("### VSScript:makeNode Invalid node name", nodeName)
             return nil
@@ -118,10 +119,7 @@ class VSScript {
     /// - Returns: a runtime generated from the script
     func compile(context:VSContext) -> VSRuntime {
         let nodes = (self.pipeline.map { (item) -> VSNode? in
-            if let name=item["name"] as? String {
-                return VSScript.makeNode(nodeName: name, params: item["attr"] as? [String:Any], context:context)
-            }
-            return nil
+            return VSScript.makeNode(nodeName: item["name"] as? String, params: item["attr"] as? [String:Any], context:context)
         }).flatMap { $0 }
     
         context.updateNamedBuffers(with: self.constants)
