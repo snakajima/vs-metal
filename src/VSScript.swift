@@ -68,6 +68,16 @@ class VSScript {
         return nil
     }
     
+    static func floatValues(params:[String:Any]?, key:String) -> [Float]? {
+        if let values = params?[key] as? [Float] {
+            return values
+        }
+        if let values = params?[key] as? [Double] {
+            return values.map { Float($0) }
+        }
+        return nil
+    }
+    
     private static func makeNode(nodeName name:String?, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
         guard let nodeName = name else { return nil }
         guard let info = VSScript.getNodeInfo(name: nodeName) else {
@@ -79,8 +89,8 @@ class VSScript {
         if let attrs = info["attr"] as? [[String:Any]] {
             for attr in attrs {
                 if let attributeName=attr["name"] as? String,
-                    var defaults=attr["default"] as? [Float] {
-                    if let values = paramsIn?[attributeName] as? [Float], values.count <= defaults.count {
+                    var defaults = floatValues(params:attr, key:"default") {
+                    if let values = floatValues(params:paramsIn, key:attributeName), values.count <= defaults.count {
                         //print("VSC:makeNode overriding", name)
                         for (index, value) in values.enumerated() {
                             defaults[index] = value
