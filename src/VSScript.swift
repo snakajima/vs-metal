@@ -78,6 +78,12 @@ class VSScript {
         if let values = params?[key] as? [Double] {
             return values.map { Float($0) }
         }
+        if let value = params?[key] as? Float {
+            return [value]
+        }
+        if let value = params?[key] as? Double {
+            return [Float(value)]
+        }
         return nil
     }
     
