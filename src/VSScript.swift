@@ -93,12 +93,7 @@ class VSScript {
             }
         }
         
-        if let node = VSController.makeNode(name: nodeName) {
-            return node
-        } else if let node = VSMPSFilter.makeNode(name: nodeName, params: params, context: context) {
-            return node
-        }
-
+        // Extract named attributes and create named buffers for them
         let buffers = attributeNames.map({ (name) -> MTLBuffer in
             let values = params[name] as! [Float]
             let length = MemoryLayout.size(ofValue: values[0]) * values.count
@@ -109,8 +104,16 @@ class VSScript {
             }
             return buffer
         })
-        let sourceCount = info["sources"] as? Int ?? 1
-        return VSFilter.makeNode(name: nodeName, buffers: buffers, sourceCount: sourceCount, context: context)
+
+        // LATER: pass buffers to VPMPSFilter.makeNode as well
+        if let node = VSController.makeNode(name: nodeName) {
+            return node
+        } else if let node = VSMPSFilter.makeNode(name: nodeName, params: params, device: context.device) {
+            return node
+        } else {
+            let sourceCount = info["sources"] as? Int ?? 1
+            return VSFilter.makeNode(name: nodeName, buffers: buffers, sourceCount: sourceCount, device: context.device)
+        }
     }
     
     /// Generate a runtime from the script and initialize the pipeline context.

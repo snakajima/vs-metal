@@ -24,13 +24,13 @@ struct VSFilter: VSNode {
         self.sourceCount = sourceCount
     }
 
-    static func makeNode(name nodeName:String, buffers:[MTLBuffer], sourceCount:Int, context:VSContext) -> VSNode? {
-        guard let kernel = context.device.newDefaultLibrary()!.makeFunction(name: nodeName) else {
+    static func makeNode(name nodeName:String, buffers:[MTLBuffer], sourceCount:Int, device:MTLDevice) -> VSNode? {
+        guard let kernel = device.newDefaultLibrary()!.makeFunction(name: nodeName) else {
             print("### VSScript:makeNode failed to create kernel", nodeName)
             return nil
         }
         do {
-            let pipelineState = try context.device.makeComputePipelineState(function: kernel)
+            let pipelineState = try device.makeComputePipelineState(function: kernel)
             return VSFilter(pipelineState: pipelineState, buffers: buffers, sourceCount:sourceCount)
         } catch {
             print("### VSScript:makeNode failed to create pipeline state", nodeName)
