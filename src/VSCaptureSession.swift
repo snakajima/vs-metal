@@ -9,9 +9,14 @@
 import Foundation
 import AVFoundation
 
+/// VSCaptureSession is a helper class (non-essential part of VideoShader), which makes it easy to feed the captured video
+/// into a VideoShader pipeline. It calls set(metalTexture:) method of VSContext object for each frame.
 class VSCaptureSession: NSObject {
+    /// Specifies the camera position (default is front)
     var cameraPosition = AVCaptureDevicePosition.front
+    /// Specifies the frame per second (optional)
     var fps:Int?
+    /// Specifies the quality level of video frames (default is 720p)
     var preset = AVCaptureSessionPreset1280x720
 
     fileprivate var session:AVCaptureSession?
@@ -22,6 +27,9 @@ class VSCaptureSession: NSObject {
         return cache!
     }()
 
+    /// Initializer
+    ///
+    /// - Parameter context: VideoShader context object. Its set(metalTexture:) method will be called for each video frame.
     init(context:VSContext) {
         self.context = context
     }
@@ -47,6 +55,7 @@ class VSCaptureSession: NSObject {
         return true
     }
 
+    /// Start the video capture session
     func start() {
         let session = AVCaptureSession()
         self.session = nil

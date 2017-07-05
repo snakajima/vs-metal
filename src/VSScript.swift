@@ -71,6 +71,12 @@ class VSScript {
         return nil
     }
     
+    /// Helper function to process attributes, either in [Float], [Double], Float or Double.
+    ///
+    /// - Parameters:
+    ///   - params: attribute dictionary
+    ///   - key: attribute name
+    /// - Returns: attribute value in [Float] format
     static func floatValues(params:[String:Any]?, key:String) -> [Float]? {
         if let values = params?[key] as? [Float] {
             return values
