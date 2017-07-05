@@ -127,13 +127,11 @@ class VSScript {
         context.updateNamedBuffers(with: self.constants)
         
         let dynamicVariables = (self.variables.map { (key, params) -> VSDynamicVariable? in
-            if let type = params["type"] as? String {
-                switch(type) {
-                case "sin":
-                    return VSTimer(key: key, params: params)
-                default:
-                    break
-                }
+            switch(params["type"] as? String) {
+            case .some("sin"):
+                return VSTimer(key: key, params: params)
+            default:
+                break
             }
             return nil
         }).flatMap { $0 }
