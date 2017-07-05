@@ -21,17 +21,18 @@ class SampleViewController1: UIViewController {
         if let mtkView = self.view as? MTKView {
             mtkView.device = context.device
             mtkView.delegate = self
+            context.pixelFormat = mtkView.colorPixelFormat
             
             // This is a VideoShader script, which represents a cartoon filter
             let json = [
                 "pipeline":[
-                    [ "name":"gaussian_blur", "attr":[ "sigma": 2.0]],
+                    [ "name":"gaussian_blur", "attr":["sigma": 2.0] ],
                     [ "name":"fork" ],
-                    [ "name":"gaussian_blur", "attr":["sigma": 2.0]],
+                    [ "name":"gaussian_blur", "attr":["sigma": 2.0] ],
                     [ "name":"toone" ],
                     [ "name":"swap" ],
                     [ "name":"sobel"],
-                    [ "name":"canny_edge", "attr":["threshold": 0.19, "thin": 0.50]],
+                    [ "name":"canny_edge", "attr":["threshold": 0.19, "thin": 0.50] ],
                     [ "name":"anti_alias" ],
                     [ "name":"alpha" ],
                 ]
@@ -39,7 +40,6 @@ class SampleViewController1: UIViewController {
             let script = VSScript(json: json)
             runtime = script.compile(context: context)
             
-            context.pixelFormat = mtkView.colorPixelFormat
             session.start()
         }
     }
@@ -50,7 +50,7 @@ extension SampleViewController1 : MTKViewDelegate {
     
     public func draw(in view: MTKView) {
         if context.hasUpdate {
-            try? runtime?.encode(commandBuffer: context.makeCommandBuffer(), context: context).commit()
+            try? runtime?.encode(commandBuffer:context.makeCommandBuffer(), context:context).commit()
             try? renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view).commit()
             context.flush()
         }

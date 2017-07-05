@@ -21,7 +21,9 @@ class SampleViewController2: UIViewController {
         if let mtkView = self.view as? MTKView {
             mtkView.device = context.device
             mtkView.delegate = self
-            // This is an alternative way to create a script object
+            context.pixelFormat = mtkView.colorPixelFormat
+            
+            // This is an alternative way to create a script object (Beta)
             let script = VSScript()
                 .gaussian_blur(sigma: 2.0)
                 .fork()
@@ -33,8 +35,7 @@ class SampleViewController2: UIViewController {
                 .anti_alias()
                 .alpha()
             runtime = script.compile(context: context)
-            
-            context.pixelFormat = mtkView.colorPixelFormat
+
             session.start()
         }
     }
@@ -45,7 +46,7 @@ extension SampleViewController2 : MTKViewDelegate {
     
     public func draw(in view: MTKView) {
         if context.hasUpdate {
-            try? runtime?.encode(commandBuffer: context.makeCommandBuffer(), context: context).commit()
+            try? runtime?.encode(commandBuffer:context.makeCommandBuffer(), context:context).commit()
             try? renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view).commit()
             context.flush()
         }
