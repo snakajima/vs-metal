@@ -13,6 +13,10 @@ extension VSScript {
         return append(node: ["name":"mono"])
     }
 
+    func color(red:Float, green:Float, blue:Float, alpha:Float) -> VSScript {
+        return append(node: ["name":"color", "attr":["color":[red, green, blue, alpha]]])
+    }
+
     func toone() -> VSScript {
         return append(node: ["name":"toone"])
     }
