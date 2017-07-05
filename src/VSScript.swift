@@ -28,6 +28,9 @@ class VSScript {
     private let constants:[String:[Float]]
     private let variables:[String:[String:Any]]
     
+    /// Initialize a script
+    ///
+    /// - Parameter json: a VideoShader script
     init(json:[String:Any]) {
         self.pipeline = json["pipeline"] as? [[String:Any]] ?? [[String:Any]]()
         self.constants = json["constants"] as? [String:[Float]] ?? [String:[Float]]()
