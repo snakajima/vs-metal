@@ -28,8 +28,8 @@ class VSScript {
     private let constants:[String:[Float]]
     private let variables:[String:[String:Any]]
     
-    private init(json:[String:Any], pipeline:[[String:Any]]) {
-        self.pipeline = pipeline
+    init(json:[String:Any]) {
+        self.pipeline = json["pipeline"] as? [[String:Any]] ?? [[String:Any]]()
         self.constants = json["constants"] as? [String:[Float]] ?? [String:[Float]]()
         self.variables = json["variables"] as? [String:[String:Any]] ?? [String:[String:Any]]()
     }
@@ -60,9 +60,8 @@ class VSScript {
         }
         do {
             let data = try Data(contentsOf: url)
-            if let json = try JSONSerialization.jsonObject(with: data) as? [String:Any],
-               let pipeline = json["pipeline"] as? [[String:Any]] {
-                return VSScript(json:json, pipeline: pipeline)
+            if let json = try JSONSerialization.jsonObject(with: data) as? [String:Any] {
+                return VSScript(json:json)
             }
         } catch {
         }
