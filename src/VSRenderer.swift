@@ -9,6 +9,8 @@
 import Foundation
 import MetalKit
 
+/// VSRenderer is a helper class (non-essential part of VideoShader), which makes is easy to render a metal texture
+/// (processed by a VideoShader pipeline) to a specified MKTView.
 class VSRenderer {
     private let context:VSContext
     private var pipelineState: MTLRenderPipelineState?
@@ -20,7 +22,9 @@ class VSRenderer {
     private var vertexData = [VSVertex]()
     private var dataSize:Int = 0
     
-    // width/height are texture's, not view's
+    /// Initializer
+    ///
+    /// - Parameter context: VideoShader context
     init(context:VSContext) {
         self.context = context
         
