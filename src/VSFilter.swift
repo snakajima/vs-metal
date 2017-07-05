@@ -9,6 +9,10 @@
 import Foundation
 import MetalKit
 
+/// VSFilter is a concrete implemtation of VSNode prototol, which represents a filter node.
+/// A filter node takes zero or more textures from the stack as input, 
+/// and push a generated texture to the stack.
+/// VSNode objects are created by a Script object when its compile() method is called.
 struct VSFilter: VSNode {
     private let pipelineState:MTLComputePipelineState
     private let paramBuffers:[MTLBuffer]

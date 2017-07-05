@@ -35,7 +35,7 @@ class VSScript {
     }
     
     /// Initialize an empty script object
-    init() {
+    public init() {
         self.pipeline = [[String:Any]]()
         self.constants = [String:[Float]]()
         self.variables = [String:[String:Any]]()
@@ -45,7 +45,7 @@ class VSScript {
     ///
     /// - Parameter node: A node with "name" and optional "attr" properties
     /// - Returns: the script object itself
-    func append(node:[String:Any]) -> VSScript {
+    public func append(node:[String:Any]) -> VSScript {
         pipeline.append(node)
         return self
     }
@@ -54,7 +54,7 @@ class VSScript {
     ///
     /// - Parameter from: the URL of the script file
     /// - Returns: a script object
-    static func load(from:URL?) -> VSScript? {
+    public static func load(from:URL?) -> VSScript? {
         guard let url = from else {
             return nil
         }
@@ -117,7 +117,7 @@ class VSScript {
     ///
     /// - Parameter context: pipeline context
     /// - Returns: a runtime generated from the script
-    func compile(context:VSContext) -> VSRuntime {
+    public func compile(context:VSContext) -> VSRuntime {
         let nodes = (self.pipeline.map { (item) -> VSNode? in
             return VSScript.makeNode(nodeName: item["name"] as? String, params: item["attr"] as? [String:Any], context:context)
         }).flatMap { $0 }
