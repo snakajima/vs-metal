@@ -7,17 +7,17 @@
     "swap": {
         "type":"control",
         "title":"Swap",
-        "description":"Swap two topmost layers",
+        "description":"Swap two topmost textures",
     },
     "discard": {
         "type":"control",
         "title":"Discard",
-        "description":"Discard the top most layer",
+        "description":"Discard the top most texture",
     },
     "shift": {
         "type":"control",
         "title":"Shift",
-        "description":"Shift the topmost layer to the bottom",
+        "description":"Shift the topmost texture to the bottom",
     },
     "previous": {
         "type":"control",

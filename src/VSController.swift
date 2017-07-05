@@ -11,10 +11,10 @@ import MetalKit
 /// VSController is a concrete implemtation of VSNode prototol, which represents a controller node.
 /// A controller node manipulates the texture stack, and there are five variations:
 /// - fork: Duplicate the top most texture
-/// - swap:
-/// - discard:
-/// - shift:
-/// - previous:
+/// - swap: Swap two topmost textures
+/// - discard: Discard the top most texture
+/// - shift: Shift the topmost texture to the bottom
+/// - previous: Push a texture from previous frame
 struct VSController : VSNode {
     private var encoder:((MTLCommandBuffer, VSContext) throws -> (Void))
 
@@ -44,6 +44,10 @@ struct VSController : VSNode {
         context.push(texture: texture)
     }
 
+    /// Make a controller node
+    ///
+    /// - Parameter name: name of the controller node
+    /// - Returns: a new controller node object
     static func makeNode(name:String) -> VSNode? {
         switch(name) {
         case "fork": return VSController(encoder: fork)
