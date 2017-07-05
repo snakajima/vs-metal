@@ -24,6 +24,15 @@ struct VSFilter: VSNode {
         self.sourceCount = sourceCount
     }
 
+    /// Make a filter object, which conforms to VSNode protocol.
+    /// This function is called by VSSCript during the compilation process.
+    ///
+    /// - Parameters:
+    ///   - nodeName: name of the node, which is the name of Metal kernel
+    ///   - buffers: named buffers (attributes)
+    ///   - sourceCount: number of input textures
+    ///   - device: metal device
+    /// - Returns: a VSNode object
     static func makeNode(name nodeName:String, buffers:[MTLBuffer], sourceCount:Int, device:MTLDevice) -> VSNode? {
         guard let kernel = device.newDefaultLibrary()!.makeFunction(name: nodeName) else {
             print("### VSScript:makeNode failed to create kernel", nodeName)
@@ -38,6 +47,12 @@ struct VSFilter: VSNode {
         return nil
     }
     
+    /// Encode appropriate GPU instructions into the command buffer.
+    ///
+    /// - Parameters:
+    ///   - commandBuffer: The command buffer to encode to
+    ///   - context: the video pipeline context
+    /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
         let encoder = commandBuffer.makeComputeCommandEncoder()
         encoder.setComputePipelineState(pipelineState)

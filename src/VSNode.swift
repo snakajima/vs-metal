@@ -9,7 +9,7 @@
 import Foundation
 import MetalPerformanceShaders
 
-/// VSNode is a protocol for objects in the video pipeline must conform to.
+/// VSNode is a protocol for nodes in the video pipeline must conform to.
 protocol VSNode {
     /// Either encode appropriate GPU instructions into the command buffer (VSFilter and VSMPSFilter)
     /// or manipulate texture stack (VSController).

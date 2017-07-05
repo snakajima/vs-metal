@@ -44,7 +44,8 @@ struct VSController : VSNode {
         context.push(texture: texture)
     }
 
-    /// Make a controller node
+    /// Make a controller node, which conforms to VSNode protocol
+    /// This function is called by VSSCript during the compilation process.
     ///
     /// - Parameter name: name of the controller node
     /// - Returns: a new controller node object
@@ -59,6 +60,12 @@ struct VSController : VSNode {
         }
     }
 
+    /// Manipulate texture stack (such as fork and swap).
+    ///
+    /// - Parameters:
+    ///   - commandBuffer: The command buffer to encode to
+    ///   - context: the video pipeline context
+    /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
         try encoder(commandBuffer,context)
     }
