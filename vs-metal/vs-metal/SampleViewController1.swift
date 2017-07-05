@@ -24,28 +24,17 @@ class SampleViewController1: UIViewController {
             
             // This is a VideoShader script, which represents a cartoon filter
             let json = [
-                "pipeline":[[
-                        "name":"gaussian_blur",
-                        "attr":[ "sigma": [2.0]]
-                    ],[
-                        "name":"fork",
-                        ],[
-                            "name":"gaussian_blur",
-                            "attr":["sigma": [2.0]]
-                    ],[
-                        "name":"toone",
-                        ],[
-                            "name":"swap"
-                    ],[
-                        "name":"sobel",
-                        ],[
-                            "name":"canny_edge",
-                            "attr":["threshold": [0.19], "thin": [0.50]]
-                    ],[
-                        "name":"anti_alias"
-                    ],[
-                        "name":"alpha"
-                    ]]
+                "pipeline":[
+                    [ "name":"gaussian_blur", "attr":[ "sigma": [2.0]]],
+                    [ "name":"fork" ],
+                    [ "name":"gaussian_blur", "attr":["sigma": [2.0]]],
+                    [ "name":"toone" ],
+                    [ "name":"swap" ],
+                    [ "name":"sobel"],
+                    [ "name":"canny_edge", "attr":["threshold": [0.19], "thin": [0.50]]],
+                    [ "name":"anti_alias" ],
+                    [ "name":"alpha" ],
+                ]
             ]
             let script = VSScript(json: json)
             runtime = script.compile(context: context)
