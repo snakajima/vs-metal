@@ -22,6 +22,8 @@
 		7428EF321EFF6FDD007BECAF /* test5.js in Resources */ = {isa = PBXBuildFile; fileRef = 7428EF311EFF6FDD007BECAF /* test5.js */; };
 		7428EF341EFF7003007BECAF /* test6.js in Resources */ = {isa = PBXBuildFile; fileRef = 7428EF331EFF7003007BECAF /* test6.js */; };
 		742CBFBC1EFDD6930017D38A /* test1.js in Resources */ = {isa = PBXBuildFile; fileRef = 742CBFBB1EFDD6930017D38A /* test1.js */; };
+		7431D79B1F0D7A8C00A93671 /* SampleViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7431D79A1F0D7A8C00A93671 /* SampleViewController2.swift */; };
+		7431D79D1F0D7A9A00A93671 /* SampleViewController2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7431D79C1F0D7A9A00A93671 /* SampleViewController2.storyboard */; };
 		7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7447330E1EF9B4FF008CD8C5 /* AppDelegate.swift */; };
 		744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744733121EF9B4FF008CD8C5 /* Main.storyboard */; };
 		744733161EF9B4FF008CD8C5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 744733151EF9B4FF008CD8C5 /* Assets.xcassets */; };
@@ -70,6 +72,8 @@
 		7428EF311EFF6FDD007BECAF /* test5.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test5.js; sourceTree = "<group>"; };
 		7428EF331EFF7003007BECAF /* test6.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test6.js; sourceTree = "<group>"; };
 		742CBFBB1EFDD6930017D38A /* test1.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test1.js; sourceTree = "<group>"; };
+		7431D79A1F0D7A8C00A93671 /* SampleViewController2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleViewController2.swift; sourceTree = "<group>"; };
+		7431D79C1F0D7A9A00A93671 /* SampleViewController2.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SampleViewController2.storyboard; sourceTree = "<group>"; };
 		7447330B1EF9B4FF008CD8C5 /* vs-metal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "vs-metal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7447330E1EF9B4FF008CD8C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		744733131EF9B4FF008CD8C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -179,7 +183,9 @@
 				7418473E1F05CAC8009A45F9 /* VSVideoSessionController.storyboard */,
 				7418473F1F05CAC8009A45F9 /* VSVideoSessionController.swift */,
 				74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */,
+				7431D79A1F0D7A8C00A93671 /* SampleViewController2.swift */,
 				74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */,
+				7431D79C1F0D7A9A00A93671 /* SampleViewController2.storyboard */,
 				7480D2921EFE2C5B00DAA88E /* ScriptsViewController.swift */,
 				744733121EF9B4FF008CD8C5 /* Main.storyboard */,
 				744733151EF9B4FF008CD8C5 /* Assets.xcassets */,
@@ -285,6 +291,7 @@
 				744733161EF9B4FF008CD8C5 /* Assets.xcassets in Resources */,
 				74E284E61F034E870045ADFB /* blink.js in Resources */,
 				744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */,
+				7431D79D1F0D7A9A00A93671 /* SampleViewController2.storyboard in Resources */,
 				74E284F41F09F8500045ADFB /* SampleViewController1.storyboard in Resources */,
 				74E284F81F0B5D250045ADFB /* motion_detector.js in Resources */,
 				7418473D1F04525C009A45F9 /* motionblur.js in Resources */,
@@ -312,6 +319,7 @@
 				74E284E81F0515A20045ADFB /* VSConvex.metal in Sources */,
 				7428EF2E1EFF6E51007BECAF /* VSController.swift in Sources */,
 				7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */,
+				7431D79B1F0D7A8C00A93671 /* SampleViewController2.swift in Sources */,
 				74D3EFCD1EFDD89A0005765A /* VSScript.swift in Sources */,
 				7418473B1F030729009A45F9 /* VSRuntime.swift in Sources */,
 				74E284EA1F0517A50045ADFB /* VSSource.metal in Sources */,
