@@ -117,28 +117,26 @@ class VSScript {
     /// - Parameter context: pipeline context
     /// - Returns: a runtime generated from the script
     func compile(context:VSContext) -> VSRuntime {
-        var nodes = [VSNode]()
-        for item in self.pipeline {
+        let nodes = (self.pipeline.map { (item) -> VSNode? in
             if let name=item["name"] as? String {
-                if let node = VSScript.makeNode(nodeName: name, params: item["attr"] as? [String:Any], context:context) {
-                    nodes.append(node)
-                }
+                return VSScript.makeNode(nodeName: name, params: item["attr"] as? [String:Any], context:context)
             }
-        }
+            return nil
+        }).flatMap { $0 }
+    
         context.updateNamedBuffers(with: self.constants)
         
-        var dynamicVariables = [VSDynamicVariable]()
-        for (key, params) in self.variables {
-            print("key=", key, params)
+        let dynamicVariables = (self.variables.map { (key, params) -> VSDynamicVariable? in
             if let type = params["type"] as? String {
                 switch(type) {
                 case "sin":
-                    dynamicVariables.append(VSTimer(key: key, params: params))
+                    return VSTimer(key: key, params: params)
                 default:
                     break
                 }
             }
-        }
+            return nil
+        }).flatMap { $0 }
         
         return VSRuntime(nodes:nodes, dynamicVariables:dynamicVariables)
     }
