@@ -28,33 +28,26 @@ class SampleViewController2: UIViewController {
             mtkView.delegate = self
             let json = [
                 "pipeline":[[
-                "name":"gaussian_blur",
-                "attr":[
-                "sigma": [2.0],
-                ]
+                    "name":"gaussian_blur",
+                    "attr":[ "sigma": [2.0] as [Float]]
                 ],[
-                "name":"fork",
+                    "name":"fork",
                 ],[
-                "name":"gaussian_blur",
-                "attr":[
-                "sigma": [2.0],
-                ]
+                    "name":"gaussian_blur",
+                    "attr":["sigma": [2.0] as [Float]]
                 ],[
-                "name":"toone",
+                    "name":"toone",
                 ],[
-                "name":"swap"
-                    ],[
-                "name":"sobel",
-                    ],[
-                "name":"canny_edge",
-                "attr":[
-                "threshold": [0.19],
-                "thin": [0.50],
-                ]
-                    ],[
-                "name":"anti_alias"
-                    ],[
-                "name":"alpha"
+                    "name":"swap"
+                ],[
+                    "name":"sobel",
+                ],[
+                    "name":"canny_edge",
+                    "attr":["threshold": [0.19] as [Float], "thin": [0.50] as [Float]]
+                ],[
+                    "name":"anti_alias"
+                ],[
+                    "name":"alpha"
                 ]]
             ]
             let script = VSScript(json: json)
