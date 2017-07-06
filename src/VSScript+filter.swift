@@ -8,6 +8,7 @@
 
 import Foundation
 
+// MARK: - Helper method to construct a VideoShader script in Swift (Beta)
 extension VSScript {
     func mono() -> VSScript {
         return append(node: ["name":"mono"])
