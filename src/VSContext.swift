@@ -58,6 +58,9 @@ class VSContext {
     private var frameCount = 0  // only for debugging
     private var droppedFrameCount = 0 // only for debugging
     
+    /// Initializer
+    ///
+    /// - Parameter device: Metal context
     init(device:MTLDevice) {
         self.device = device
         commandQueue = device.makeCommandQueue()
@@ -67,16 +70,16 @@ class VSContext {
         print("VCS:frame drop rate = ", Float(droppedFrameCount) / Float(frameCount))
     }
     
-    func set(metalTexture:CVMetalTexture) {
-        if let texture = CVMetalTextureGetTexture(metalTexture) {
-            set(texture:texture)
-        }
-    }
-    
-    // Special type of push for the video source
-    private func set(texture:MTLTexture) {
+    /// This function set the video source
+    ///
+    /// - Parameter sourceImage: source image data
+    func set(sourceImage:CVMetalTexture) {
         assert(Thread.current == Thread.main)
-        
+        guard let texture = CVMetalTextureGetTexture(sourceImage) else {
+            return
+        }
+
+        // For the very first time
         if width != texture.width || height != texture.height {
             width = texture.width
             height = texture.height
@@ -97,6 +100,7 @@ class VSContext {
         }
 
         frameCount += 1 // debug only
+        
         if (hasUpdate) {
             // Previous texture has not been processed yet. Ignore the new frame.
             droppedFrameCount += 1 // debug only

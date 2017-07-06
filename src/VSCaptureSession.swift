@@ -100,7 +100,7 @@ AVCaptureVideoDataOutputSampleBufferDelegate {
             let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil,
                                                                    context.pixelFormat, width, height, 0, &metalTexture)
             if let metalTexture = metalTexture, status == kCVReturnSuccess {
-                context.set(metalTexture: metalTexture)
+                context.set(sourceImage: metalTexture)
             } else {
                 print("VSVS: failed to create texture")
             }
