@@ -29,7 +29,7 @@ class VSScript {
     private let variables:[String:[String:Any]]
     
     /// JSON representation of the VideoShader script, from which an equivalent VSScript object can be created.
-    var json:[String:Any] {
+    public var json:[String:Any] {
         return [
             "constants":constants,
             "variables":variables,

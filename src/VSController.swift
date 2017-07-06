@@ -49,7 +49,7 @@ struct VSController : VSNode {
     ///
     /// - Parameter name: name of the controller node
     /// - Returns: a new controller node object
-    static func makeNode(name:String) -> VSNode? {
+    public static func makeNode(name:String) -> VSNode? {
         switch(name) {
         case "fork": return VSController(encoder: fork)
         case "swap": return VSController(encoder: swap)

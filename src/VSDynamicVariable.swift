@@ -8,7 +8,13 @@
 
 import Foundation
 
+/// VSDynamicVariable is a protocol for "dynamic variable" objects must conform to.
+/// "Dynamic variable" objects can change value of named variables 
 protocol VSDynamicVariable {
+    /// For each frame, the VSRuntime object calls this method of all dynamic variable objects
+    /// attached to the video pipeline.
+    ///
+    /// - Parameter callback: it calls back this function to modify variables
     func apply(callback:(String, [Float])->())
 }
 
