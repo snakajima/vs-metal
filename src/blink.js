@@ -1,9 +1,9 @@
 {
-    "constants":{
+    "variables":{
         "green":[0.0, 1.0, 0.0, 1.0],
         "red":[1.0, 0.0, 0.0, 1.0],
     },
-    "variables":{
+    "dynamics":{
         "myratio":{
             "type":"sin",
             "range":[0.0, 1.0],

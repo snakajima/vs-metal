@@ -14,16 +14,16 @@ import Metal
 /// It is generated from a VSScript object by calling its compile() method.
 struct VSRuntime {
     private let nodes:[VSNode]
-    private let dynamicVariables:[VSDynamicVariable]
+    private let dynamics:[VSDynamicVariable]
     
     /// Initializer
     ///
     /// - Parameters:
     ///   - nodes: an array of VSNode objects to be processed in the video pipeline
-    ///   - dynamicVariables: an array of objects that alters dynamic variables
-    init(nodes:[VSNode], dynamicVariables:[VSDynamicVariable]) {
+    ///   - dynamics: an array of objects that alters dynamic variables
+    init(nodes:[VSNode], dynamics:[VSDynamicVariable]) {
         self.nodes = nodes
-        self.dynamicVariables = dynamicVariables
+        self.dynamics = dynamics
     }
 
     /// Encode the video pipeline instructions into the specified command buffer
@@ -37,8 +37,8 @@ struct VSRuntime {
         assert(Thread.current == Thread.main)
         
         var dictionary = [String:[Float]]()
-        for dynamicVariable in dynamicVariables {
-            dynamicVariable.apply(callback: { (key, values) in
+        for dynamic in dynamics {
+            dynamic.apply(callback: { (key, values) in
                 dictionary[key] = values
             })
         }

@@ -25,14 +25,14 @@ class VSScript {
     }
 
     private var pipeline:[[String:Any]]
-    private let constants:[String:[Float]]
-    private let variables:[String:[String:Any]]
+    private let variables:[String:[Float]]
+    private let dynamics:[String:[String:Any]]
     
     /// JSON representation of the VideoShader script, from which an equivalent VSScript object can be created.
     public var json:[String:Any] {
         return [
-            "constants":constants,
             "variables":variables,
+            "dynamics":dynamics,
             "pipeline":pipeline
         ]
     }
@@ -42,15 +42,15 @@ class VSScript {
     /// - Parameter json: a VideoShader script
     init(json:[String:Any]) {
         self.pipeline = json["pipeline"] as? [[String:Any]] ?? [[String:Any]]()
-        self.constants = json["constants"] as? [String:[Float]] ?? [String:[Float]]()
-        self.variables = json["variables"] as? [String:[String:Any]] ?? [String:[String:Any]]()
+        self.variables = json["variables"] as? [String:[Float]] ?? [String:[Float]]()
+        self.dynamics = json["dynamics"] as? [String:[String:Any]] ?? [String:[String:Any]]()
     }
     
     /// Initialize an empty script object
     public init() {
         self.pipeline = [[String:Any]]()
-        self.constants = [String:[Float]]()
-        self.variables = [String:[String:Any]]()
+        self.variables = [String:[Float]]()
+        self.dynamics = [String:[String:Any]]()
     }
     
     /// Append a node to the script object
@@ -158,9 +158,9 @@ class VSScript {
             return VSScript.makeNode(nodeName: item["name"] as? String, params: item["attr"] as? [String:Any], context:context)
         }).flatMap { $0 }
     
-        context.updateNamedBuffers(with: self.constants)
+        context.updateNamedBuffers(with: self.variables)
         
-        let dynamicVariables = (self.variables.map { (key, params) -> VSDynamicVariable? in
+        let dynamics = (self.dynamics.map { (key, params) -> VSDynamicVariable? in
             switch(params["type"] as? String) {
             case .some("sin"):
                 return VSTimer(key: key, params: params)
@@ -170,6 +170,6 @@ class VSScript {
             return nil
         }).flatMap { $0 }
         
-        return VSRuntime(nodes:nodes, dynamicVariables:dynamicVariables)
+        return VSRuntime(nodes:nodes, dynamics:dynamics)
     }
 }
