@@ -598,3 +598,26 @@ delta(texture2d<half, access::read>  inTexture2  [[texture(0)]],
     outTexture.write(half4((d < delta) ? color1 : color2), gid);
 }
 
+kernel void
+color_tracker(texture2d<half, access::read>  inTexture2  [[texture(0)]],
+                texture2d<half, access::read>  inTexture1  [[texture(1)]],
+                texture2d<half, access::write> outTexture [[texture(2)]],
+                const device float& ratio [[ buffer(3) ]],
+                const device float3& color [[ buffer(4) ]],
+                const device float2& range [[ buffer(5) ]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 color1  = inTexture1.read(gid);
+    half4 color2  = inTexture2.read(gid);
+    half d1 = distance(color1.rgb, half3(color));
+    half d2 = distance(color2.rgb, half3(color));
+    half r2 = (d2-half(range.x))/half(range.y-range.x);
+    outTexture.write(half4((d1 < d2) ? color1 : mix(color1, color2, half(ratio) * (1.0h - clamp(r2, 0.0h, 1.0h)))), gid);
+}

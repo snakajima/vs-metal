@@ -507,6 +507,23 @@
             "default":[0.0, 0.0, 0.0, 1.0],
         }],
     },
+    "color_tracker": {
+        "type":"blender",
+        "title":"Color Tracker",
+        "sources":2,
+        "description":"Tracks a specified color",
+        "attr": [{
+            "name":"ratio",
+            "default":[0.95],
+            "range":[0.75, 1.0]
+        },{
+            "name":"color",
+            "default":[1.0, 1.0, 0.12],
+        },{
+            "name":"range",
+            "default":[0.34, 0.8],
+        }],
+    },
     
     "tilt_shift": {
         "type":"filter",
