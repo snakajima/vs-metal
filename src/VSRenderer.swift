@@ -81,6 +81,10 @@ class VSRenderer {
             print("VSR:draw something is wrong")
             return commandBuffer
         }
+        
+        // MEMO: Alternatively, we could choose to call makeBlitCommandEncoder() and copy the texture
+        // into drawable.texture (we need to set view.framebufferOnly to false), but it means
+        // we need to perform mirroring (for front camera) somewhere else. 
         let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         encoder.setRenderPipelineState(pipelineState)
         encoder.setVertexBytes(vertexData, length: dataSize, at: 0)
