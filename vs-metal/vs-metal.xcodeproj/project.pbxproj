@@ -36,6 +36,8 @@
 		7492F7EE1F0DFAEE00380832 /* delicious.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7ED1F0DFAEE00380832 /* delicious.js */; };
 		7492F7F01F0DFC5E00380832 /* emboss.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7EF1F0DFC5E00380832 /* emboss.js */; };
 		7492F7F21F0DFC6900380832 /* freeza.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7F11F0DFC6900380832 /* freeza.js */; };
+		7492F7F41F0E001200380832 /* hawaii.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7F31F0E001200380832 /* hawaii.js */; };
+		7492F7F61F0E001E00380832 /* hipass.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7F51F0E001E00380832 /* hipass.js */; };
 		74A39DCC1EF9D106004713D8 /* VSRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCB1EF9D106004713D8 /* VSRenderer.metal */; };
 		74A39DCE1EFC30EB004713D8 /* VSFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCD1EFC30EB004713D8 /* VSFilter.swift */; };
 		74A39DD01EFC31AB004713D8 /* VSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCF1EFC31AB004713D8 /* VSContext.swift */; };
@@ -93,6 +95,8 @@
 		7492F7ED1F0DFAEE00380832 /* delicious.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = delicious.js; sourceTree = "<group>"; };
 		7492F7EF1F0DFC5E00380832 /* emboss.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = emboss.js; sourceTree = "<group>"; };
 		7492F7F11F0DFC6900380832 /* freeza.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = freeza.js; sourceTree = "<group>"; };
+		7492F7F31F0E001200380832 /* hawaii.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = hawaii.js; sourceTree = "<group>"; };
+		7492F7F51F0E001E00380832 /* hipass.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = hipass.js; sourceTree = "<group>"; };
 		74A39DCB1EF9D106004713D8 /* VSRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSRenderer.metal; sourceTree = "<group>"; };
 		74A39DCD1EFC30EB004713D8 /* VSFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSFilter.swift; sourceTree = "<group>"; };
 		74A39DCF1EFC31AB004713D8 /* VSContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSContext.swift; sourceTree = "<group>"; };
@@ -146,14 +150,16 @@
 			isa = PBXGroup;
 			children = (
 				742CBFBB1EFDD6930017D38A /* test1.js */,
+				74D3EFCE1EFDE41B0005765A /* test2.js */,
+				7428EF2B1EFE2F8D007BECAF /* test3.js */,
+				7492F7F31F0E001200380832 /* hawaii.js */,
+				7428EF2F1EFF6F9B007BECAF /* test4.js */,
+				7492F7F51F0E001E00380832 /* hipass.js */,
 				7492F7EF1F0DFC5E00380832 /* emboss.js */,
 				74E284F91F0DF9160045ADFB /* sketch.js */,
 				74E284F71F0B5D250045ADFB /* motion_detector.js */,
-				74D3EFCE1EFDE41B0005765A /* test2.js */,
 				7492F7F11F0DFC6900380832 /* freeza.js */,
 				7492F7ED1F0DFAEE00380832 /* delicious.js */,
-				7428EF2B1EFE2F8D007BECAF /* test3.js */,
-				7428EF2F1EFF6F9B007BECAF /* test4.js */,
 				74E284E51F034E870045ADFB /* blink.js */,
 				745D3A9B1F070D30009DD359 /* mosaic.js */,
 				741847381F02CCE4009A45F9 /* red.js */,
@@ -301,6 +307,7 @@
 				74E284E01EFFE4D00045ADFB /* test0.js in Resources */,
 				744733191EF9B4FF008CD8C5 /* LaunchScreen.storyboard in Resources */,
 				745D3A9C1F070D30009DD359 /* mosaic.js in Resources */,
+				7492F7F61F0E001E00380832 /* hipass.js in Resources */,
 				744733161EF9B4FF008CD8C5 /* Assets.xcassets in Resources */,
 				74E284E61F034E870045ADFB /* blink.js in Resources */,
 				744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */,
@@ -316,6 +323,7 @@
 				7428EF301EFF6F9B007BECAF /* test4.js in Resources */,
 				7428EF341EFF7003007BECAF /* test6.js in Resources */,
 				742CBFBC1EFDD6930017D38A /* test1.js in Resources */,
+				7492F7F41F0E001200380832 /* hawaii.js in Resources */,
 				7480D28D1EFCC63D00DAA88E /* VSNodes.js in Resources */,
 				741847331F01B0EA009A45F9 /* cartoon.js in Resources */,
 				741847311F01B0C2009A45F9 /* gradientmap.js in Resources */,
