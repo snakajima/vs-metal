@@ -33,6 +33,7 @@
 		7480D28D1EFCC63D00DAA88E /* VSNodes.js in Resources */ = {isa = PBXBuildFile; fileRef = 7480D28C1EFCC63D00DAA88E /* VSNodes.js */; };
 		7480D28F1EFCC91A00DAA88E /* shaders.js in Resources */ = {isa = PBXBuildFile; fileRef = 7480D28E1EFCC91A00DAA88E /* shaders.js */; };
 		7480D2931EFE2C5B00DAA88E /* ScriptsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7480D2921EFE2C5B00DAA88E /* ScriptsViewController.swift */; };
+		7492F7EE1F0DFAEE00380832 /* delicious.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7ED1F0DFAEE00380832 /* delicious.js */; };
 		74A39DCC1EF9D106004713D8 /* VSRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCB1EF9D106004713D8 /* VSRenderer.metal */; };
 		74A39DCE1EFC30EB004713D8 /* VSFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCD1EFC30EB004713D8 /* VSFilter.swift */; };
 		74A39DD01EFC31AB004713D8 /* VSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCF1EFC31AB004713D8 /* VSContext.swift */; };
@@ -51,6 +52,7 @@
 		74E284F41F09F8500045ADFB /* SampleViewController1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */; };
 		74E284F61F09FB790045ADFB /* VSScript+controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284F51F09FB790045ADFB /* VSScript+controller.swift */; };
 		74E284F81F0B5D250045ADFB /* motion_detector.js in Resources */ = {isa = PBXBuildFile; fileRef = 74E284F71F0B5D250045ADFB /* motion_detector.js */; };
+		74E284FA1F0DF9160045ADFB /* sketch.js in Resources */ = {isa = PBXBuildFile; fileRef = 74E284F91F0DF9160045ADFB /* sketch.js */; };
 		74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */; };
 		74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BBF1EFC828E0039A0CA /* VSNode.swift */; };
 		74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74FB9BC11EFC84070039A0CA /* VSFilters.metal */; };
@@ -86,6 +88,7 @@
 		7480D28C1EFCC63D00DAA88E /* VSNodes.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = VSNodes.js; sourceTree = "<group>"; };
 		7480D28E1EFCC91A00DAA88E /* shaders.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = shaders.js; sourceTree = "<group>"; };
 		7480D2921EFE2C5B00DAA88E /* ScriptsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScriptsViewController.swift; sourceTree = "<group>"; };
+		7492F7ED1F0DFAEE00380832 /* delicious.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = delicious.js; sourceTree = "<group>"; };
 		74A39DCB1EF9D106004713D8 /* VSRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSRenderer.metal; sourceTree = "<group>"; };
 		74A39DCD1EFC30EB004713D8 /* VSFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSFilter.swift; sourceTree = "<group>"; };
 		74A39DCF1EFC31AB004713D8 /* VSContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSContext.swift; sourceTree = "<group>"; };
@@ -105,6 +108,7 @@
 		74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SampleViewController1.storyboard; sourceTree = "<group>"; };
 		74E284F51F09FB790045ADFB /* VSScript+controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VSScript+controller.swift"; sourceTree = "<group>"; };
 		74E284F71F0B5D250045ADFB /* motion_detector.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = motion_detector.js; sourceTree = "<group>"; };
+		74E284F91F0DF9160045ADFB /* sketch.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = sketch.js; sourceTree = "<group>"; };
 		74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSRenderer.swift; sourceTree = "<group>"; };
 		74FB9BBF1EFC828E0039A0CA /* VSNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSNode.swift; sourceTree = "<group>"; };
 		74FB9BC11EFC84070039A0CA /* VSFilters.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSFilters.metal; sourceTree = "<group>"; };
@@ -138,8 +142,10 @@
 			isa = PBXGroup;
 			children = (
 				742CBFBB1EFDD6930017D38A /* test1.js */,
+				74E284F91F0DF9160045ADFB /* sketch.js */,
 				74E284F71F0B5D250045ADFB /* motion_detector.js */,
 				74D3EFCE1EFDE41B0005765A /* test2.js */,
+				7492F7ED1F0DFAEE00380832 /* delicious.js */,
 				7428EF2B1EFE2F8D007BECAF /* test3.js */,
 				7428EF2F1EFF6F9B007BECAF /* test4.js */,
 				74E284E51F034E870045ADFB /* blink.js */,
@@ -292,8 +298,10 @@
 				74E284E61F034E870045ADFB /* blink.js in Resources */,
 				744733141EF9B4FF008CD8C5 /* Main.storyboard in Resources */,
 				7431D79D1F0D7A9A00A93671 /* SampleViewController2.storyboard in Resources */,
+				74E284FA1F0DF9160045ADFB /* sketch.js in Resources */,
 				74E284F41F09F8500045ADFB /* SampleViewController1.storyboard in Resources */,
 				74E284F81F0B5D250045ADFB /* motion_detector.js in Resources */,
+				7492F7EE1F0DFAEE00380832 /* delicious.js in Resources */,
 				7418473D1F04525C009A45F9 /* motionblur.js in Resources */,
 				741847391F02CCE4009A45F9 /* red.js in Resources */,
 				741847351F01B108009A45F9 /* cartoon_hipass.js in Resources */,

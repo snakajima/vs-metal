@@ -60,8 +60,8 @@ struct VSMPSFilter: VSNode {
     ///   - context: the video pipeline context
     /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
+        let destination = context.getDestination() // must be called before pop
         let source = try context.pop()
-        let destination = context.getDestination()
         kernel.encode(commandBuffer: commandBuffer, sourceTexture: source.texture, destinationTexture: destination.texture)
         context.push(texture:destination)
     }

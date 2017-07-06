@@ -41,6 +41,13 @@ class VSRenderer {
         pipelineState = try! context.device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
+    /// Encode the rendering instruction to the specified command buffer
+    ///
+    /// - Parameters:
+    ///   - commandBuffer: the command buffer to encode to
+    ///   - view: view to render
+    /// - Returns: the command buffer
+    /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
     func encode(commandBuffer:MTLCommandBuffer, view: MTKView) throws -> MTLCommandBuffer {
         let texture = try context.pop()
         if dataSize == 0 {
