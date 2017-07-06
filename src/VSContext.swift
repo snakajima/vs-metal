@@ -12,26 +12,33 @@ import MetalPerformanceShaders
 
 // A wrapper of MTLTexture so that we can compare
 struct VSTexture:Equatable {
+    /// Metal texture
     let texture:MTLTexture
-    let identity:Int
+    fileprivate let identity:Int
     public static func ==(lhs: VSTexture, rhs: VSTexture) -> Bool {
         return lhs.identity == rhs.identity
     }
 }
 
+/// VSContextError is the type of Error VSContext method throws
+///
+/// - stackUnderflow : pop() was called when the stack is empty
 enum VSContextError:Error {
     case stackUnderflow // pop() was called when the stack is empty
 }
 
 class VSContext {
-    // Public properties for apps
+    /// Metal device
     let device:MTLDevice
-    var hasUpdate = false
+    /// The pixel format of texture
     var pixelFormat = MTLPixelFormat.bgra8Unorm
+    /// Becomes true when a source texture is updated
+    private(set) var hasUpdate = false
 
-    // Semi-public properties for VSScript, filters and possibly third-party extensions
+    /// The default group size for Metal shaders
     let threadGroupSize = MTLSizeMake(16,16,1)
-    var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
+    /// The default group count for Metal shaders
+    private(set) var threadGroupCount = MTLSizeMake(1, 1, 1) // to be filled later
     
     private struct NamedBuffer {
         let key:String
@@ -73,6 +80,11 @@ class VSContext {
         if width != texture.width || height != texture.height {
             width = texture.width
             height = texture.height
+
+            // Paranoia
+            stack.removeAll()
+            pool.removeAll()
+            prevs.removeAll()
             
             descriptor.textureType = .type2D
             descriptor.pixelFormat = pixelFormat
