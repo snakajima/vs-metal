@@ -39,6 +39,8 @@
 		7492F7F41F0E001200380832 /* hawaii.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7F31F0E001200380832 /* hawaii.js */; };
 		7492F7F61F0E001E00380832 /* hipass.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7F51F0E001E00380832 /* hipass.js */; };
 		7492F7F81F0E08D400380832 /* smoothskin.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7F71F0E08D400380832 /* smoothskin.js */; };
+		7492F7FA1F0EA67400380832 /* sports_light.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7F91F0EA67400380832 /* sports_light.js */; };
+		7492F7FC1F0EA67F00380832 /* sports_dark.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7FB1F0EA67F00380832 /* sports_dark.js */; };
 		74A39DCC1EF9D106004713D8 /* VSRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCB1EF9D106004713D8 /* VSRenderer.metal */; };
 		74A39DCE1EFC30EB004713D8 /* VSFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCD1EFC30EB004713D8 /* VSFilter.swift */; };
 		74A39DD01EFC31AB004713D8 /* VSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCF1EFC31AB004713D8 /* VSContext.swift */; };
@@ -99,6 +101,8 @@
 		7492F7F31F0E001200380832 /* hawaii.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = hawaii.js; sourceTree = "<group>"; };
 		7492F7F51F0E001E00380832 /* hipass.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = hipass.js; sourceTree = "<group>"; };
 		7492F7F71F0E08D400380832 /* smoothskin.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = smoothskin.js; sourceTree = "<group>"; };
+		7492F7F91F0EA67400380832 /* sports_light.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = sports_light.js; sourceTree = "<group>"; };
+		7492F7FB1F0EA67F00380832 /* sports_dark.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = sports_dark.js; sourceTree = "<group>"; };
 		74A39DCB1EF9D106004713D8 /* VSRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSRenderer.metal; sourceTree = "<group>"; };
 		74A39DCD1EFC30EB004713D8 /* VSFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSFilter.swift; sourceTree = "<group>"; };
 		74A39DCF1EFC31AB004713D8 /* VSContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSContext.swift; sourceTree = "<group>"; };
@@ -154,7 +158,9 @@
 				742CBFBB1EFDD6930017D38A /* test1.js */,
 				7492F7F71F0E08D400380832 /* smoothskin.js */,
 				74D3EFCE1EFDE41B0005765A /* test2.js */,
+				7492F7F91F0EA67400380832 /* sports_light.js */,
 				7428EF2B1EFE2F8D007BECAF /* test3.js */,
+				7492F7FB1F0EA67F00380832 /* sports_dark.js */,
 				7492F7F31F0E001200380832 /* hawaii.js */,
 				7428EF2F1EFF6F9B007BECAF /* test4.js */,
 				7492F7F51F0E001E00380832 /* hipass.js */,
@@ -300,6 +306,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7492F7FC1F0EA67F00380832 /* sports_dark.js in Resources */,
 				7480D28F1EFCC91A00DAA88E /* shaders.js in Resources */,
 				7492F7F81F0E08D400380832 /* smoothskin.js in Resources */,
 				74D3EFCF1EFDE41B0005765A /* test2.js in Resources */,
@@ -328,6 +335,7 @@
 				7428EF341EFF7003007BECAF /* test6.js in Resources */,
 				742CBFBC1EFDD6930017D38A /* test1.js in Resources */,
 				7492F7F41F0E001200380832 /* hawaii.js in Resources */,
+				7492F7FA1F0EA67400380832 /* sports_light.js in Resources */,
 				7480D28D1EFCC63D00DAA88E /* VSNodes.js in Resources */,
 				741847331F01B0EA009A45F9 /* cartoon.js in Resources */,
 				741847311F01B0C2009A45F9 /* gradientmap.js in Resources */,
