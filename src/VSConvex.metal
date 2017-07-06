@@ -35,6 +35,52 @@ blur(texture2d<half, access::read>  inTexture  [[texture(0)]],
     outTexture.write(outColor, gid);
 }
 
+kernel void
+max_blur(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                const device float& weight [[ buffer(2) ]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+
+    half4 color = inTexture.read(uint2(gid.x, gid.y-1));
+    color = max(color, inTexture.read(uint2(gid.x, gid.y-1)));
+    color = max(color, inTexture.read(uint2(gid.x, gid.y+1)));
+    color = max(color, inTexture.read(uint2(gid.x+1, gid.y)));
+    color = max(color, inTexture.read(uint2(gid.x-1, gid.y)));
+    color = max(color, inTexture.read(uint2(gid.x-1, gid.y-1)));
+    color = max(color, inTexture.read(uint2(gid.x+1, gid.y-1)));
+    color = max(color, inTexture.read(uint2(gid.x-1, gid.y+1)));
+    color = max(color, inTexture.read(uint2(gid.x+1, gid.y+1)));
+    outTexture.write(color, gid);
+}
+
+kernel void
+max_blur_cross(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                const device float& weight [[ buffer(2) ]],
+                uint2                          gid         [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+
+    half4 color = inTexture.read(uint2(gid.x, gid.y-1));
+    color = max(color, inTexture.read(uint2(gid.x, gid.y-1)));
+    color = max(color, inTexture.read(uint2(gid.x, gid.y+1)));
+    color = max(color, inTexture.read(uint2(gid.x+1, gid.y)));
+    color = max(color, inTexture.read(uint2(gid.x-1, gid.y)));
+    outTexture.write(color, gid);
+}
+
 // NOTE: Identical to blur
 kernel void
 anti_alias(texture2d<half, access::read>  inTexture  [[texture(0)]],

@@ -418,7 +418,17 @@
         "type":"filter",
         "title":"Blur",
         "blur":true,
-        "description":"lur",
+        "description":"blur",
+    },
+    "max_blur": {
+        "type":"filter",
+        "title":"Max Box Blur",
+        "description":"Maximum value of 9 adjacent pixels",
+    },
+    "max_blur_cross": {
+        "type":"filter",
+        "title":"Max Cross Blur",
+        "description":"Maximum value of 5 adjacent pixels",
     },
     "alphamask": {
         "type":"blender",
