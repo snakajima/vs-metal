@@ -42,6 +42,8 @@
 		7492F7FA1F0EA67400380832 /* sports_light.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7F91F0EA67400380832 /* sports_light.js */; };
 		7492F7FC1F0EA67F00380832 /* sports_dark.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7FB1F0EA67F00380832 /* sports_dark.js */; };
 		7492F7FE1F0EAF8A00380832 /* tennis_ball_tracker.js in Resources */ = {isa = PBXBuildFile; fileRef = 7492F7FD1F0EAF8A00380832 /* tennis_ball_tracker.js */; };
+		7492F8001F10A20200380832 /* SampleViewController3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7492F7FF1F10A20200380832 /* SampleViewController3.swift */; };
+		7492F8021F10A21A00380832 /* SampleViewController3.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7492F8011F10A21A00380832 /* SampleViewController3.storyboard */; };
 		74A39DCC1EF9D106004713D8 /* VSRenderer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCB1EF9D106004713D8 /* VSRenderer.metal */; };
 		74A39DCE1EFC30EB004713D8 /* VSFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCD1EFC30EB004713D8 /* VSFilter.swift */; };
 		74A39DD01EFC31AB004713D8 /* VSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCF1EFC31AB004713D8 /* VSContext.swift */; };
@@ -105,6 +107,8 @@
 		7492F7F91F0EA67400380832 /* sports_light.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = sports_light.js; sourceTree = "<group>"; };
 		7492F7FB1F0EA67F00380832 /* sports_dark.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = sports_dark.js; sourceTree = "<group>"; };
 		7492F7FD1F0EAF8A00380832 /* tennis_ball_tracker.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = tennis_ball_tracker.js; sourceTree = "<group>"; };
+		7492F7FF1F10A20200380832 /* SampleViewController3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleViewController3.swift; sourceTree = "<group>"; };
+		7492F8011F10A21A00380832 /* SampleViewController3.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SampleViewController3.storyboard; sourceTree = "<group>"; };
 		74A39DCB1EF9D106004713D8 /* VSRenderer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSRenderer.metal; sourceTree = "<group>"; };
 		74A39DCD1EFC30EB004713D8 /* VSFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSFilter.swift; sourceTree = "<group>"; };
 		74A39DCF1EFC31AB004713D8 /* VSContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSContext.swift; sourceTree = "<group>"; };
@@ -214,8 +218,10 @@
 				7418473F1F05CAC8009A45F9 /* VSVideoSessionController.swift */,
 				74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */,
 				7431D79A1F0D7A8C00A93671 /* SampleViewController2.swift */,
+				7492F7FF1F10A20200380832 /* SampleViewController3.swift */,
 				74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */,
 				7431D79C1F0D7A9A00A93671 /* SampleViewController2.storyboard */,
+				7492F8011F10A21A00380832 /* SampleViewController3.storyboard */,
 				7480D2921EFE2C5B00DAA88E /* ScriptsViewController.swift */,
 				744733121EF9B4FF008CD8C5 /* Main.storyboard */,
 				744733151EF9B4FF008CD8C5 /* Assets.xcassets */,
@@ -331,6 +337,7 @@
 				74E284F41F09F8500045ADFB /* SampleViewController1.storyboard in Resources */,
 				74E284F81F0B5D250045ADFB /* motion_detector.js in Resources */,
 				7492F7EE1F0DFAEE00380832 /* delicious.js in Resources */,
+				7492F8021F10A21A00380832 /* SampleViewController3.storyboard in Resources */,
 				7418473D1F04525C009A45F9 /* motionblur.js in Resources */,
 				741847391F02CCE4009A45F9 /* red.js in Resources */,
 				741847351F01B108009A45F9 /* cartoon_hipass.js in Resources */,
@@ -363,6 +370,7 @@
 				74D3EFCD1EFDD89A0005765A /* VSScript.swift in Sources */,
 				7418473B1F030729009A45F9 /* VSRuntime.swift in Sources */,
 				74E284EA1F0517A50045ADFB /* VSSource.metal in Sources */,
+				7492F8001F10A20200380832 /* SampleViewController3.swift in Sources */,
 				74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */,
 				74A39DD21EFC4778004713D8 /* VSMPSFilter.swift in Sources */,
 				74E284EE1F09C9800045ADFB /* VSScript+filter.swift in Sources */,
