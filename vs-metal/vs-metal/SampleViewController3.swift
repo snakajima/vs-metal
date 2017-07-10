@@ -14,8 +14,15 @@ import AVFoundation
 class SampleViewController3: UIViewController {
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
+    var output:AVPlayerItemVideoOutput?
+    var playerItem:AVPlayerItem?
     var player:AVPlayer?
     lazy var renderer:VSRenderer = VSRenderer(context:self.context)
+    fileprivate lazy var textureCache:CVMetalTextureCache = {
+        var cache:CVMetalTextureCache? = nil
+        CVMetalTextureCacheCreate(nil, nil, self.context.device, nil, &cache)
+        return cache!
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +32,10 @@ class SampleViewController3: UIViewController {
             mtkView.delegate = self
             context.pixelFormat = mtkView.colorPixelFormat
         }
+        // This is an alternative way to create a script object (Beta)
+        let script = VSScript()
+            .mono()
+        runtime = script.compile(context: context)
     }
     
     @IBAction func importMovie(_ sender:UIBarButtonItem) {
@@ -49,14 +60,29 @@ extension SampleViewController3 : UIImagePickerControllerDelegate, UINavigationC
                 if status == AVKeyValueStatus.loaded {
                     print("didFinish, loaded")
                     let settings:[String:Any] = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_32BGRA]
-                    let output = AVPlayerItemVideoOutput(outputSettings: settings)
-                    let playerItem = AVPlayerItem(asset: asset)
-                    playerItem.add(output)
-                    self.player = AVPlayer(playerItem: playerItem)
-                    self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds:1.0/30.0, preferredTimescale:600), queue: DispatchQueue.main, using: { (time) in
+                    self.output = AVPlayerItemVideoOutput(outputSettings: settings)
+                    self.playerItem = AVPlayerItem(asset: asset)
+                    self.playerItem!.add(self.output!)
+                    self.player = AVPlayer(playerItem: self.playerItem!)
+                    self.player!.addPeriodicTimeObserver(forInterval: CMTime(seconds:1.0/30.0, preferredTimescale:600), queue: DispatchQueue.main, using: { (time) in
                         print("time", time)
+                        guard let pixelBuffer = self.output?.copyPixelBuffer(forItemTime: self.playerItem!.currentTime(), itemTimeForDisplay: nil) else {
+                            print("failed to copy pixel buffer")
+                            return
+                        }
+                        
+                        let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
+                        var metalTexture:CVMetalTexture? = nil
+                        let status = CVMetalTextureCacheCreateTextureFromImage(nil, self.textureCache, pixelBuffer, nil,
+                                                                               self.context.pixelFormat, width, height, 0, &metalTexture)
+                        if let metalTexture = metalTexture, status == kCVReturnSuccess {
+                            self.context.set(sourceImage: metalTexture)
+                        } else {
+                            print("VSVS: failed to create texture")
+                        }
+                        
                     })
-                    self.player?.play()
+                    self.player!.play()
                 }
             }
         }
