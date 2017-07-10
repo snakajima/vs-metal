@@ -15,7 +15,6 @@ class SampleViewController3: UIViewController {
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
     var output:AVPlayerItemVideoOutput?
-    var playerItem:AVPlayerItem?
     var player:AVPlayer?
     lazy var renderer:VSRenderer = VSRenderer(context:self.context)
     fileprivate lazy var textureCache:CVMetalTextureCache = {
@@ -64,9 +63,9 @@ extension SampleViewController3 : UIImagePickerControllerDelegate, UINavigationC
                     //print("didFinish, loaded")
                     let settings:[String:Any] = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_32BGRA]
                     self.output = AVPlayerItemVideoOutput(outputSettings: settings)
-                    self.playerItem = AVPlayerItem(asset: asset)
-                    self.playerItem!.add(self.output!)
-                    self.player = AVPlayer(playerItem: self.playerItem!)
+                    let playerItem = AVPlayerItem(asset: asset)
+                    playerItem.add(self.output!)
+                    self.player = AVPlayer(playerItem: playerItem)
                     self.player!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 30), queue: DispatchQueue.main, using: { (time) in
                         //print("time", time)
                         guard let pixelBuffer = self.output?.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: nil) else {
