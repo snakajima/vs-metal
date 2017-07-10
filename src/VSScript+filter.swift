@@ -41,5 +41,9 @@ extension VSScript {
     func alpha() -> VSScript {
         return append(node: ["name":"alpha"])
     }
+    
+    func color_tracker(red:Float, green:Float, blue:Float, ratio:Float, range:Range<Float>) -> VSScript {
+        return append(node: ["name":"color_tracker", "attr":["color":[red, green, blue], "ratio":[ratio], "range":[range.lowerBound,range.upperBound]]])
+    }
 }
 
