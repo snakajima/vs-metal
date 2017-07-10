@@ -9,10 +9,12 @@
 import UIKit
 import MetalKit
 import MobileCoreServices
+import AVFoundation
 
 class SampleViewController3: UIViewController {
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
+    var player:AVPlayer?
     lazy var renderer:VSRenderer = VSRenderer(context:self.context)
 
     override func viewDidLoad() {
@@ -23,8 +25,6 @@ class SampleViewController3: UIViewController {
             mtkView.delegate = self
             context.pixelFormat = mtkView.colorPixelFormat
         }
-        
-        // https://stackoverflow.com/questions/12500408/can-i-use-avfoundation-to-stream-downloaded-video-frames-into-an-opengl-es-textu/12500409#12500409
     }
     
     @IBAction func importMovie(_ sender:UIBarButtonItem) {
@@ -39,10 +39,26 @@ class SampleViewController3: UIViewController {
 
 extension SampleViewController3 : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        print("didFinish")
         self.dismiss(animated: true, completion: nil)
-        if let url = info[UIImagePickerControllerMediaURL] {
+        if let url = info[UIImagePickerControllerMediaURL] as? URL {
             print("didFinish", url)
+            // https://stackoverflow.com/questions/12500408/can-i-use-avfoundation-to-stream-downloaded-video-frames-into-an-opengl-es-textu/12500409#12500409
+            let asset = AVURLAsset(url: url)
+            asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
+                let status = asset.statusOfValue(forKey: "tracks", error: nil)
+                if status == AVKeyValueStatus.loaded {
+                    print("didFinish, loaded")
+                    let settings:[String:Any] = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_32BGRA]
+                    let output = AVPlayerItemVideoOutput(outputSettings: settings)
+                    let playerItem = AVPlayerItem(asset: asset)
+                    playerItem.add(output)
+                    self.player = AVPlayer(playerItem: playerItem)
+                    self.player?.addPeriodicTimeObserver(forInterval: CMTime(seconds:1.0/30.0, preferredTimescale:600), queue: DispatchQueue.main, using: { (time) in
+                        print("time", time)
+                    })
+                    self.player?.play()
+                }
+            }
         }
     }
 }
