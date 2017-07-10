@@ -35,7 +35,8 @@ class SampleViewController3: UIViewController {
         // This is an alternative way to create a script object (Beta)
         let script = VSScript()
             .previous()
-            .color_tracker(red: 1.0, green: 1.0, blue: 0.12, ratio: 0.95, range: 0.34..<0.80)
+            .alpha(ratio: 0.8)
+            //.color_tracker(red: 1.0, green: 1.0, blue: 0.12, ratio: 0.95, range: 0.34..<0.80)
             .fork()
         runtime = script.compile(context: context)
     }
@@ -66,9 +67,9 @@ extension SampleViewController3 : UIImagePickerControllerDelegate, UINavigationC
                     self.playerItem = AVPlayerItem(asset: asset)
                     self.playerItem!.add(self.output!)
                     self.player = AVPlayer(playerItem: self.playerItem!)
-                    self.player!.addPeriodicTimeObserver(forInterval: CMTime(seconds:1.0/30.0, preferredTimescale:600), queue: DispatchQueue.main, using: { (time) in
+                    self.player!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 30), queue: DispatchQueue.main, using: { (time) in
                         //print("time", time)
-                        guard let pixelBuffer = self.output?.copyPixelBuffer(forItemTime: self.playerItem!.currentTime(), itemTimeForDisplay: nil) else {
+                        guard let pixelBuffer = self.output?.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: nil) else {
                             print("failed to copy pixel buffer", time)
                             return
                         }

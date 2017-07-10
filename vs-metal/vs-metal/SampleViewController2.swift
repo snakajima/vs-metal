@@ -33,7 +33,7 @@ class SampleViewController2: UIViewController {
                 .sobel()
                 .canny_edge(threshhold: 0.19, thin: 0.5)
                 .anti_alias()
-                .alpha()
+                .alpha(ratio: 1.0)
             runtime = script.compile(context: context)
 
             session.start()

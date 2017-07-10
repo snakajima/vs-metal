@@ -38,8 +38,8 @@ extension VSScript {
         return append(node: ["name":"gaussian_blur", "attr":["sigma":[sigma]]])
     }
     
-    func alpha() -> VSScript {
-        return append(node: ["name":"alpha"])
+    func alpha(ratio:Float) -> VSScript {
+        return append(node: ["name":"alpha", "attr":["ratio":[ratio]]])
     }
     
     func color_tracker(red:Float, green:Float, blue:Float, ratio:Float, range:Range<Float>) -> VSScript {
