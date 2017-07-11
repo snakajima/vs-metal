@@ -16,6 +16,7 @@ class SampleViewController4: UIViewController {
     var runtime:VSRuntime?
     
     var reader:AVAssetReader?
+    var output:AVAssetReaderTrackOutput?
 
     lazy var renderer:VSRenderer = VSRenderer(context:self.context)
     fileprivate lazy var textureCache:CVMetalTextureCache = {
@@ -65,29 +66,38 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                     let tracks = asset.tracks(withMediaType: AVMediaTypeVideo)
                     let settings:[String:Any] = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_32BGRA]
                     let output = AVAssetReaderTrackOutput(track: tracks[0], outputSettings: settings)
+                    self.output = output
                     reader.add(output)
                     reader.startReading()
-                    if reader.status == .reading,
-                       let sampleBuffer = output.copyNextSampleBuffer(),
-                       let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-                        let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
-                        var metalTexture:CVMetalTexture? = nil
-                        let status = CVMetalTextureCacheCreateTextureFromImage(nil, self.textureCache, pixelBuffer, nil,
-                                                                               self.context.pixelFormat, width, height, 0, &metalTexture)
-                        if let metalTexture = metalTexture, status == kCVReturnSuccess {
-                            DispatchQueue.main.async {
-                                self.context.set(sourceImage: metalTexture)
-                            }
-                        } else {
-                            print("VSVS: failed to create texture")
-                        }
-                    } else {
-                        print("failed to get pixel buffer")
-                    }
+                    self.processNext()
                 } else {
                     print("failed to create asset reader")
                 }
             }
+        }
+    }
+    
+    func processNext() {
+        guard let reader = self.reader,
+            let output = self.output else {
+                return
+        }
+        if reader.status == .reading,
+            let sampleBuffer = output.copyNextSampleBuffer(),
+            let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+            let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
+            var metalTexture:CVMetalTexture? = nil
+            let status = CVMetalTextureCacheCreateTextureFromImage(nil, self.textureCache, pixelBuffer, nil,
+                                                                   self.context.pixelFormat, width, height, 0, &metalTexture)
+            if let metalTexture = metalTexture, status == kCVReturnSuccess {
+                DispatchQueue.main.async {
+                    self.context.set(sourceImage: metalTexture)
+                }
+            } else {
+                print("VSVS: failed to create texture")
+            }
+        } else {
+            print("Process Complete")
         }
     }
 }
@@ -98,7 +108,12 @@ extension SampleViewController4 : MTKViewDelegate {
     public func draw(in view: MTKView) {
         if context.hasUpdate {
             try? runtime?.encode(commandBuffer:context.makeCommandBuffer(), context:context).commit()
-            try? renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view).commit()
+            if let commandBuffer = try? renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view) {
+                commandBuffer.addCompletedHandler({ (_) in
+                    self.processNext()
+                })
+                commandBuffer.commit()
+            }
             context.flush()
         }
     }
