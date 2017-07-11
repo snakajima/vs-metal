@@ -17,6 +17,8 @@ class SampleViewController4: UIViewController {
     
     var reader:AVAssetReader?
     var output:AVAssetReaderTrackOutput?
+    var texture:MTLTexture?
+    lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
 
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
     fileprivate lazy var textureCache:CVMetalTextureCache = {
@@ -92,6 +94,21 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
             if let metalTexture = metalTexture, status == kCVReturnSuccess {
                 DispatchQueue.main.async {
                     self.context.set(sourceImage: metalTexture)
+                    do {
+                        let commandBuffer = try self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context)
+                        commandBuffer?.addCompletedHandler({ (_) in
+                            DispatchQueue.main.async {
+                                if let texture = try? self.context.pop() {
+                                    self.texture = texture.texture
+                                }
+                                self.context.flush()
+                                self.processNext()
+                            }
+                        })
+                        commandBuffer?.commit()
+                    } catch {
+                        print("Got an exception")
+                    }
                 }
             } else {
                 print("VSVS: failed to create texture")
@@ -106,15 +123,8 @@ extension SampleViewController4 : MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
     
     public func draw(in view: MTKView) {
-        if context.hasUpdate {
-            try? runtime?.encode(commandBuffer:context.makeCommandBuffer(), context:context).commit()
-            if let commandBuffer = renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view, texture: try? context.pop().texture) {
-                commandBuffer.addCompletedHandler({ (_) in
-                    self.processNext()
-                })
-                commandBuffer.commit()
-            }
-            context.flush()
+        if let texture = self.texture {
+            renderer.encode(commandBuffer:commandQueue.makeCommandBuffer(), view:view, texture: texture)?.commit()
         }
     }
 }
