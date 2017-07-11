@@ -12,6 +12,7 @@ import MetalKit
 /// VSRenderer is a helper class (non-essential part of VideoShader), which makes is easy to render a metal texture
 /// (processed by a VideoShader pipeline) to a specified MKTView.
 class VSRenderer {
+    var orientation = UIDeviceOrientation.portrait
     private let context:VSContext
     private var pipelineState: MTLRenderPipelineState?
     
@@ -54,7 +55,12 @@ class VSRenderer {
             // Very first time
             let viewSize = view.bounds.size
             let viewRatio = viewSize.height / viewSize.width
-            let size = CGSize(width:texture.texture.height, height:texture.texture.width)
+            let size:CGSize
+            if orientation == .portrait || orientation == .portraitUpsideDown {
+                size = CGSize(width:texture.texture.height, height:texture.texture.width)
+            } else {
+                size = CGSize(width:texture.texture.width, height:texture.texture.height)
+            }
             let ratio = size.height / size.width
             var x = 1.0 as Float
             var y = 1.0 as Float
@@ -64,14 +70,27 @@ class VSRenderer {
             } else {
                 y = Float(ratio / viewRatio)
             }
-            self.vertexData = [
-                VSVertex(position:[-x, -y], textureCoordinate:[1.0, 1.0]),
-                VSVertex(position:[x,  -y], textureCoordinate:[1.0, 0.0]),
-                VSVertex(position:[-x,  y], textureCoordinate:[0.0, 1.0]),
-                VSVertex(position:[x, -y], textureCoordinate:[1.0, 0.0]),
-                VSVertex(position:[x,  y], textureCoordinate:[0.0, 0.0]),
-                VSVertex(position:[-x,  y], textureCoordinate:[0.0, 1.0]),
+            
+            // LATER: Lazy implementation
+            if orientation == .portrait || orientation == .portraitUpsideDown {
+                self.vertexData = [
+                    VSVertex(position:[-x, -y], textureCoordinate:[1.0, 1.0]),
+                    VSVertex(position:[x,  -y], textureCoordinate:[1.0, 0.0]),
+                    VSVertex(position:[-x,  y], textureCoordinate:[0.0, 1.0]),
+                    VSVertex(position:[x, -y], textureCoordinate:[1.0, 0.0]),
+                    VSVertex(position:[x,  y], textureCoordinate:[0.0, 0.0]),
+                    VSVertex(position:[-x,  y], textureCoordinate:[0.0, 1.0]),
                 ]
+            } else {
+                self.vertexData = [
+                    VSVertex(position:[-x, -y], textureCoordinate:[0.0, 1.0]),
+                    VSVertex(position:[x,  -y], textureCoordinate:[1.0, 1.0]),
+                    VSVertex(position:[-x,  y], textureCoordinate:[0.0, 0.0]),
+                    VSVertex(position:[x, -y], textureCoordinate:[1.0, 1.0]),
+                    VSVertex(position:[x,  y], textureCoordinate:[1.0, 0.0]),
+                    VSVertex(position:[-x,  y], textureCoordinate:[0.0, 0.0]),
+                ]
+            }
             self.dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
         }
         

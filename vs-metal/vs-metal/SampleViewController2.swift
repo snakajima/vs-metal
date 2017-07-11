@@ -22,6 +22,7 @@ class SampleViewController2: UIViewController {
             mtkView.device = context.device
             mtkView.delegate = self
             context.pixelFormat = mtkView.colorPixelFormat
+            session.cameraPosition = .back
             
             // This is an alternative way to create a script object (Beta)
             let script = VSScript()
