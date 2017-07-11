@@ -26,7 +26,8 @@ class TestViewController: UIViewController {
             
             // This is an alternative way to create a script object (Beta)
             let script = VSScript()
-                            .boolean(range: 0.0..<0.6, color1: [0.0, 0.0, 0.0, 1.0], color2: [1.0, 0.0, 0.0, 1.0])
+                            .gradient_map(color1: [0.0, 0.0, 1.0, 1.0], color2: [1.0, 1.0, 0.5, 1.0])
+                            .toone(levels: 3)
             runtime = script.compile(context: context)
 
             session.start()
