@@ -43,7 +43,7 @@ extension VSVideoSessionController : MTKViewDelegate {
             do {
                 try runtime.encode(commandBuffer: context.makeCommandBuffer(), context: context)
                            .commit()
-                try renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view)
+                renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view, texture: try? context.pop().texture)?
                            .commit()
             } catch let error {
                 print("#### ERROR #### VSProcessor:draw", error)

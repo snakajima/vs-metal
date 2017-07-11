@@ -108,7 +108,7 @@ extension SampleViewController4 : MTKViewDelegate {
     public func draw(in view: MTKView) {
         if context.hasUpdate {
             try? runtime?.encode(commandBuffer:context.makeCommandBuffer(), context:context).commit()
-            if let commandBuffer = try? renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view) {
+            if let commandBuffer = renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view, texture: try? context.pop().texture) {
                 commandBuffer.addCompletedHandler({ (_) in
                     self.processNext()
                 })

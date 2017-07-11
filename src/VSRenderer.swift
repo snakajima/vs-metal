@@ -49,17 +49,19 @@ class VSRenderer {
     ///   - view: view to render
     /// - Returns: the command buffer
     /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
-    func encode(commandBuffer:MTLCommandBuffer, view: MTKView) throws -> MTLCommandBuffer {
-        let texture = try context.pop()
+    func encode(commandBuffer:MTLCommandBuffer, view: MTKView, texture:MTLTexture?) -> MTLCommandBuffer? {
+        guard let texture = texture else {
+            return nil
+        }
         if dataSize == 0 {
             // Very first time
             let viewSize = view.bounds.size
             let viewRatio = viewSize.height / viewSize.width
             let size:CGSize
             if orientation == .portrait || orientation == .portraitUpsideDown {
-                size = CGSize(width:texture.texture.height, height:texture.texture.width)
+                size = CGSize(width:texture.height, height:texture.width)
             } else {
-                size = CGSize(width:texture.texture.width, height:texture.texture.height)
+                size = CGSize(width:texture.width, height:texture.height)
             }
             let ratio = size.height / size.width
             var x = 1.0 as Float
@@ -107,7 +109,7 @@ class VSRenderer {
         let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         encoder.setRenderPipelineState(pipelineState)
         encoder.setVertexBytes(vertexData, length: dataSize, at: 0)
-        encoder.setFragmentTexture(texture.texture, at: 0)
+        encoder.setFragmentTexture(texture, at: 0)
         encoder.drawPrimitives(type: .triangle, vertexStart: 0,
                                vertexCount: vertexData.count,
                                instanceCount: vertexData.count/3)
