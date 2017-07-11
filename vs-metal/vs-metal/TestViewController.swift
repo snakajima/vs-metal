@@ -26,9 +26,11 @@ class TestViewController: UIViewController {
             
             // This is an alternative way to create a script object (Beta)
             let script = VSScript()
-                            .gaussian_blur(sigma: 3.0)
-                            .halftone(radius: 10.0, scale: 1.0, color1: [0.0, 0.0, 0.0], color2: [1.0, 1.0, 0.0])
-                            .anti_alias()
+                            .fork()
+                            .mono()
+                            .swap()
+                            .hue_filter(range: 0..<100, chroma: 0.2..<0.8)
+                            .alpha(ratio: 1.0)
             runtime = script.compile(context: context)
 
             session.start()

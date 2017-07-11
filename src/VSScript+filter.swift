@@ -18,6 +18,14 @@ extension VSScript {
         return append(node: ["name":"color", "attr":["color":[red, green, blue, alpha]]])
     }
 
+    func tint(ratio:Float, red:Float, green:Float, blue:Float, alpha:Float) -> VSScript {
+        return append(node: ["name":"tint", "attr":["ratio":ratio, "color":[red, green, blue, alpha]]])
+    }
+
+    func enhancer(red:[Float], green:[Float], blue:[Float]) -> VSScript {
+        return append(node: ["name":"enhancer", "attr":["red":red, "green":green, "blue":blue]])
+    }
+
     func toone() -> VSScript {
         return append(node: ["name":"toone"])
     }
@@ -60,6 +68,10 @@ extension VSScript {
     
     func color_tracker(red:Float, green:Float, blue:Float, ratio:Float, range:Range<Float>) -> VSScript {
         return append(node: ["name":"color_tracker", "attr":["color":[red, green, blue], "ratio":[ratio], "range":[range.lowerBound,range.upperBound]]])
+    }
+
+    func hue_filter(range:Range<Float>, chroma:Range<Float>) -> VSScript {
+        return append(node: ["name":"hue_filter", "attr":["range":[range.lowerBound, range.upperBound], "chroma":[chroma.lowerBound, chroma.upperBound]]])
     }
 
     func translate(tx:Float, ty:Float) -> VSScript {
