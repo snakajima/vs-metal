@@ -45,5 +45,13 @@ extension VSScript {
     func color_tracker(red:Float, green:Float, blue:Float, ratio:Float, range:Range<Float>) -> VSScript {
         return append(node: ["name":"color_tracker", "attr":["color":[red, green, blue], "ratio":[ratio], "range":[range.lowerBound,range.upperBound]]])
     }
+
+    func translate(tx:Float, ty:Float) -> VSScript {
+        return append(node: ["name":"translate", "attr":["tx":[tx], "ty":[ty]]])
+    }
+
+    func transform(a:Float, b:Float, c:Float, d:Float, tx:Float, ty:Float) -> VSScript {
+        return append(node: ["name":"transform", "attr":["abcd":[a, b, c, d], "txty":[tx, ty]]])
+    }
 }
 

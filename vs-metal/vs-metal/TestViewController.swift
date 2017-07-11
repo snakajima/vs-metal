@@ -27,6 +27,7 @@ class TestViewController: UIViewController {
             // This is an alternative way to create a script object (Beta)
             let script = VSScript()
                 .mono()
+                .transform(a: cos(0.1), b: sin(0.1), c: -sin(0.1), d: cos(0.1), tx: 0, ty: 0)
             runtime = script.compile(context: context)
 
             session.start()

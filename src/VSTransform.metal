@@ -9,7 +9,7 @@
 #include <metal_stdlib>
 using namespace metal;
 
-constexpr sampler c_smp(coord::pixel, address::clamp_to_zero, filter::nearest);
+constexpr sampler c_smp(coord::pixel, address::clamp_to_zero, filter::linear);
 
 kernel void
 translate(texture2d<half, access::sample>  inTexture  [[texture(0)]],
