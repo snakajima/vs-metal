@@ -29,7 +29,7 @@ class TestViewController: UIViewController {
                             .fork()
                             .mono()
                             .swap()
-                            .hue_filter(range: 0..<100, chroma: 0.2..<0.8)
+                            .hue_filter(hue: 0..<100, chroma: 0.2..<0.8)
                             .alpha(ratio: 1.0)
             runtime = script.compile(context: context)
 

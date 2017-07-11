@@ -70,8 +70,15 @@ extension VSScript {
         return append(node: ["name":"color_tracker", "attr":["color":[red, green, blue], "ratio":[ratio], "range":[range.lowerBound,range.upperBound]]])
     }
 
-    func hue_filter(range:Range<Float>, chroma:Range<Float>) -> VSScript {
-        return append(node: ["name":"hue_filter", "attr":["range":[range.lowerBound, range.upperBound], "chroma":[chroma.lowerBound, chroma.upperBound]]])
+    /// It detects pixels within specified range of hue and chroma, and leave them as is,
+    /// while it makes the rest of pixels transparent (alpha = 0).
+    ///
+    /// - Parameters:
+    ///   - hue: specifies the range of hue (default is 0..<180)
+    ///   - chroma: specifies the range of chroma (default is 0.2..<1.0)
+    /// - Returns: the script object itself
+    func hue_filter(hue:Range<Float>, chroma:Range<Float>) -> VSScript {
+        return append(node: ["name":"hue_filter", "attr":["range":[hue.lowerBound, hue.upperBound], "chroma":[chroma.lowerBound, chroma.upperBound]]])
     }
 
     func translate(tx:Float, ty:Float) -> VSScript {
