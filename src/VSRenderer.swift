@@ -13,7 +13,6 @@ import MetalKit
 /// (processed by a VideoShader pipeline) to a specified MKTView.
 class VSRenderer {
     var orientation = UIDeviceOrientation.portrait
-    private let context:VSContext
     private var pipelineState: MTLRenderPipelineState?
     
     private struct VSVertex {
@@ -26,11 +25,10 @@ class VSRenderer {
     /// Initializer
     ///
     /// - Parameter context: VideoShader context
-    init(context:VSContext) {
-        self.context = context
+    init(device:MTLDevice, pixelFormat:MTLPixelFormat) {
         
         // load vertex & fragment shaders
-        let defaultLibrary = context.device.newDefaultLibrary()!
+        let defaultLibrary = device.newDefaultLibrary()!
         let vertexProgram = defaultLibrary.makeFunction(name: "basic_vertex")
         let fragmentProgram = defaultLibrary.makeFunction(name: "basic_fragment")
         
@@ -38,8 +36,8 @@ class VSRenderer {
         let pipelineStateDescriptor = MTLRenderPipelineDescriptor()
         pipelineStateDescriptor.vertexFunction = vertexProgram
         pipelineStateDescriptor.fragmentFunction = fragmentProgram
-        pipelineStateDescriptor.colorAttachments[0].pixelFormat = context.pixelFormat
-        pipelineState = try! context.device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
+        pipelineStateDescriptor.colorAttachments[0].pixelFormat = pixelFormat
+        pipelineState = try! device.makeRenderPipelineState(descriptor: pipelineStateDescriptor)
     }
     
     /// Encode the rendering instruction to the specified command buffer

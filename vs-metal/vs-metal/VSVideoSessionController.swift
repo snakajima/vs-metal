@@ -18,7 +18,7 @@ class VSVideoSessionController: UIViewController {
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime!
     lazy var session:VSCaptureSession = VSCaptureSession(context: self.context)
-    lazy var renderer:VSRenderer = VSRenderer(context:self.context)
+    lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
 
     override func viewDidLoad() {
         super.viewDidLoad()

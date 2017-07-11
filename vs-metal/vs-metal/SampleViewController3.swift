@@ -16,7 +16,7 @@ class SampleViewController3: UIViewController {
     var runtime:VSRuntime?
     var output:AVPlayerItemVideoOutput?
     var player:AVPlayer?
-    lazy var renderer:VSRenderer = VSRenderer(context:self.context)
+    lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
     fileprivate lazy var textureCache:CVMetalTextureCache = {
         var cache:CVMetalTextureCache? = nil
         CVMetalTextureCacheCreate(nil, nil, self.context.device, nil, &cache)
