@@ -1,5 +1,5 @@
 //
-//  SampleViewController1.swift
+//  TestViewController.swift
 //  vs-metal
 //
 //  Created by SATOSHI NAKAJIMA on 6/20/17.
@@ -9,7 +9,7 @@
 import UIKit
 import MetalKit
 
-class SampleViewController2: UIViewController {
+class TestViewController: UIViewController {
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
     lazy var session:VSCaptureSession = VSCaptureSession(context: self.context)
@@ -21,19 +21,12 @@ class SampleViewController2: UIViewController {
         if let mtkView = self.view as? MTKView {
             mtkView.device = context.device
             mtkView.delegate = self
+            mtkView.transform = (session.cameraPosition == .front) ? CGAffineTransform(scaleX: -1.0, y: 1.0) : CGAffineTransform.identity
             context.pixelFormat = mtkView.colorPixelFormat
             
             // This is an alternative way to create a script object (Beta)
             let script = VSScript()
-                .gaussian_blur(sigma: 2.0)
-                .fork()
-                .gaussian_blur(sigma: 2.0)
-                .toone()
-                .swap()
-                .sobel()
-                .canny_edge(threshhold: 0.19, thin: 0.5)
-                .anti_alias()
-                .alpha(ratio: 1.0)
+                .mono()
             runtime = script.compile(context: context)
 
             session.start()
@@ -41,7 +34,7 @@ class SampleViewController2: UIViewController {
     }
 }
 
-extension SampleViewController2 : MTKViewDelegate {
+extension TestViewController : MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
     
     public func draw(in view: MTKView) {
