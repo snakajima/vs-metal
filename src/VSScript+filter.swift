@@ -34,6 +34,10 @@ extension VSScript {
         return append(node: ["name":"gradient_map", "attr":["color1":color1, "color2":color2]])
     }
 
+    func halftone(radius:Float, scale:Float, color1:[Float], color2:[Float]) -> VSScript {
+        return append(node: ["name":"halftone", "attr":["radius":radius, "scale":scale, "color1":color1, "color2":color2]])
+    }
+
     func invert() -> VSScript {
         return append(node: ["name":"invert"])
     }
