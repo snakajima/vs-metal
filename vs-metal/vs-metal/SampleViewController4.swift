@@ -14,8 +14,9 @@ import AVFoundation
 class SampleViewController4: UIViewController {
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
-    var output:AVPlayerItemVideoOutput?
-    var player:AVPlayer?
+    
+    var reader:AVAssetReader?
+
     lazy var renderer:VSRenderer = VSRenderer(context:self.context)
     fileprivate lazy var textureCache:CVMetalTextureCache = {
         var cache:CVMetalTextureCache? = nil
@@ -58,32 +59,33 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
             let asset = AVURLAsset(url: url)
             asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
                 let status = asset.statusOfValue(forKey: "tracks", error: nil)
-                if status == AVKeyValueStatus.loaded {
-                    //print("didFinish, loaded")
+                if status == AVKeyValueStatus.loaded,
+                   let reader = try? AVAssetReader(asset: asset) {
+                    self.reader = reader
+                    let tracks = asset.tracks(withMediaType: AVMediaTypeVideo)
                     let settings:[String:Any] = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_32BGRA]
-                    self.output = AVPlayerItemVideoOutput(outputSettings: settings)
-                    let playerItem = AVPlayerItem(asset: asset)
-                    playerItem.add(self.output!)
-                    self.player = AVPlayer(playerItem: playerItem)
-                    self.player!.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 30), queue: DispatchQueue.main, using: { (time) in
-                        //print("time", time)
-                        guard let pixelBuffer = self.output?.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: nil) else {
-                            print("failed to copy pixel buffer", time)
-                            return
-                        }
-                        
+                    let output = AVAssetReaderTrackOutput(track: tracks[0], outputSettings: settings)
+                    reader.add(output)
+                    reader.startReading()
+                    if reader.status == .reading,
+                       let sampleBuffer = output.copyNextSampleBuffer(),
+                       let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
                         let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
                         var metalTexture:CVMetalTexture? = nil
                         let status = CVMetalTextureCacheCreateTextureFromImage(nil, self.textureCache, pixelBuffer, nil,
                                                                                self.context.pixelFormat, width, height, 0, &metalTexture)
                         if let metalTexture = metalTexture, status == kCVReturnSuccess {
-                            self.context.set(sourceImage: metalTexture)
+                            DispatchQueue.main.async {
+                                self.context.set(sourceImage: metalTexture)
+                            }
                         } else {
                             print("VSVS: failed to create texture")
                         }
-                        
-                    })
-                    self.player!.play()
+                    } else {
+                        print("failed to get pixel buffer")
+                    }
+                } else {
+                    print("failed to create asset reader")
                 }
             }
         }
