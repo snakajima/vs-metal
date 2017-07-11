@@ -22,6 +22,14 @@ extension VSScript {
         return append(node: ["name":"toone"])
     }
 
+    func toone(levels:Int) -> VSScript {
+        return append(node: ["name":"toone", "attr":["lavels":[Float(levels)]]])
+    }
+
+    func invert() -> VSScript {
+        return append(node: ["name":"invert"])
+    }
+
     func sobel() -> VSScript {
         return append(node: ["name":"sobel"])
     }
@@ -36,10 +44,6 @@ extension VSScript {
     
     func gaussian_blur(sigma:Float) -> VSScript {
         return append(node: ["name":"gaussian_blur", "attr":["sigma":[sigma]]])
-    }
-    
-    func alpha(ratio:Float) -> VSScript {
-        return append(node: ["name":"alpha", "attr":["ratio":[ratio]]])
     }
     
     func color_tracker(red:Float, green:Float, blue:Float, ratio:Float, range:Range<Float>) -> VSScript {
