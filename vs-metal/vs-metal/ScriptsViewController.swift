@@ -10,7 +10,7 @@ import UIKit
 
 class ScriptsViewController: UITableViewController {
     let filenames = ["test0", "test1", "test2", "test3", "test4", "test5", "test6",
-                     "tennis_ball_tracker", "sports_light", "sports_dark", "smoothskin", "hawaii", "hipass", "emboss", "freeza", "delicious", "sketch", "motion_detector", "mosaic", "motionblur", "blink", "red", "halftone", "gradientmap", "cartoon", "cartoon_hipass", "invalid"]
+                     "yeswecan", "tennis_ball_tracker", "sports_light", "sports_dark", "smoothskin", "hawaii", "hipass", "emboss", "freeza", "delicious", "sketch", "motion_detector", "mosaic", "motionblur", "blink", "red", "halftone", "gradientmap", "cartoon", "cartoon_hipass", "invalid"]
 
     override func viewDidLoad() {
         super.viewDidLoad()

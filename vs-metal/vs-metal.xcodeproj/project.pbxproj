@@ -53,6 +53,7 @@
 		74D5B0461F156A1B00C165BC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D5B0451F156A1B00C165BC /* TestViewController.swift */; };
 		74D5B0481F156A5700C165BC /* TestViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74D5B0471F156A5700C165BC /* TestViewController.storyboard */; };
 		74D5B04A1F156D4D00C165BC /* VSScript+blender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D5B0491F156D4D00C165BC /* VSScript+blender.swift */; };
+		74D5B04C1F15703B00C165BC /* yeswecan.js in Resources */ = {isa = PBXBuildFile; fileRef = 74D5B04B1F15703B00C165BC /* yeswecan.js */; };
 		74E284E01EFFE4D00045ADFB /* test0.js in Resources */ = {isa = PBXBuildFile; fileRef = 74E284DF1EFFE4D00045ADFB /* test0.js */; };
 		74E284E21F00B9B70045ADFB /* VSBlender.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74E284E11F00B9B70045ADFB /* VSBlender.metal */; };
 		74E284E41F0336D50045ADFB /* VSDynamicVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284E31F0336D50045ADFB /* VSDynamicVariable.swift */; };
@@ -122,6 +123,7 @@
 		74D5B0451F156A1B00C165BC /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		74D5B0471F156A5700C165BC /* TestViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TestViewController.storyboard; sourceTree = "<group>"; };
 		74D5B0491F156D4D00C165BC /* VSScript+blender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VSScript+blender.swift"; sourceTree = "<group>"; };
+		74D5B04B1F15703B00C165BC /* yeswecan.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = yeswecan.js; sourceTree = "<group>"; };
 		74E284DF1EFFE4D00045ADFB /* test0.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test0.js; sourceTree = "<group>"; };
 		74E284E11F00B9B70045ADFB /* VSBlender.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSBlender.metal; sourceTree = "<group>"; };
 		74E284E31F0336D50045ADFB /* VSDynamicVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSDynamicVariable.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				745D3A9B1F070D30009DD359 /* mosaic.js */,
 				741847381F02CCE4009A45F9 /* red.js */,
 				741847361F01C1BA009A45F9 /* halftone.js */,
+				74D5B04B1F15703B00C165BC /* yeswecan.js */,
 				741847321F01B0EA009A45F9 /* cartoon.js */,
 				74E284DF1EFFE4D00045ADFB /* test0.js */,
 				741847301F01B0C2009A45F9 /* gradientmap.js */,
@@ -358,6 +361,7 @@
 				7492F7F41F0E001200380832 /* hawaii.js in Resources */,
 				7492F7FA1F0EA67400380832 /* sports_light.js in Resources */,
 				7480D28D1EFCC63D00DAA88E /* VSNodes.js in Resources */,
+				74D5B04C1F15703B00C165BC /* yeswecan.js in Resources */,
 				741847331F01B0EA009A45F9 /* cartoon.js in Resources */,
 				741847311F01B0C2009A45F9 /* gradientmap.js in Resources */,
 			);

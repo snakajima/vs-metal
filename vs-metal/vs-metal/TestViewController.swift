@@ -26,7 +26,7 @@ class TestViewController: UIViewController {
             
             // This is an alternative way to create a script object (Beta)
             let script = VSScript()
-                            .toone(levels: 2)
+                            .boolean(range: 0.0..<0.6, color1: [0.0, 0.0, 0.0, 1.0], color2: [1.0, 0.0, 0.0, 1.0])
             runtime = script.compile(context: context)
 
             session.start()

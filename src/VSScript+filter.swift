@@ -26,6 +26,10 @@ extension VSScript {
         return append(node: ["name":"toone", "attr":["lavels":[Float(levels)]]])
     }
 
+    func boolean(range:Range<Float>, color1:[Float], color2:[Float]) -> VSScript {
+        return append(node: ["name":"boolean", "attr":["range":[range.lowerBound, range.upperBound], "color1":color1, "color2":color2]])
+    }
+    
     func invert() -> VSScript {
         return append(node: ["name":"invert"])
     }
