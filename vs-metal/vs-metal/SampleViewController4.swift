@@ -1,5 +1,5 @@
 //
-//  SampleViewController3.swift
+//  SampleViewController4.swift
 //  vs-metal
 //
 //  Created by SATOSHI NAKAJIMA on 6/20/17.
@@ -11,7 +11,7 @@ import MetalKit
 import MobileCoreServices
 import AVFoundation
 
-class SampleViewController3: UIViewController {
+class SampleViewController4: UIViewController {
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
     var output:AVPlayerItemVideoOutput?
@@ -34,10 +34,7 @@ class SampleViewController3: UIViewController {
 
             // This is an alternative way to create a script object (Beta)
             let script = VSScript()
-                .previous()
-                .alpha(ratio: 0.8)
-                //.color_tracker(red: 1.0, green: 1.0, blue: 0.12, ratio: 0.95, range: 0.34..<0.80)
-                .fork()
+                .mono()
             runtime = script.compile(context: context)
         }
     }
@@ -52,7 +49,7 @@ class SampleViewController3: UIViewController {
     }
 }
 
-extension SampleViewController3 : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         self.dismiss(animated: true, completion: nil)
         if let url = info[UIImagePickerControllerMediaURL] as? URL {
@@ -93,7 +90,7 @@ extension SampleViewController3 : UIImagePickerControllerDelegate, UINavigationC
     }
 }
 
-extension SampleViewController3 : MTKViewDelegate {
+extension SampleViewController4 : MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
     
     public func draw(in view: MTKView) {

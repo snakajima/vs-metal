@@ -1,5 +1,5 @@
 //
-//  SampleViewController1.swift
+//  SampleViewController2.swift
 //  vs-metal
 //
 //  Created by SATOSHI NAKAJIMA on 6/20/17.

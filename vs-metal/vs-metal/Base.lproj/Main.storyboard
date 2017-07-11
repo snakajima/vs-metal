@@ -121,8 +121,28 @@
                                             <segue destination="2A4-Tr-2LV" kind="show" id="xB4-MG-Ldq"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="5Jt-d5-8Af" style="IBUITableViewCellStyleDefault" id="uZo-6y-HBc">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="vao-qH-TS7" style="IBUITableViewCellStyleDefault" id="DTu-Sa-ZK1">
                                         <rect key="frame" x="0.0" y="132" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DTu-Sa-ZK1" id="w7T-qC-tAc">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Sample4" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vao-qH-TS7">
+                                                    <rect key="frame" x="15" y="0.0" width="345" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="z6T-kn-2GN" kind="show" id="fU8-i1-JB2"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="5Jt-d5-8Af" style="IBUITableViewCellStyleDefault" id="uZo-6y-HBc">
+                                        <rect key="frame" x="0.0" y="176" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uZo-6y-HBc" id="nm1-nY-tiI">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -142,7 +162,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="wqp-Gc-HGq" style="IBUITableViewCellStyleDefault" id="vLW-YE-67y">
-                                        <rect key="frame" x="0.0" y="176" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="220" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vLW-YE-67y" id="L4F-Yx-9A7">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -199,13 +219,21 @@
             </objects>
             <point key="canvasLocation" x="-802" y="522"/>
         </scene>
+        <!--SampleViewController4-->
+        <scene sceneID="bqc-2n-18d">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SampleViewController4" id="z6T-kn-2GN" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qhv-BO-wcb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-732" y="561"/>
+        </scene>
         <!--TestViewController-->
         <scene sceneID="442-oT-qm5">
             <objects>
                 <viewControllerPlaceholder storyboardName="TestViewController" id="lQ1-AJ-9RQ" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sp9-ns-LPf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-728" y="563"/>
+            <point key="canvasLocation" x="-626" y="601"/>
         </scene>
         <!--VSVideoSessionController-->
         <scene sceneID="EHK-JM-ARo">
