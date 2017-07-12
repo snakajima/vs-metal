@@ -93,8 +93,7 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                     self.url = url
                     self.writer = writer
 
-                    // https://stackoverflow.com/questions/44797728/recording-a-video-filtered-with-cifilter-is-too-slow
-                    /*
+                    /* no need to specify the compression settings
                     let compressionSettings: [String: Any] = [
                         AVVideoAverageBitRateKey: NSNumber(value: 20000000),
                         AVVideoMaxKeyFrameIntervalKey: NSNumber(value: 1),
@@ -104,10 +103,9 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
 
                     let videoSettings: [String : Any] = [
                         AVVideoCodecKey  : AVVideoCodecH264,
-                        //AVVideoCompressionPropertiesKey: compressionSettings,
                         AVVideoWidthKey  : track.naturalSize.width,
                         AVVideoHeightKey : track.naturalSize.height,
-                        //AVVideoScalingModeKey:AVVideoScalingModeResizeAspectFill
+                        //AVVideoCompressionPropertiesKey: compressionSettings,
                     ]
                     let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
                     input.transform = track.preferredTransform
@@ -189,9 +187,18 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
     
     private func writeNextFrame(time:CMTime) {
         guard let writer = self.writer,
+              let input = self.input,
               let adaptor = self.adaptor,
               let texture = self.texture else {
                 return
+        }
+        
+        if !input.isReadyForMoreMediaData {
+            print("Input is not ready for more media data. Retry async.")
+            DispatchQueue.main.async {
+                self.writeNextFrame(time: time)
+            }
+            return
         }
         
         guard let pixelBufferPool = adaptor.pixelBufferPool else {
