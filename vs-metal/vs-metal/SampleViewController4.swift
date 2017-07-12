@@ -67,9 +67,9 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                 if status == AVKeyValueStatus.loaded,
                    let reader = try? AVAssetReader(asset: asset) {
                     self.reader = reader
-                    let tracks = asset.tracks(withMediaType: AVMediaTypeVideo)
+                    let track = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
                     let settings:[String:Any] = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_32BGRA]
-                    let output = AVAssetReaderTrackOutput(track: tracks[0], outputSettings: settings)
+                    let output = AVAssetReaderTrackOutput(track: track, outputSettings: settings)
                     self.output = output
                     reader.add(output)
                     reader.startReading()
@@ -100,17 +100,17 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                     let videoSettings: [String : Any] = [
                         AVVideoCodecKey  : AVVideoCodecH264,
                         AVVideoCompressionPropertiesKey: compressionSettings,
-                        AVVideoWidthKey  : 1080,
-                        AVVideoHeightKey : 1920,
+                        AVVideoWidthKey  : track.naturalSize.width,
+                        AVVideoHeightKey : track.naturalSize.height,
                         AVVideoScalingModeKey:AVVideoScalingModeResizeAspectFill
                     ]
                     let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
-                    input.transform = tracks[0].preferredTransform
+                    input.transform = track.preferredTransform
                     writer.add(input)
                     let attrs : [String: Any] = [
                         String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
-                        String(kCVPixelBufferWidthKey) : 1080,
-                        String(kCVPixelBufferHeightKey) : 1920,
+                        String(kCVPixelBufferWidthKey) : track.naturalSize.width,
+                        String(kCVPixelBufferHeightKey) : track.naturalSize.height,
                         String(kCVPixelFormatOpenGLESCompatibility) : kCFBooleanTrue
                     ]
                     let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: attrs)
@@ -129,6 +129,7 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
     
     func processNext() {
         guard let reader = self.reader,
+            let writer = self.writer,
             let output = self.output else {
                 return
         }
@@ -158,7 +159,14 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                             self.texture = texture.texture
                         }
                         self.context.flush()
-                        self.processNext()
+                        
+                        if writer.status == .writing {
+                            writer.finishWriting {
+                                self.processNext()
+                            }
+                        } else {
+                            self.processNext()
+                        }
                     }
                 })
                 commandBuffer?.commit()
