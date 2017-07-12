@@ -159,7 +159,8 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                             self.texture = texture.texture
                         }
                         self.context.flush()
-                        self.writeNextFrame()
+                        let time = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+                        self.writeNextFrame(time:time)
                      }
                 })
                 commandBuffer?.commit()
@@ -169,8 +170,14 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
         }
     }
     
-    private func writeNextFrame() {
-        guard let pixelBufferPool = adaptor?.pixelBufferPool else {
+    private func writeNextFrame(time:CMTime) {
+        guard let writer = self.writer,
+              let adaptor = self.adaptor,
+              let texture = self.texture else {
+                return
+        }
+        
+        guard let pixelBufferPool = adaptor.pixelBufferPool else {
             print("Pixel buffer asset writer input did not have a pixel buffer pool available; cannot retrieve frame")
             return
         }
@@ -181,6 +188,18 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
             print("Could not get pixel buffer from asset writer input; dropping frame...")
             return
         }
+        
+        CVPixelBufferLockBaseAddress(pixelBuffer, [])
+        defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, []) }
+        let pixelBufferBytes = CVPixelBufferGetBaseAddress(pixelBuffer)!
+        
+        // Use the bytes per row value from the pixel buffer since its stride may be rounded up to be 16-byte aligned
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+        let region = MTLRegionMake2D(0, 0, texture.width, texture.height)
+        
+        texture.getBytes(pixelBufferBytes, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
+        
+        adaptor.append(pixelBuffer, withPresentationTime: time)
         
         self.processNext()
     }
