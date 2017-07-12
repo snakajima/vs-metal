@@ -132,37 +132,39 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
             let output = self.output else {
                 return
         }
-        if reader.status == .reading,
+        guard reader.status == .reading,
             let sampleBuffer = output.copyNextSampleBuffer(),
-            let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-            let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
-            var metalTexture:CVMetalTexture? = nil
-            let status = CVMetalTextureCacheCreateTextureFromImage(nil, self.textureCache, pixelBuffer, nil,
-                                                                   self.context.pixelFormat, width, height, 0, &metalTexture)
-            if let metalTexture = metalTexture, status == kCVReturnSuccess {
-                DispatchQueue.main.async {
-                    self.context.set(sourceImage: metalTexture)
-                    do {
-                        let commandBuffer = try self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context)
-                        commandBuffer?.addCompletedHandler({ (_) in
-                            DispatchQueue.main.async {
-                                if let texture = try? self.context.pop() {
-                                    self.texture = texture.texture
-                                }
-                                self.context.flush()
-                                self.processNext()
-                            }
-                        })
-                        commandBuffer?.commit()
-                    } catch {
-                        print("Got an exception")
-                    }
-                }
-            } else {
-                print("VSVS: failed to create texture")
-            }
-        } else {
+            let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             print("Process Complete")
+            return
+        }
+        
+        let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
+        var metalTextureFromPixelBuffer:CVMetalTexture? = nil
+        let status = CVMetalTextureCacheCreateTextureFromImage(nil, self.textureCache, pixelBuffer, nil,
+                                                               self.context.pixelFormat, width, height, 0, &metalTextureFromPixelBuffer)
+        guard let metalTexture = metalTextureFromPixelBuffer, status == kCVReturnSuccess else {
+            print("VSVS: failed to create texture")
+            return
+        }
+        
+        DispatchQueue.main.async {
+            self.context.set(sourceImage: metalTexture)
+            do {
+                let commandBuffer = try self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context)
+                commandBuffer?.addCompletedHandler({ (_) in
+                    DispatchQueue.main.async {
+                        if let texture = try? self.context.pop() {
+                            self.texture = texture.texture
+                        }
+                        self.context.flush()
+                        self.processNext()
+                    }
+                })
+                commandBuffer?.commit()
+            } catch {
+                print("Got an exception")
+            }
         }
     }
 }
