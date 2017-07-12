@@ -90,32 +90,33 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                     self.writer = writer
 
                     // https://stackoverflow.com/questions/44797728/recording-a-video-filtered-with-cifilter-is-too-slow
+                    /*
                     let compressionSettings: [String: Any] = [
                         AVVideoAverageBitRateKey: NSNumber(value: 20000000),
                         AVVideoMaxKeyFrameIntervalKey: NSNumber(value: 1),
                         AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline41
                     ]
-
+                    */
 
                     let videoSettings: [String : Any] = [
                         AVVideoCodecKey  : AVVideoCodecH264,
-                        AVVideoCompressionPropertiesKey: compressionSettings,
+                        //AVVideoCompressionPropertiesKey: compressionSettings,
                         AVVideoWidthKey  : track.naturalSize.width,
                         AVVideoHeightKey : track.naturalSize.height,
-                        AVVideoScalingModeKey:AVVideoScalingModeResizeAspectFill
+                        //AVVideoScalingModeKey:AVVideoScalingModeResizeAspectFill
                     ]
                     let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
                     input.transform = track.preferredTransform
-                    writer.add(input)
+                    
                     let attrs : [String: Any] = [
                         String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
                         String(kCVPixelBufferWidthKey) : track.naturalSize.width,
-                        String(kCVPixelBufferHeightKey) : track.naturalSize.height,
-                        String(kCVPixelFormatOpenGLESCompatibility) : kCFBooleanTrue
+                        String(kCVPixelBufferHeightKey) : track.naturalSize.height
                     ]
                     let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: attrs)
                     self.adaptor = adaptor
                     
+                    writer.add(input)
                     writer.startWriting()
                     writer.startSession(atSourceTime: kCMTimeZero)
                     
@@ -127,9 +128,8 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
         }
     }
     
-    func processNext() {
+    private func processNext() {
         guard let reader = self.reader,
-            let writer = self.writer,
             let output = self.output else {
                 return
         }
@@ -159,21 +159,30 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                             self.texture = texture.texture
                         }
                         self.context.flush()
-                        
-                        if writer.status == .writing {
-                            writer.finishWriting {
-                                self.processNext()
-                            }
-                        } else {
-                            self.processNext()
-                        }
-                    }
+                        self.writeNextFrame()
+                     }
                 })
                 commandBuffer?.commit()
             } catch {
                 print("Got an exception")
             }
         }
+    }
+    
+    private func writeNextFrame() {
+        guard let pixelBufferPool = adaptor?.pixelBufferPool else {
+            print("Pixel buffer asset writer input did not have a pixel buffer pool available; cannot retrieve frame")
+            return
+        }
+        
+        var newPixelBuffer: CVPixelBuffer? = nil
+        let status  = CVPixelBufferPoolCreatePixelBuffer(nil, pixelBufferPool, &newPixelBuffer)
+        guard let pixelBuffer = newPixelBuffer, status == kCVReturnSuccess else {
+            print("Could not get pixel buffer from asset writer input; dropping frame...")
+            return
+        }
+        
+        self.processNext()
     }
 }
 
