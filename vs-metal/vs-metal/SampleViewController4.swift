@@ -19,6 +19,8 @@ class SampleViewController4: UIViewController {
     var output:AVAssetReaderTrackOutput?
     var texture:MTLTexture?
     lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
+    var writer:AVAssetWriter?
+    var adaptor:AVAssetWriterInputPixelBufferAdaptor?
 
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
     fileprivate lazy var textureCache:CVMetalTextureCache = {
@@ -71,6 +73,52 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                     self.output = output
                     reader.add(output)
                     reader.startReading()
+                    
+                    let fileManager = FileManager.default
+                    guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+                        print("no document directory")
+                        return
+                    }
+                    let url = documentsURL.appendingPathComponent("export.mov")
+                    if fileManager.fileExists(atPath: url.path) {
+                        try? fileManager.removeItem(at: url)
+                    }
+                    guard let writer = try? AVAssetWriter(url: url, fileType: AVFileTypeQuickTimeMovie) else {
+                        print("failed to create a file", url)
+                        return
+                    }
+                    self.writer = writer
+
+                    // https://stackoverflow.com/questions/44797728/recording-a-video-filtered-with-cifilter-is-too-slow
+                    let compressionSettings: [String: Any] = [
+                        AVVideoAverageBitRateKey: NSNumber(value: 20000000),
+                        AVVideoMaxKeyFrameIntervalKey: NSNumber(value: 1),
+                        AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline41
+                    ]
+
+
+                    let videoSettings: [String : Any] = [
+                        AVVideoCodecKey  : AVVideoCodecH264,
+                        AVVideoCompressionPropertiesKey: compressionSettings,
+                        AVVideoWidthKey  : 1080,
+                        AVVideoHeightKey : 1920,
+                        AVVideoScalingModeKey:AVVideoScalingModeResizeAspectFill
+                    ]
+                    let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
+                    input.transform = tracks[0].preferredTransform
+                    writer.add(input)
+                    let attrs : [String: Any] = [
+                        String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
+                        String(kCVPixelBufferWidthKey) : 1080,
+                        String(kCVPixelBufferHeightKey) : 1920,
+                        String(kCVPixelFormatOpenGLESCompatibility) : kCFBooleanTrue
+                    ]
+                    let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: attrs)
+                    self.adaptor = adaptor
+                    
+                    writer.startWriting()
+                    writer.startSession(atSourceTime: kCMTimeZero)
+                    
                     self.processNext()
                 } else {
                     print("failed to create asset reader")
