@@ -38,5 +38,7 @@
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To process video</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 </dict>
 </plist>

@@ -20,7 +20,9 @@ class SampleViewController4: UIViewController {
     var texture:MTLTexture?
     lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
     var writer:AVAssetWriter?
+    var input:AVAssetWriterInput?
     var adaptor:AVAssetWriterInputPixelBufferAdaptor?
+    var url:URL?
 
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
     fileprivate lazy var textureCache:CVMetalTextureCache = {
@@ -87,6 +89,7 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                         print("failed to create a file", url)
                         return
                     }
+                    self.url = url
                     self.writer = writer
 
                     // https://stackoverflow.com/questions/44797728/recording-a-video-filtered-with-cifilter-is-too-slow
@@ -107,6 +110,7 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                     ]
                     let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
                     input.transform = track.preferredTransform
+                    self.input = input
                     
                     let attrs : [String: Any] = [
                         String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
@@ -130,13 +134,19 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
     
     private func processNext() {
         guard let reader = self.reader,
-            let output = self.output else {
+            let output = self.output,
+            let input = self.input,
+            let writer = self.writer else {
                 return
         }
         guard reader.status == .reading,
             let sampleBuffer = output.copyNextSampleBuffer(),
             let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             print("Process Complete")
+            input.markAsFinished()
+            writer.finishWriting {
+                print("Finish Writing", self.url)
+            }
             return
         }
         
