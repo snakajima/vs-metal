@@ -12,6 +12,7 @@ import MobileCoreServices
 import AVFoundation
 
 class SampleViewController4: UIViewController {
+    @IBOutlet var btnCamera:UIBarButtonItem!
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
     
@@ -136,7 +137,8 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
         guard let reader = self.reader,
             let output = self.output,
             let input = self.input,
-            let writer = self.writer else {
+            let writer = self.writer,
+            let url = self.url else {
                 return
         }
         guard reader.status == .reading,
@@ -145,7 +147,12 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
             print("Process Complete")
             input.markAsFinished()
             writer.finishWriting {
-                print("Finish Writing", self.url)
+                print("Finish Writing")
+                let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                if let popover = sheet.popoverPresentationController {
+                    popover.barButtonItem = self.btnCamera
+                }
+                self.present(sheet, animated: true, completion: nil)
             }
             return
         }

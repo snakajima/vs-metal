@@ -39,6 +39,9 @@
                             <constraint firstItem="AFw-1y-Nrn" firstAttribute="top" secondItem="wqG-di-yup" secondAttribute="bottom" id="yX2-kn-Npe"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="btnCamera" destination="HRd-rb-0M7" id="GbL-eh-4UA"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xIA-jy-dBH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
