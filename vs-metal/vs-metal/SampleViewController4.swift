@@ -86,7 +86,8 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                         return
                     }
                     self.writer = writer
-                    
+
+                    // https://stackoverflow.com/questions/44797728/recording-a-video-filtered-with-cifilter-is-too-slow
                     let compressionSettings: [String: Any] = [
                         AVVideoAverageBitRateKey: NSNumber(value: 20000000),
                         AVVideoMaxKeyFrameIntervalKey: NSNumber(value: 1),
