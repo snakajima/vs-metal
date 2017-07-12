@@ -13,19 +13,26 @@ import AVFoundation
 
 class SampleViewController4: UIViewController {
     @IBOutlet var btnCamera:UIBarButtonItem!
-    var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
-    var runtime:VSRuntime?
-    
+
+    // For Reading
     var reader:AVAssetReader?
     var output:AVAssetReaderTrackOutput?
     var texture:MTLTexture?
-    lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
+
+    // For processing
+    var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
+    var runtime:VSRuntime?
+
+    // For writing
     var writer:AVAssetWriter?
     var input:AVAssetWriterInput?
     var adaptor:AVAssetWriterInputPixelBufferAdaptor?
     var url:URL?
 
+    // For rendering
+    lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
+
     fileprivate lazy var textureCache:CVMetalTextureCache = {
         var cache:CVMetalTextureCache? = nil
         CVMetalTextureCacheCreate(nil, nil, self.context.device, nil, &cache)
@@ -41,10 +48,10 @@ class SampleViewController4: UIViewController {
             context.pixelFormat = mtkView.colorPixelFormat
             renderer.orientation = .landscapeLeft // it means "do not transform"
 
-            // This is an alternative way to create a script object (Beta)
-            let script = VSScript()
-                .mono()
-            runtime = script.compile(context: context)
+            let url = Bundle.main.url(forResource: "sports_light", withExtension: "js")
+            if let script = VSScript.load(from: url) {
+                runtime = script.compile(context: context)
+            }
         }
     }
     
@@ -62,8 +69,6 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         self.dismiss(animated: true, completion: nil)
         if let url = info[UIImagePickerControllerMediaURL] as? URL {
-            //print("didFinish", url)
-            // https://stackoverflow.com/questions/12500408/can-i-use-avfoundation-to-stream-downloaded-video-frames-into-an-opengl-es-textu/12500409#12500409
             let asset = AVURLAsset(url: url)
             asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
                 let status = asset.statusOfValue(forKey: "tracks", error: nil)
@@ -86,11 +91,12 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                     if fileManager.fileExists(atPath: url.path) {
                         try? fileManager.removeItem(at: url)
                     }
+                    self.url = url
+
                     guard let writer = try? AVAssetWriter(url: url, fileType: AVFileTypeQuickTimeMovie) else {
                         print("failed to create a file", url)
                         return
                     }
-                    self.url = url
                     self.writer = writer
 
                     /* no need to specify the compression settings
@@ -134,27 +140,28 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
     private func processNext() {
         guard let reader = self.reader,
             let output = self.output,
-            let input = self.input,
-            let writer = self.writer,
-            let url = self.url else {
+            let writer = self.writer else {
                 return
         }
         guard reader.status == .reading,
             let sampleBuffer = output.copyNextSampleBuffer(),
             let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             print("Process Complete")
-            input.markAsFinished()
-            writer.finishWriting {
-                print("Finish Writing")
-                let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                if let popover = sheet.popoverPresentationController {
-                    popover.barButtonItem = self.btnCamera
+            if let url = self.url, let input = self.input {
+                input.markAsFinished()
+                writer.finishWriting {
+                    print("Finish Writing")
+                        let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                        if let popover = sheet.popoverPresentationController {
+                            popover.barButtonItem = self.btnCamera
+                        }
+                        self.present(sheet, animated: true, completion: nil)
                 }
-                self.present(sheet, animated: true, completion: nil)
             }
             return
         }
         
+        let time = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
         var metalTextureFromPixelBuffer:CVMetalTexture? = nil
         let status = CVMetalTextureCacheCreateTextureFromImage(nil, self.textureCache, pixelBuffer, nil,
@@ -174,7 +181,6 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
                             self.texture = texture.texture
                         }
                         self.context.flush()
-                        let time = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
                         self.writeNextFrame(time:time)
                      }
                 })
@@ -216,11 +222,8 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
         CVPixelBufferLockBaseAddress(pixelBuffer, [])
         defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, []) }
         let pixelBufferBytes = CVPixelBufferGetBaseAddress(pixelBuffer)!
-        
-        // Use the bytes per row value from the pixel buffer since its stride may be rounded up to be 16-byte aligned
         let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
         let region = MTLRegionMake2D(0, 0, texture.width, texture.height)
-        
         texture.getBytes(pixelBufferBytes, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
         
         adaptor.append(pixelBuffer, withPresentationTime: time)
