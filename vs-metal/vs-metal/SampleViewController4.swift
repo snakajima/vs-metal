@@ -29,12 +29,6 @@ class SampleViewController4: UIViewController {
     lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
 
-    fileprivate lazy var textureCache:CVMetalTextureCache = {
-        var cache:CVMetalTextureCache? = nil
-        CVMetalTextureCacheCreate(nil, nil, self.context.device, nil, &cache)
-        return cache!
-    }()
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -69,42 +63,27 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
             self.reader?.startReading()
         }
     }
-    
-    fileprivate func processNext() {
-        reader?.readNextFrame()
-    }
-    
-    fileprivate func writeNextFrame(time:CMTime) {
-        guard let writer = self.writer,
-              let texture = self.texture else {
-                return
-        }
-
-        writer.writeFrame(texture: texture, presentationTime: time)
-    }
 }
 
 extension SampleViewController4 : VSVideoReaderDelegate {
     func didStartReading(reader:VSVideoReader, track:AVAssetTrack) {
         self.writer = VSVideoWriter(delegate: self)
         let _ = self.writer?.startWriting(track: track)
-        self.processNext()
+        reader.readNextFrame()
     }
     func didFailToRead(reader:VSVideoReader) {
-        
+        print("Sample4: didFailToRead")
     }
     func didGetFrame(reader:VSVideoReader, texture:MTLTexture, presentationTime:CMTime) {
         self.context.set(texture: texture)
         let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context)
-        commandBuffer?.addCompletedHandler({ (_) in
+        commandBuffer?.addCompletedHandler { (_) in
             DispatchQueue.main.async {
-                if let texture = self.context.pop() {
-                    self.texture = texture.texture
-                }
+                self.texture = self.context.pop()?.texture // store it for renderer
                 self.context.flush()
-                self.writeNextFrame(time:presentationTime)
+                self.writer?.writeFrame(texture: self.texture, presentationTime: presentationTime)
             }
-        })
+        }
         commandBuffer?.commit()
     }
     func didFinishReading(reader:VSVideoReader) {
@@ -114,11 +93,10 @@ extension SampleViewController4 : VSVideoReaderDelegate {
 
 extension SampleViewController4 : VSVideoWriterDelegate {
     func didWriteFrame(writer:VSVideoWriter) {
-        self.processNext()
+        reader?.readNextFrame()
     }
     
     func didFinishWriting(writer: VSVideoWriter, url: URL) {
-        print("Finish Writing")
         let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
         if let popover = sheet.popoverPresentationController {
             popover.barButtonItem = self.btnCamera

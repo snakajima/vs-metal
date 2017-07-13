@@ -75,8 +75,9 @@ class VSVideoWriter {
         return true
     }
     
-    func writeFrame(texture:MTLTexture, presentationTime:CMTime) {
+    func writeFrame(texture:MTLTexture?, presentationTime:CMTime) {
         guard let writer = self.writer,
+            let texture = texture,
             let input = self.input,
             let adaptor = self.adaptor else {
                 return
