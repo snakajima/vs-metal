@@ -27,7 +27,6 @@ class SampleViewController3: UIViewController {
     lazy var session:VSCaptureSession = VSCaptureSession(device: self.context.device, pixelFormat: self.context.pixelFormat, delegate: self)
 
     // For rendering
-    var texture:MTLTexture?
     lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
     
@@ -50,7 +49,7 @@ class SampleViewController3: UIViewController {
     }
     
     @IBAction func record(sender:UIBarButtonItem) {
-        guard let texture = self.texture else {
+        guard let texture = self.context.textureOut?.texture else {
             return
         }
         recording = true
@@ -88,14 +87,14 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
         if let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context) {
             commandBuffer.addCompletedHandler { (_) in
                 DispatchQueue.main.async {
-                    self.texture = self.context.pop()?.texture // store it for renderer
+                    self.context.textureOut  = self.context.pop() // store it for renderer
                     self.context.flush()
                     if self.recording {
                         if self.startTime == nil {
                             self.startTime = presentationTime
                         }
                         let relativeTime = CMTimeSubtract(presentationTime, self.startTime!)
-                        self.writer?.append(texture: self.texture, presentationTime: relativeTime)
+                        self.writer?.append(texture: self.context.textureOut?.texture, presentationTime: relativeTime)
                     }
                 }
             }
@@ -108,7 +107,7 @@ extension SampleViewController3 : MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
     
     public func draw(in view: MTKView) {
-        if let texture = self.texture {
+        if let texture = self.context.textureOut?.texture {
             renderer.encode(commandBuffer:commandQueue.makeCommandBuffer(), view:view, texture: texture)?.commit()
         }
     }

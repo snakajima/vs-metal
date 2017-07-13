@@ -26,6 +26,8 @@ class VSContext: NSObject {
     let device:MTLDevice
     /// The pixel format of texture
     var pixelFormat = MTLPixelFormat.bgra8Unorm
+    /// texture for output (for app to prevent recycling)
+    var textureOut:VSTexture?
     /// Becomes true when a source texture is updated
     private(set) var hasUpdate = false
 
@@ -152,7 +154,7 @@ class VSContext: NSObject {
     func getDestination() -> VSTexture {
         // Find a texture in the pool, which is not in the stack
         for texture in pool {
-            if !stack.contains(texture) && !prevs.contains(texture) {
+            if !stack.contains(texture) && !prevs.contains(texture) && (textureOut==nil || texture != textureOut!) {
                 return texture
             }
         }
