@@ -48,13 +48,34 @@ class SampleViewController3: UIViewController {
     }
     
     @IBAction func record(sender:UIBarButtonItem) {
+        guard let texture = self.texture else {
+            return
+        }
         recording = true
-        //self.writer = VSVideoWriter(delegate: self)
-        //let _ = self.writer?.startWriting(track: track)
+        self.writer = VSVideoWriter(delegate: self)
+        let size = CGSize(width: texture.width, height: texture.height)
+        let _ = self.writer?.startWriting(size: size)
     }
     
     @IBAction func stop(sender:UIBarButtonItem) {
         recording = false
+        writer?.finishWriting()
+        writer = nil
+    }
+}
+
+extension SampleViewController3 : VSVideoWriterDelegate {
+    func didAppendFrame(writer:VSVideoWriter) {
+        //reader?.readNextFrame()
+    }
+    
+    func didFinishWriting(writer: VSVideoWriter, url: URL) {
+        recording = false
+        let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        if let popover = sheet.popoverPresentationController {
+            popover.barButtonItem = self.btnRecord
+        }
+        self.present(sheet, animated: true, completion: nil)
     }
 }
 
@@ -66,7 +87,7 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                 DispatchQueue.main.async {
                     self.texture = self.context.pop()?.texture // store it for renderer
                     self.context.flush()
-                    //self.writer?.append(texture: self.texture, presentationTime: presentationTime)
+                    self.writer?.append(texture: self.texture, presentationTime: presentationTime)
                 }
             }
             commandBuffer.commit()

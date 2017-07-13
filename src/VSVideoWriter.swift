@@ -43,7 +43,7 @@ class VSVideoWriter {
         self.delegate = delegate
     }
     
-    /// It starts the writing session
+    /// Start the writing session
     ///
     /// - Parameter track: the source track (to extract dimension and transform)
     /// - Returns: true if successfully started
@@ -51,7 +51,13 @@ class VSVideoWriter {
         return startWriting(size: track.naturalSize, transform: track.preferredTransform)
     }
     
-    public func startWriting(size:CGSize, transform:CGAffineTransform) -> Bool {
+    /// Start the writing session
+    ///
+    /// - Parameters:
+    ///   - size: size of texture
+    ///   - transform: transform
+    /// - Returns: true if successfully started
+    public func startWriting(size:CGSize, transform:CGAffineTransform = .identity) -> Bool {
         if self.urlExport == nil {
             // Use the default URL if not specified by the caller
             let fileManager = FileManager.default
