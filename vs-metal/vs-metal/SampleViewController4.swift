@@ -23,7 +23,6 @@ class SampleViewController4: UIViewController {
     var runtime:VSRuntime?
 
     // For rendering
-    var texture:MTLTexture?
     lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
 
@@ -79,9 +78,9 @@ extension SampleViewController4 : VSVideoReaderDelegate {
         if let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context) {
             commandBuffer.addCompletedHandler { (_) in
                 DispatchQueue.main.async {
-                    self.texture = self.context.pop()?.texture // store it for renderer
+                    self.context.textureOut = self.context.pop() // store it for renderer
                     self.context.flush()
-                    self.writer?.append(texture: self.texture, presentationTime: presentationTime)
+                    self.writer?.append(texture: self.context.textureOut?.texture, presentationTime: presentationTime)
                 }
             }
             commandBuffer.commit()
@@ -111,7 +110,7 @@ extension SampleViewController4 : MTKViewDelegate {
     public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
     
     public func draw(in view: MTKView) {
-        if let texture = self.texture {
+        if let texture = self.context.textureOut?.texture {
             renderer.encode(commandBuffer:commandQueue.makeCommandBuffer(), view:view, texture: texture)?.commit()
         }
     }
