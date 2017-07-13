@@ -19,6 +19,7 @@ class SampleViewController3: UIViewController {
             self.btnStop.isEnabled = recording
         }
     }
+    var startTime:CMTime?
     
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
@@ -52,6 +53,7 @@ class SampleViewController3: UIViewController {
             return
         }
         recording = true
+        startTime = nil
         self.writer = VSVideoWriter(delegate: self)
         let size = CGSize(width: texture.width, height: texture.height)
         let _ = self.writer?.startWriting(size: size)
@@ -87,7 +89,13 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                 DispatchQueue.main.async {
                     self.texture = self.context.pop()?.texture // store it for renderer
                     self.context.flush()
-                    self.writer?.append(texture: self.texture, presentationTime: presentationTime)
+                    if self.recording {
+                        if self.startTime == nil {
+                            self.startTime = presentationTime
+                        }
+                        let relativeTime = CMTimeSubtract(presentationTime, self.startTime!)
+                        self.writer?.append(texture: self.texture, presentationTime: relativeTime)
+                    }
                 }
             }
             commandBuffer.commit()
