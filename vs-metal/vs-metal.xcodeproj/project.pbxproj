@@ -49,6 +49,7 @@
 		74A39DD01EFC31AB004713D8 /* VSContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DCF1EFC31AB004713D8 /* VSContext.swift */; };
 		74A39DD21EFC4778004713D8 /* VSMPSFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */; };
 		74C593BA1F17DA9700768BF0 /* VSVideoWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C593B91F17DA9700768BF0 /* VSVideoWriter.swift */; };
+		74C593BC1F17E23B00768BF0 /* VSVideoReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C593BB1F17E23B00768BF0 /* VSVideoReader.swift */; };
 		74D3EFCD1EFDD89A0005765A /* VSScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D3EFCC1EFDD89A0005765A /* VSScript.swift */; };
 		74D3EFCF1EFDE41B0005765A /* test2.js in Resources */ = {isa = PBXBuildFile; fileRef = 74D3EFCE1EFDE41B0005765A /* test2.js */; };
 		74D5B0461F156A1B00C165BC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D5B0451F156A1B00C165BC /* TestViewController.swift */; };
@@ -121,6 +122,7 @@
 		74A39DCF1EFC31AB004713D8 /* VSContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSContext.swift; sourceTree = "<group>"; };
 		74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSMPSFilter.swift; sourceTree = "<group>"; };
 		74C593B91F17DA9700768BF0 /* VSVideoWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSVideoWriter.swift; sourceTree = "<group>"; };
+		74C593BB1F17E23B00768BF0 /* VSVideoReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSVideoReader.swift; sourceTree = "<group>"; };
 		74D3EFCC1EFDD89A0005765A /* VSScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSScript.swift; sourceTree = "<group>"; };
 		74D3EFCE1EFDE41B0005765A /* test2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test2.js; sourceTree = "<group>"; };
 		74D3EFD21F01AC3F0005765A /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE.txt; path = ../LICENSE.txt; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				7480D28C1EFCC63D00DAA88E /* VSNodes.js */,
 				742CBFBE1EFDD7F90017D38A /* scripts */,
 				74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */,
+				74C593BB1F17E23B00768BF0 /* VSVideoReader.swift */,
 				74C593B91F17DA9700768BF0 /* VSVideoWriter.swift */,
 				745D3A991F06E614009DD359 /* VSCaptureSession.swift */,
 				74A39DCD1EFC30EB004713D8 /* VSFilter.swift */,
@@ -387,6 +390,7 @@
 				7480D2931EFE2C5B00DAA88E /* ScriptsViewController.swift in Sources */,
 				74FB9BC01EFC828E0039A0CA /* VSNode.swift in Sources */,
 				74FB9BBE1EFC64DF0039A0CA /* VSRenderer.swift in Sources */,
+				74C593BC1F17E23B00768BF0 /* VSVideoReader.swift in Sources */,
 				74E284E81F0515A20045ADFB /* VSConvex.metal in Sources */,
 				7428EF2E1EFF6E51007BECAF /* VSController.swift in Sources */,
 				7447330F1EF9B4FF008CD8C5 /* AppDelegate.swift in Sources */,

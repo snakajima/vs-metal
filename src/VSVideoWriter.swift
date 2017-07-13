@@ -13,8 +13,13 @@ enum VSVideoWriterError:Error {
     case failedToLoadSourceAsset
 }
 
+protocol VSVideoWriterDelegate {
+    func didStartWriting(videoWriter:VSVideoWriter)
+}
+
 class VSVideoWriter {
     public var urlExport:URL?
+    public var delegate:VSVideoWriterDelegate?
     
     // For Reading
     private var reader:AVAssetReader?

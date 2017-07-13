@@ -69,15 +69,21 @@ class VSContext {
     deinit {
         print("VCS:frame drop rate = ", Float(droppedFrameCount) / Float(frameCount))
     }
-    
+        
     /// This function set the video source
     ///
     /// - Parameter sourceImage: source image data
     func set(sourceImage:CVMetalTexture) {
-        assert(Thread.current == Thread.main)
-        guard let texture = CVMetalTextureGetTexture(sourceImage) else {
-            return
+        if let texture = CVMetalTextureGetTexture(sourceImage) {
+            self.set(texture:texture)
         }
+    }
+    
+    /// This function set the video source
+    ///
+    /// - Parameter texture: texture
+    func set(texture:MTLTexture) {
+        assert(Thread.current == Thread.main)
 
         // For the very first time
         if width != texture.width || height != texture.height {
