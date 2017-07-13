@@ -46,8 +46,10 @@ extension SampleViewController2 : MTKViewDelegate {
     
     public func draw(in view: MTKView) {
         if context.hasUpdate {
-            try? runtime?.encode(commandBuffer:context.makeCommandBuffer(), context:context).commit()
-            renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view, texture: try? context.pop().texture)?.commit()
+            runtime?.encode(commandBuffer:context.makeCommandBuffer(), context:context).commit()
+            if let texture = context.pop() {
+                renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view, texture: texture.texture)?.commit()
+            }
             context.flush()
         }
     }

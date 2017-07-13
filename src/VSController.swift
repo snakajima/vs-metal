@@ -16,30 +16,32 @@ import MetalKit
 /// - shift: Shift the topmost texture to the bottom
 /// - previous: Push a texture from previous frame
 struct VSController : VSNode {
-    private var encoder:((MTLCommandBuffer, VSContext) throws -> (Void))
+    private var encoder:((MTLCommandBuffer, VSContext) -> (Void))
 
-    private static func fork(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
-        let texture = try context.pop()
-        context.push(texture:texture)
-        context.push(texture:texture)
+    private static func fork(commandBuffer:MTLCommandBuffer, context:VSContext) {
+        if let texture = context.pop() {
+            context.push(texture:texture)
+            context.push(texture:texture)
+        }
     }
 
-    private static func swap(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
-        let texture1 = try context.pop()
-        let texture2 = try context.pop()
-        context.push(texture:texture1)
-        context.push(texture:texture2)
+    private static func swap(commandBuffer:MTLCommandBuffer, context:VSContext) {
+        if let texture1 = context.pop(),
+            let texture2 = context.pop() {
+            context.push(texture:texture1)
+            context.push(texture:texture2)
+        }
     }
 
-    private static func discard(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
-        let _ = try context.pop()
+    private static func discard(commandBuffer:MTLCommandBuffer, context:VSContext) {
+        let _ = context.pop()
     }
 
-    private static func shift(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
+    private static func shift(commandBuffer:MTLCommandBuffer, context:VSContext) {
         context.shift()
     }
 
-    private static func previous(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
+    private static func previous(commandBuffer:MTLCommandBuffer, context:VSContext) {
         let texture = context.prev()
         context.push(texture: texture)
     }
@@ -66,7 +68,7 @@ struct VSController : VSNode {
     ///   - commandBuffer: The command buffer to encode to
     ///   - context: the video pipeline context
     /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
-    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
-        try encoder(commandBuffer,context)
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
+        encoder(commandBuffer,context)
     }
 }

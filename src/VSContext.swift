@@ -20,13 +20,6 @@ struct VSTexture:Equatable {
     }
 }
 
-/// VSContextError is the type of Error VSContext method throws
-///
-/// - stackUnderflow : pop() was called when the stack is empty
-enum VSContextError:Error {
-    case stackUnderflow // pop() was called when the stack is empty
-}
-
 class VSContext {
     /// Metal device
     let device:MTLDevice
@@ -139,12 +132,11 @@ class VSContext {
     ///
     /// - Returns: a texture to be processed by Metal
     /// - Throws: VSContextError.underUnderflow when the stack is empty
-    func pop() throws -> VSTexture {
+    func pop() -> VSTexture? {
         if let texture = stack.popLast() {
             return texture
         }
-        print("VSC:pop underflow")
-        throw VSContextError.stackUnderflow
+        return nil
     }
     
     func prev() -> VSTexture {

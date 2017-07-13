@@ -59,10 +59,11 @@ struct VSMPSFilter: VSNode {
     ///   - commandBuffer: The command buffer to encode to
     ///   - context: the video pipeline context
     /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
-    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
         let destination = context.getDestination() // must be called before pop
-        let source = try context.pop()
-        kernel.encode(commandBuffer: commandBuffer, sourceTexture: source.texture, destinationTexture: destination.texture)
-        context.push(texture:destination)
+        if let source = context.pop() {
+            kernel.encode(commandBuffer: commandBuffer, sourceTexture: source.texture, destinationTexture: destination.texture)
+            context.push(texture:destination)
+        }
     }
 }

@@ -18,7 +18,7 @@ protocol VSNode {
     ///   - commandBuffer: The command buffer to encode to
     ///   - context: the video pipeline context
     /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
-    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext)
 }
 
 

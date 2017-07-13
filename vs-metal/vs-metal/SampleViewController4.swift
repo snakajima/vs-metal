@@ -95,21 +95,17 @@ extension SampleViewController4 : VSVideoReaderDelegate {
     }
     func didGetFrame(reader:VSVideoReader, texture:MTLTexture, presentationTime:CMTime) {
         self.context.set(texture: texture)
-        do {
-            let commandBuffer = try self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context)
-            commandBuffer?.addCompletedHandler({ (_) in
-                DispatchQueue.main.async {
-                    if let texture = try? self.context.pop() {
-                        self.texture = texture.texture
-                    }
-                    self.context.flush()
-                    self.writeNextFrame(time:presentationTime)
+        let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context)
+        commandBuffer?.addCompletedHandler({ (_) in
+            DispatchQueue.main.async {
+                if let texture = self.context.pop() {
+                    self.texture = texture.texture
                 }
-            })
-            commandBuffer?.commit()
-        } catch {
-            print("Got an exception")
-        }
+                self.context.flush()
+                self.writeNextFrame(time:presentationTime)
+            }
+        })
+        commandBuffer?.commit()
     }
     func didFinishReading(reader:VSVideoReader) {
         writer?.finishWriting()

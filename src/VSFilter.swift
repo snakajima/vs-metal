@@ -53,13 +53,15 @@ struct VSFilter: VSNode {
     ///   - commandBuffer: The command buffer to encode to
     ///   - context: the video pipeline context
     /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
-    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws {
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
         let encoder = commandBuffer.makeComputeCommandEncoder()
         encoder.setComputePipelineState(pipelineState)
         let destination = context.getDestination() // must be called before any stack operation
         
         for index in 0..<sourceCount {
-            encoder.setTexture(try context.pop().texture, at: index)
+            if let texture = context.pop() {
+                encoder.setTexture(texture.texture, at: index)
+            }
         }
         encoder.setTexture(destination.texture, at: sourceCount)
         for (index, buffer) in paramBuffers.enumerated() {

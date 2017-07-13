@@ -33,7 +33,7 @@ struct VSRuntime {
     ///   - context: the pipeline context
     /// - Returns: the specified command buffer
     /// - Throws: VSContextError.underUnderflow if pop() was called when the stack is empty
-    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) throws -> MTLCommandBuffer {
+    func encode(commandBuffer:MTLCommandBuffer, context:VSContext) -> MTLCommandBuffer {
         assert(Thread.current == Thread.main)
         
         var dictionary = [String:[Float]]()
@@ -45,7 +45,7 @@ struct VSRuntime {
         context.updateNamedBuffers(with: dictionary)
  
         for node in nodes {
-            try node.encode(commandBuffer:commandBuffer, context:context)
+            node.encode(commandBuffer:commandBuffer, context:context)
         }
         
         return commandBuffer
