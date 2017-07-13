@@ -65,15 +65,6 @@ class VSContext {
         
     /// This function set the video source
     ///
-    /// - Parameter sourceImage: source image data
-    func set(sourceImage:CVMetalTexture) {
-        if let texture = CVMetalTextureGetTexture(sourceImage) {
-            self.set(texture:texture)
-        }
-    }
-    
-    /// This function set the video source
-    ///
     /// - Parameter texture: texture
     func set(texture:MTLTexture) {
         assert(Thread.current == Thread.main)
