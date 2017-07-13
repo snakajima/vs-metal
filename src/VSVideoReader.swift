@@ -12,6 +12,7 @@ import AVFoundation
 protocol VSVideoReaderDelegate: NSObjectProtocol {
     func didStartReading(reader:VSVideoReader, track:AVAssetTrack)
     func didFailToRead(reader:VSVideoReader)
+    func didGetFrame(reader:VSVideoReader, texture:MTLTexture, presentationTime:CMTime)
     func didFinishReading(reader:VSVideoReader)
 }
 
@@ -56,7 +57,7 @@ class VSVideoReader {
         }
     }
     
-    func read() {
+    func readNextFrame() {
         guard let reader = self.reader,
             let output = self.output else {
                 return
@@ -64,7 +65,7 @@ class VSVideoReader {
         guard reader.status == .reading,
               let sampleBuffer = output.copyNextSampleBuffer(),
               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-            print("Process Complete")
+            print("VSVideoReader: Process Complete")
             self.delegate?.didFinishReading(reader: self)
             return
         }
@@ -75,9 +76,13 @@ class VSVideoReader {
         let status = CVMetalTextureCacheCreateTextureFromImage(nil, self.textureCache, pixelBuffer, nil,
                                                                pixelFormat, width, height, 0, &metalTextureFromPixelBuffer)
         guard let metalTexture = metalTextureFromPixelBuffer, status == kCVReturnSuccess else {
-            print("VSVS: failed to create texture")
+            print("VSVideoReader: Failed to create texture")
             return
         }
-        
+        guard let texture = CVMetalTextureGetTexture(metalTexture) else {
+            print("VSVideoReader: Failed to get texture")
+            return
+        }
+        self.delegate?.didGetFrame(reader: self, texture: texture, presentationTime: time)
     }
 }
