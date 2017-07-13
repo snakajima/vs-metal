@@ -20,7 +20,7 @@ struct VSTexture:Equatable {
     }
 }
 
-class VSContext {
+class VSContext: NSObject {
     /// Metal device
     let device:MTLDevice
     /// The pixel format of texture
@@ -209,5 +209,11 @@ class VSContext {
                 }
             }
         }
+    }
+}
+
+extension VSContext: VSCaptureSessionDelegate {
+    func didCaptureOutput(session:VSCaptureSession, texture:MTLTexture) {
+        self.set(texture: texture)
     }
 }

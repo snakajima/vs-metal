@@ -12,7 +12,7 @@ import MetalKit
 class SampleViewController2: UIViewController {
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
-    lazy var session:VSCaptureSession = VSCaptureSession(context: self.context)
+    lazy var session:VSCaptureSession = VSCaptureSession(device: self.context.device, pixelFormat: self.context.pixelFormat, delegate: self.context)
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
 
     override func viewDidLoad() {

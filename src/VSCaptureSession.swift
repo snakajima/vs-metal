@@ -9,6 +9,10 @@
 import Foundation
 import AVFoundation
 
+protocol VSCaptureSessionDelegate: NSObjectProtocol {
+    func didCaptureOutput(session:VSCaptureSession, texture:MTLTexture)
+}
+
 /// VSCaptureSession is a helper class (non-essential part of VideoShader), which makes it easy to feed the captured video
 /// into a VideoShader pipeline. It calls set(metalTexture:) method of VSContext object for each frame.
 class VSCaptureSession: NSObject {
@@ -18,20 +22,25 @@ class VSCaptureSession: NSObject {
     var fps:Int?
     /// Specifies the quality level of video frames (default is 720p)
     var preset = AVCaptureSessionPreset1280x720
+    
+    private let device:MTLDevice
+    fileprivate let pixelFormat:MTLPixelFormat
+    fileprivate weak var delegate:VSCaptureSessionDelegate?
 
     fileprivate var session:AVCaptureSession?
-    fileprivate let context:VSContext
     fileprivate lazy var textureCache:CVMetalTextureCache = {
         var cache:CVMetalTextureCache? = nil
-        CVMetalTextureCacheCreate(nil, nil, self.context.device, nil, &cache)
+        CVMetalTextureCacheCreate(nil, nil, self.device, nil, &cache)
         return cache!
     }()
 
     /// Initializer
     ///
     /// - Parameter context: VideoShader context object. Its set(metalTexture:) method will be called for each video frame.
-    init(context:VSContext) {
-        self.context = context
+    init(device:MTLDevice, pixelFormat:MTLPixelFormat, delegate:VSCaptureSessionDelegate) {
+        self.device = device
+        self.pixelFormat = pixelFormat
+        self.delegate = delegate
     }
 
     private func addCamera(session:AVCaptureSession) throws -> Bool {
@@ -98,10 +107,10 @@ AVCaptureVideoDataOutputSampleBufferDelegate {
             let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
             var metalTexture:CVMetalTexture? = nil
             let status = CVMetalTextureCacheCreateTextureFromImage(nil, textureCache, pixelBuffer, nil,
-                                                                   context.pixelFormat, width, height, 0, &metalTexture)
+                                                                   pixelFormat, width, height, 0, &metalTexture)
             if let metalTexture = metalTexture, status == kCVReturnSuccess,
                let texture = CVMetalTextureGetTexture(metalTexture) {
-                context.set(texture: texture)
+                delegate?.didCaptureOutput(session: self, texture: texture)
             } else {
                 print("VSVS: failed to create texture")
             }
