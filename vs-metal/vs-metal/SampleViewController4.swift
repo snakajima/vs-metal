@@ -14,18 +14,16 @@ import AVFoundation
 class SampleViewController4: UIViewController {
     @IBOutlet var btnCamera:UIBarButtonItem!
 
-    // For Reading
+    // For Reading & Writing
     var reader:VSVideoReader?
-    var texture:MTLTexture?
+    var writer:VSVideoWriter?
 
     // For processing
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
 
-    // For writing
-    var writer:VSVideoWriter?
-
     // For rendering
+    var texture:MTLTexture?
     lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
 
@@ -71,21 +69,25 @@ extension SampleViewController4 : VSVideoReaderDelegate {
         let _ = self.writer?.startWriting(track: track)
         reader.readNextFrame()
     }
+    
     func didFailToRead(reader:VSVideoReader) {
         print("Sample4: didFailToRead")
     }
+
     func didGetFrame(reader:VSVideoReader, texture:MTLTexture, presentationTime:CMTime) {
         self.context.set(texture: texture)
-        let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context)
-        commandBuffer?.addCompletedHandler { (_) in
-            DispatchQueue.main.async {
-                self.texture = self.context.pop()?.texture // store it for renderer
-                self.context.flush()
-                self.writer?.writeFrame(texture: self.texture, presentationTime: presentationTime)
+        if let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context) {
+            commandBuffer.addCompletedHandler { (_) in
+                DispatchQueue.main.async {
+                    self.texture = self.context.pop()?.texture // store it for renderer
+                    self.context.flush()
+                    self.writer?.writeFrame(texture: self.texture, presentationTime: presentationTime)
+                }
             }
+            commandBuffer.commit()
         }
-        commandBuffer?.commit()
     }
+    
     func didFinishReading(reader:VSVideoReader) {
         writer?.finishWriting()
     }
