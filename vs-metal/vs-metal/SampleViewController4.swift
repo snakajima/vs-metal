@@ -15,8 +15,7 @@ class SampleViewController4: UIViewController {
     @IBOutlet var btnCamera:UIBarButtonItem!
 
     // For Reading
-    var reader:AVAssetReader?
-    var output:AVAssetReaderTrackOutput?
+    var reader:VSVideoReader?
     var texture:MTLTexture?
 
     // For processing
@@ -69,129 +68,22 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         self.dismiss(animated: true, completion: nil)
         if let url = info[UIImagePickerControllerMediaURL] as? URL {
-            let asset = AVURLAsset(url: url)
-            asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
-                let status = asset.statusOfValue(forKey: "tracks", error: nil)
-                if status == AVKeyValueStatus.loaded,
-                   let reader = try? AVAssetReader(asset: asset) {
-                    self.reader = reader
-                    let track = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
-                    let settings:[String:Any] = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_32BGRA]
-                    let output = AVAssetReaderTrackOutput(track: track, outputSettings: settings)
-                    self.output = output
-                    reader.add(output)
-                    reader.startReading()
-                    
-                    let fileManager = FileManager.default
-                    guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-                        print("no document directory")
-                        return
-                    }
-                    let url = documentsURL.appendingPathComponent("export.mov")
-                    if fileManager.fileExists(atPath: url.path) {
-                        try? fileManager.removeItem(at: url)
-                    }
-                    self.url = url
-
-                    guard let writer = try? AVAssetWriter(url: url, fileType: AVFileTypeQuickTimeMovie) else {
-                        print("failed to create a file", url)
-                        return
-                    }
-                    self.writer = writer
-
-                    /* no need to specify the compression settings
-                    let compressionSettings: [String: Any] = [
-                        AVVideoAverageBitRateKey: NSNumber(value: 20000000),
-                        AVVideoMaxKeyFrameIntervalKey: NSNumber(value: 1),
-                        AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline41
-                    ]
-                    */
-
-                    let videoSettings: [String : Any] = [
-                        AVVideoCodecKey  : AVVideoCodecH264,
-                        AVVideoWidthKey  : track.naturalSize.width,
-                        AVVideoHeightKey : track.naturalSize.height,
-                        //AVVideoCompressionPropertiesKey: compressionSettings,
-                    ]
-                    let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
-                    input.transform = track.preferredTransform
-                    self.input = input
-                    
-                    let attrs : [String: Any] = [
-                        String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
-                        String(kCVPixelBufferWidthKey) : track.naturalSize.width,
-                        String(kCVPixelBufferHeightKey) : track.naturalSize.height
-                    ]
-                    let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: attrs)
-                    self.adaptor = adaptor
-                    
-                    writer.add(input)
-                    writer.startWriting()
-                    writer.startSession(atSourceTime: kCMTimeZero)
-                    
-                    self.processNext()
-                } else {
-                    print("failed to create asset reader")
-                }
-            }
+            self.reader = VSVideoReader(device: context.device, pixelFormat: context.pixelFormat, url: url, delegate: self)
+            self.reader?.startReading()
         }
     }
     
-    private func processNext() {
-        guard let reader = self.reader,
-            let output = self.output,
-            let writer = self.writer else {
-                return
-        }
-        guard reader.status == .reading,
-            let sampleBuffer = output.copyNextSampleBuffer(),
-            let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-            print("Process Complete")
-            if let url = self.url, let input = self.input {
-                input.markAsFinished()
-                writer.finishWriting {
-                    print("Finish Writing")
-                        let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                        if let popover = sheet.popoverPresentationController {
-                            popover.barButtonItem = self.btnCamera
-                        }
-                        self.present(sheet, animated: true, completion: nil)
-                }
-            }
+    fileprivate func processNext() {
+        guard let reader = self.reader else {
             return
         }
-        
-        let time = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
-        var metalTextureFromPixelBuffer:CVMetalTexture? = nil
-        let status = CVMetalTextureCacheCreateTextureFromImage(nil, self.textureCache, pixelBuffer, nil,
-                                                               self.context.pixelFormat, width, height, 0, &metalTextureFromPixelBuffer)
-        guard let metalTexture = metalTextureFromPixelBuffer, status == kCVReturnSuccess else {
-            print("VSVS: failed to create texture")
-            return
-        }
+        reader.readNextFrame()
         
         DispatchQueue.main.async {
-            self.context.set(sourceImage: metalTexture)
-            do {
-                let commandBuffer = try self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context)
-                commandBuffer?.addCompletedHandler({ (_) in
-                    DispatchQueue.main.async {
-                        if let texture = try? self.context.pop() {
-                            self.texture = texture.texture
-                        }
-                        self.context.flush()
-                        self.writeNextFrame(time:time)
-                     }
-                })
-                commandBuffer?.commit()
-            } catch {
-                print("Got an exception")
-            }
         }
     }
     
-    private func writeNextFrame(time:CMTime) {
+    fileprivate func writeNextFrame(time:CMTime) {
         guard let writer = self.writer,
               let input = self.input,
               let adaptor = self.adaptor,
@@ -229,6 +121,93 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
         adaptor.append(pixelBuffer, withPresentationTime: time)
         
         self.processNext()
+    }
+}
+
+extension SampleViewController4 : VSVideoReaderDelegate {
+    func didStartReading(reader:VSVideoReader, track:AVAssetTrack) {
+        let fileManager = FileManager.default
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("no document directory")
+            return
+        }
+        let url = documentsURL.appendingPathComponent("export.mov")
+        if fileManager.fileExists(atPath: url.path) {
+            try? fileManager.removeItem(at: url)
+        }
+        self.url = url
+        
+        guard let writer = try? AVAssetWriter(url: url, fileType: AVFileTypeQuickTimeMovie) else {
+            print("failed to create a file", url)
+            return
+        }
+        self.writer = writer
+        
+        /* no need to specify the compression settings
+         let compressionSettings: [String: Any] = [
+         AVVideoAverageBitRateKey: NSNumber(value: 20000000),
+         AVVideoMaxKeyFrameIntervalKey: NSNumber(value: 1),
+         AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline41
+         ]
+         */
+        
+        let videoSettings: [String : Any] = [
+            AVVideoCodecKey  : AVVideoCodecH264,
+            AVVideoWidthKey  : track.naturalSize.width,
+            AVVideoHeightKey : track.naturalSize.height,
+            //AVVideoCompressionPropertiesKey: compressionSettings,
+        ]
+        let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
+        input.transform = track.preferredTransform
+        self.input = input
+        
+        let attrs : [String: Any] = [
+            String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
+            String(kCVPixelBufferWidthKey) : track.naturalSize.width,
+            String(kCVPixelBufferHeightKey) : track.naturalSize.height
+        ]
+        let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: attrs)
+        self.adaptor = adaptor
+        
+        writer.add(input)
+        writer.startWriting()
+        writer.startSession(atSourceTime: kCMTimeZero)
+        
+        self.processNext()
+    }
+    func didFailToRead(reader:VSVideoReader) {
+        
+    }
+    func didGetFrame(reader:VSVideoReader, texture:MTLTexture, presentationTime:CMTime) {
+        self.context.set(texture: texture)
+        do {
+            let commandBuffer = try self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context)
+            commandBuffer?.addCompletedHandler({ (_) in
+                DispatchQueue.main.async {
+                    if let texture = try? self.context.pop() {
+                        self.texture = texture.texture
+                    }
+                    self.context.flush()
+                    self.writeNextFrame(time:presentationTime)
+                }
+            })
+            commandBuffer?.commit()
+        } catch {
+            print("Got an exception")
+        }
+    }
+    func didFinishReading(reader:VSVideoReader) {
+        if let url = self.url, let input = self.input, let writer = self.writer {
+            input.markAsFinished()
+            writer.finishWriting {
+                print("Finish Writing")
+                let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                if let popover = sheet.popoverPresentationController {
+                    popover.barButtonItem = self.btnCamera
+                }
+                self.present(sheet, animated: true, completion: nil)
+            }
+        }
     }
 }
 

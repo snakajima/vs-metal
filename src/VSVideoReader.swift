@@ -40,19 +40,21 @@ class VSVideoReader {
     func startReading() {
         let asset = AVURLAsset(url: url)
         asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
-            let status = asset.statusOfValue(forKey: "tracks", error: nil)
-            if status == AVKeyValueStatus.loaded,
-                let reader = try? AVAssetReader(asset: asset) {
-                self.reader = reader
-                let track = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
-                let settings:[String:Any] = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_32BGRA]
-                let output = AVAssetReaderTrackOutput(track: track, outputSettings: settings)
-                self.output = output
-                reader.add(output)
-                reader.startReading()
-                self.delegate?.didStartReading(reader:self, track:track)
-            } else {
-                self.delegate?.didFailToRead(reader: self)
+            DispatchQueue.main.async {
+                let status = asset.statusOfValue(forKey: "tracks", error: nil)
+                if status == AVKeyValueStatus.loaded,
+                    let reader = try? AVAssetReader(asset: asset) {
+                    self.reader = reader
+                    let track = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
+                    let settings:[String:Any] = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_32BGRA]
+                    let output = AVAssetReaderTrackOutput(track: track, outputSettings: settings)
+                    self.output = output
+                    reader.add(output)
+                    reader.startReading()
+                    self.delegate?.didStartReading(reader:self, track:track)
+                } else {
+                    self.delegate?.didFailToRead(reader: self)
+                }
             }
         }
     }
