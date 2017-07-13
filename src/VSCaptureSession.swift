@@ -9,12 +9,13 @@
 import Foundation
 import AVFoundation
 
+/// The protocol the client of VSCaptureSesssion must conform to.
 protocol VSCaptureSessionDelegate: NSObjectProtocol {
     func didCaptureOutput(session:VSCaptureSession, texture:MTLTexture)
 }
 
-/// VSCaptureSession is a helper class (non-essential part of VideoShader), which makes it easy to feed the captured video
-/// into a VideoShader pipeline. It calls set(metalTexture:) method of VSContext object for each frame.
+/// VSCaptureSession is a helper class (non-essential part of VideoShader), which makes it easy to process
+/// each video frame in Metal.
 class VSCaptureSession: NSObject {
     /// Specifies the camera position (default is front)
     var cameraPosition = AVCaptureDevicePosition.front
@@ -36,7 +37,10 @@ class VSCaptureSession: NSObject {
 
     /// Initializer
     ///
-    /// - Parameter context: VideoShader context object. Its set(metalTexture:) method will be called for each video frame.
+    /// - Parameters:
+    ///   - device: the metal device
+    ///   - pixelFormat: pixelFormat of the texture to pass to didCaptureOutput
+    ///   - delegate: the delegate object
     init(device:MTLDevice, pixelFormat:MTLPixelFormat, delegate:VSCaptureSessionDelegate) {
         self.device = device
         self.pixelFormat = pixelFormat
