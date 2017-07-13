@@ -9,8 +9,8 @@
 import Foundation
 import MetalKit
 
-/// VSRenderer is a helper class (non-essential part of VideoShader), which makes is easy to render a metal texture
-/// (processed by a VideoShader pipeline) to a specified MKTView.
+/// VSRenderer is a helper class (non-essential part of VideoShader), 
+/// which makes is easy to render a metal texture to a specified MKTView.
 class VSRenderer {
     var orientation = UIDeviceOrientation.portrait
     private var pipelineState: MTLRenderPipelineState?

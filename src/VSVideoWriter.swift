@@ -9,29 +9,45 @@
 import Foundation
 import AVFoundation
 
-enum VSVideoWriterError:Error {
-    case failedToLoadSourceAsset
-}
-
+/// The procotol the client of video writer object must conform to.
 protocol VSVideoWriterDelegate:NSObjectProtocol {
-    func didWriteFrame(writer:VSVideoWriter)
+    /// It signals that a frame was appended as a responce to append(texture:) call.
+    ///
+    /// - Parameter writer: the video writer object
+    func didAppendFrame(writer:VSVideoWriter)
+    
+    /// It signals that the writing session was finished
+    ///
+    /// - Parameters:
+    ///   - writer: the video writer object
+    ///   - url: the url of the video file
     func didFinishWriting(writer:VSVideoWriter, url:URL)
 }
 
+/// VSVideWriter is a helper class (non-essential part of VideoShader), which makes it easy
+/// to create a video file from a series of timed metal textures.
 class VSVideoWriter {
+    /// The location of the output file (optional). If it is not specified the default URL 
+    /// ("export.mov" file in the user's document holder) will be used.
     public var urlExport:URL?
-    weak var delegate:VSVideoWriterDelegate?
+    private weak var delegate:VSVideoWriterDelegate?
     
-    // For writing
     private var writer:AVAssetWriter?
     private var input:AVAssetWriterInput?
     private var adaptor:AVAssetWriterInputPixelBufferAdaptor?
     
+    /// Initializer
+    ///
+    /// - Parameter delegate: the delegate object
     init(delegate:VSVideoWriterDelegate) {
         self.delegate = delegate
     }
     
-    func startWriting(track:AVAssetTrack) -> Bool {
+    /// It starts the writing session
+    ///
+    /// - Parameter track: the source track (to extract dimension and transform)
+    /// - Returns: true if successfully started
+    public func startWriting(track:AVAssetTrack) -> Bool {
         if self.urlExport == nil {
             // Use the default URL if not specified by the caller
             let fileManager = FileManager.default
@@ -75,7 +91,13 @@ class VSVideoWriter {
         return true
     }
     
-    func writeFrame(texture:MTLTexture?, presentationTime:CMTime) {
+    /// Write the specified metal texture as a frame to the video file.
+    /// It wlll call delegate's didWriteFrame after appending the texture as a video frame asynchronously.
+    ///
+    /// - Parameters:
+    ///   - texture: the metal texture
+    ///   - presentationTime: the presentation time
+    public func append(texture:MTLTexture?, presentationTime:CMTime) {
         guard let writer = self.writer,
             let texture = texture,
             let input = self.input,
@@ -86,7 +108,7 @@ class VSVideoWriter {
         if !input.isReadyForMoreMediaData {
             print("Input is not ready for more media data. Retry async.")
             DispatchQueue.main.async {
-                self.writeFrame(texture:texture, presentationTime:presentationTime)
+                self.append(texture:texture, presentationTime:presentationTime)
             }
             return
         }
@@ -112,10 +134,12 @@ class VSVideoWriter {
         
         adaptor.append(pixelBuffer, withPresentationTime: presentationTime)
         
-        self.delegate?.didWriteFrame(writer: self)
+        self.delegate?.didAppendFrame(writer: self)
     }
     
-    func finishWriting() {
+    /// Finish the writing session. It will call delegate's didFinishWriting asynchronously, after
+    /// finishing the writing session.
+    public func finishWriting() {
         if let input = self.input, let writer = self.writer, let url = self.urlExport {
             input.markAsFinished()
             writer.finishWriting {

@@ -9,13 +9,36 @@
 import Foundation
 import AVFoundation
 
+/// The procotol the client of video reader object must conform to.
 protocol VSVideoReaderDelegate: NSObjectProtocol {
+    /// It signals that the reading session has started successfully.
+    ///
+    /// - Parameters:
+    ///   - reader: the video reader object
+    ///   - track: the video track to get frames from
     func didStartReading(reader:VSVideoReader, track:AVAssetTrack)
-    func didFailToRead(reader:VSVideoReader)
+
+    /// It signals that it failed to start the reading session.
+    ///
+    /// - Parameter reader: the video reader object
+    func didFailToLoad(reader:VSVideoReader)
+
+    /// It presents the frame as the metal texture as a responce to readNextFrame() call.
+    ///
+    /// - Parameters:
+    ///   - reader: the video reader object
+    ///   - texture: the metal texture of the frame
+    ///   - presentationTime: <#presentationTime description#>
     func didGetFrame(reader:VSVideoReader, texture:MTLTexture, presentationTime:CMTime)
+
+    /// It signals that there is no more frame (end of the track) as a responce to readNextFrame() call.
+    ///
+    /// - Parameter reader: the video reader object
     func didFinishReading(reader:VSVideoReader)
 }
 
+/// VSVideoReader is a helper class (non-essential part of VideoShader), which makes it easy
+/// to load a video file and extract each frame as a metal texture (MTLTexture).
 class VSVideoReader {
     private let device:MTLDevice
     private let pixelFormat:MTLPixelFormat
@@ -30,6 +53,13 @@ class VSVideoReader {
         return cache!
     }()
     
+    /// Initializer
+    ///
+    /// - Parameters:
+    ///   - device: metal device
+    ///   - pixelFormat: pixel format of the metal texture to extract
+    ///   - url: url of the source video file
+    ///   - delegate: delegate
     init(device:MTLDevice, pixelFormat:MTLPixelFormat, url:URL, delegate:VSVideoReaderDelegate) {
         self.device = device
         self.pixelFormat = pixelFormat
@@ -37,7 +67,9 @@ class VSVideoReader {
         self.delegate = delegate
     }
     
-    func startReading() {
+    /// Start the reading session. If it succeeds, it will call delegate's didStartReadring() method asynchronously.
+    /// Otherwise, it will call delegate's didFailToLoad() method asychronously.
+    public func startReading() {
         let asset = AVURLAsset(url: url)
         asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
             DispatchQueue.main.async {
@@ -53,13 +85,15 @@ class VSVideoReader {
                     reader.startReading()
                     self.delegate?.didStartReading(reader:self, track:track)
                 } else {
-                    self.delegate?.didFailToRead(reader: self)
+                    self.delegate?.didFailToLoad(reader: self)
                 }
             }
         }
     }
     
-    func readNextFrame() {
+    /// Extract the next frame. If it succeeds, it will call delegate's didGetFrame() method.
+    /// If there is no frame, it will call delegate's didFinishReading() method.
+    public func readNextFrame() {
         guard let reader = self.reader,
             let output = self.output else {
                 return

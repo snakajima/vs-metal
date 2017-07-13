@@ -70,7 +70,7 @@ extension SampleViewController4 : VSVideoReaderDelegate {
         reader.readNextFrame()
     }
     
-    func didFailToRead(reader:VSVideoReader) {
+    func didFailToLoad(reader:VSVideoReader) {
         print("Sample4: didFailToRead")
     }
 
@@ -81,7 +81,7 @@ extension SampleViewController4 : VSVideoReaderDelegate {
                 DispatchQueue.main.async {
                     self.texture = self.context.pop()?.texture // store it for renderer
                     self.context.flush()
-                    self.writer?.writeFrame(texture: self.texture, presentationTime: presentationTime)
+                    self.writer?.append(texture: self.texture, presentationTime: presentationTime)
                 }
             }
             commandBuffer.commit()
@@ -94,7 +94,7 @@ extension SampleViewController4 : VSVideoReaderDelegate {
 }
 
 extension SampleViewController4 : VSVideoWriterDelegate {
-    func didWriteFrame(writer:VSVideoWriter) {
+    func didAppendFrame(writer:VSVideoWriter) {
         reader?.readNextFrame()
     }
     
