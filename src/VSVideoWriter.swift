@@ -14,7 +14,8 @@ enum VSVideoWriterError:Error {
 }
 
 protocol VSVideoWriterDelegate:NSObjectProtocol {
-    func didWriteFrame(videoWriter:VSVideoWriter)
+    func didWriteFrame(writer:VSVideoWriter)
+    func didFinishWriting(writer:VSVideoWriter, url:URL)
 }
 
 class VSVideoWriter {
@@ -110,6 +111,15 @@ class VSVideoWriter {
         
         adaptor.append(pixelBuffer, withPresentationTime: presentationTime)
         
-        self.delegate?.didWriteFrame(videoWriter: self)
+        self.delegate?.didWriteFrame(writer: self)
+    }
+    
+    func finishWriting() {
+        if let input = self.input, let writer = self.writer, let url = self.urlExport {
+            input.markAsFinished()
+            writer.finishWriting {
+                self.delegate?.didFinishWriting(writer: self, url: url)
+            }
+        }
     }
 }

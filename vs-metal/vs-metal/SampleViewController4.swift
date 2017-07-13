@@ -23,10 +23,7 @@ class SampleViewController4: UIViewController {
     var runtime:VSRuntime?
 
     // For writing
-    var writer:AVAssetWriter?
-    var input:AVAssetWriterInput?
-    var adaptor:AVAssetWriterInputPixelBufferAdaptor?
-    var url:URL?
+    var writer:VSVideoWriter?
 
     // For rendering
     lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
@@ -79,94 +76,18 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
     
     fileprivate func writeNextFrame(time:CMTime) {
         guard let writer = self.writer,
-              let input = self.input,
-              let adaptor = self.adaptor,
               let texture = self.texture else {
                 return
         }
-        
-        if !input.isReadyForMoreMediaData {
-            print("Input is not ready for more media data. Retry async.")
-            DispatchQueue.main.async {
-                self.writeNextFrame(time: time)
-            }
-            return
-        }
-        
-        guard let pixelBufferPool = adaptor.pixelBufferPool else {
-            print("Pixel buffer asset writer input did not have a pixel buffer pool available; cannot retrieve frame")
-            return
-        }
-        
-        var newPixelBuffer: CVPixelBuffer? = nil
-        let status  = CVPixelBufferPoolCreatePixelBuffer(nil, pixelBufferPool, &newPixelBuffer)
-        guard let pixelBuffer = newPixelBuffer, status == kCVReturnSuccess else {
-            print("Could not get pixel buffer from asset writer input; dropping frame...")
-            return
-        }
-        
-        CVPixelBufferLockBaseAddress(pixelBuffer, [])
-        defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, []) }
-        let pixelBufferBytes = CVPixelBufferGetBaseAddress(pixelBuffer)!
-        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
-        let region = MTLRegionMake2D(0, 0, texture.width, texture.height)
-        texture.getBytes(pixelBufferBytes, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
-        
-        adaptor.append(pixelBuffer, withPresentationTime: time)
-        
-        self.processNext()
+
+        writer.writeFrame(texture: texture, presentationTime: time)
     }
 }
 
 extension SampleViewController4 : VSVideoReaderDelegate {
     func didStartReading(reader:VSVideoReader, track:AVAssetTrack) {
-        let fileManager = FileManager.default
-        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            print("no document directory")
-            return
-        }
-        let url = documentsURL.appendingPathComponent("export.mov")
-        if fileManager.fileExists(atPath: url.path) {
-            try? fileManager.removeItem(at: url)
-        }
-        self.url = url
-        
-        guard let writer = try? AVAssetWriter(url: url, fileType: AVFileTypeQuickTimeMovie) else {
-            print("failed to create a file", url)
-            return
-        }
-        self.writer = writer
-        
-        /* no need to specify the compression settings
-         let compressionSettings: [String: Any] = [
-         AVVideoAverageBitRateKey: NSNumber(value: 20000000),
-         AVVideoMaxKeyFrameIntervalKey: NSNumber(value: 1),
-         AVVideoProfileLevelKey: AVVideoProfileLevelH264Baseline41
-         ]
-         */
-        
-        let videoSettings: [String : Any] = [
-            AVVideoCodecKey  : AVVideoCodecH264,
-            AVVideoWidthKey  : track.naturalSize.width,
-            AVVideoHeightKey : track.naturalSize.height,
-            //AVVideoCompressionPropertiesKey: compressionSettings,
-        ]
-        let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
-        input.transform = track.preferredTransform
-        self.input = input
-        
-        let attrs : [String: Any] = [
-            String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
-            String(kCVPixelBufferWidthKey) : track.naturalSize.width,
-            String(kCVPixelBufferHeightKey) : track.naturalSize.height
-        ]
-        let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: attrs)
-        self.adaptor = adaptor
-        
-        writer.add(input)
-        writer.startWriting()
-        writer.startSession(atSourceTime: kCMTimeZero)
-        
+        self.writer = VSVideoWriter(delegate: self)
+        let _ = self.writer?.startWriting(track: track)
         self.processNext()
     }
     func didFailToRead(reader:VSVideoReader) {
@@ -191,17 +112,22 @@ extension SampleViewController4 : VSVideoReaderDelegate {
         }
     }
     func didFinishReading(reader:VSVideoReader) {
-        if let url = self.url, let input = self.input, let writer = self.writer {
-            input.markAsFinished()
-            writer.finishWriting {
-                print("Finish Writing")
-                let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                if let popover = sheet.popoverPresentationController {
-                    popover.barButtonItem = self.btnCamera
-                }
-                self.present(sheet, animated: true, completion: nil)
-            }
+        writer?.finishWriting()
+    }
+}
+
+extension SampleViewController4 : VSVideoWriterDelegate {
+    func didWriteFrame(writer:VSVideoWriter) {
+        self.processNext()
+    }
+    
+    func didFinishWriting(writer: VSVideoWriter, url: URL) {
+        print("Finish Writing")
+        let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        if let popover = sheet.popoverPresentationController {
+            popover.barButtonItem = self.btnCamera
         }
+        self.present(sheet, animated: true, completion: nil)
     }
 }
 
