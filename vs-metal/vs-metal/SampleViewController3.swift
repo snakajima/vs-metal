@@ -38,6 +38,7 @@ class SampleViewController3: UIViewController {
         if let mtkView = self.view as? MTKView {
             mtkView.device = context.device
             mtkView.delegate = self
+            mtkView.transform = (session.cameraPosition == .front) ? CGAffineTransform(scaleX: -1.0, y: 1.0) : CGAffineTransform.identity
             context.pixelFormat = mtkView.colorPixelFormat
             
             let script = VSScript()
