@@ -11,6 +11,15 @@ import AVFoundation
 import MetalKit
 
 class SampleViewController3: UIViewController {
+    @IBOutlet var btnRecord:UIBarButtonItem!
+    @IBOutlet var btnStop:UIBarButtonItem!
+    var recording = false {
+        didSet {
+            self.btnRecord.isEnabled = !recording
+            self.btnStop.isEnabled = recording
+        }
+    }
+    
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
     lazy var session:VSCaptureSession = VSCaptureSession(device: self.context.device, pixelFormat: self.context.pixelFormat, delegate: self)
@@ -22,6 +31,7 @@ class SampleViewController3: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        recording = false // force the UI update
 
         if let mtkView = self.view as? MTKView {
             mtkView.device = context.device
@@ -34,6 +44,14 @@ class SampleViewController3: UIViewController {
 
             session.start()
         }
+    }
+    
+    @IBAction func record(sender:UIBarButtonItem) {
+        recording = true
+    }
+    
+    @IBAction func stop(sender:UIBarButtonItem) {
+        recording = false
     }
 }
 
