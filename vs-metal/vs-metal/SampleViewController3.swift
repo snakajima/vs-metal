@@ -49,14 +49,8 @@ class SampleViewController3: UIViewController {
     }
     
     @IBAction func record(sender:UIBarButtonItem) {
-        guard let texture = self.context.textureOut?.texture else {
-            return
-        }
         recording = true
         startTime = nil
-        self.writer = VSVideoWriter(delegate: self)
-        let size = CGSize(width: texture.width, height: texture.height)
-        let _ = self.writer?.startWriting(size: size)
     }
     
     @IBAction func stop(sender:UIBarButtonItem) {
@@ -77,24 +71,35 @@ extension SampleViewController3 : VSVideoWriterDelegate {
         if let popover = sheet.popoverPresentationController {
             popover.barButtonItem = self.btnRecord
         }
-        self.present(sheet, animated: true, completion: nil)
+        self.present(sheet, animated: true) {
+            self.writer = nil
+        }
     }
 }
 
 extension SampleViewController3 : VSCaptureSessionDelegate {
-    func didCaptureOutput(session:VSCaptureSession, texture:MTLTexture, presentationTime:CMTime) {
-        self.context.set(texture: texture)
+    func didCaptureOutput(session:VSCaptureSession, texture textureIn:MTLTexture, presentationTime:CMTime) {
+        self.context.set(texture: textureIn)
         if let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context) {
             commandBuffer.addCompletedHandler { (_) in
                 DispatchQueue.main.async {
                     self.context.textureOut  = self.context.pop() // store it for renderer
                     self.context.flush()
+                    guard let textureOut = self.context.textureOut?.texture else {
+                        return
+                    }
+                    if self.writer == nil {
+                        self.writer = VSVideoWriter(delegate: self)
+                    }
                     if self.recording {
                         if self.startTime == nil {
                             self.startTime = presentationTime
+                            let size = CGSize(width: textureOut.width, height: textureOut.height)
+                            let _ = self.writer?.startWriting(size: size)
                         }
                         let relativeTime = CMTimeSubtract(presentationTime, self.startTime!)
-                        self.writer?.append(texture: self.context.textureOut?.texture, presentationTime: relativeTime)
+                        print("time=", relativeTime)
+                        self.writer?.append(texture: textureOut, presentationTime: relativeTime)
                     }
                 }
             }
