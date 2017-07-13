@@ -22,6 +22,7 @@ class SampleViewController3: UIViewController {
     
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
+    var writer:VSVideoWriter?
     lazy var session:VSCaptureSession = VSCaptureSession(device: self.context.device, pixelFormat: self.context.pixelFormat, delegate: self)
 
     // For rendering
@@ -48,6 +49,8 @@ class SampleViewController3: UIViewController {
     
     @IBAction func record(sender:UIBarButtonItem) {
         recording = true
+        //self.writer = VSVideoWriter(delegate: self)
+        //let _ = self.writer?.startWriting(track: track)
     }
     
     @IBAction func stop(sender:UIBarButtonItem) {

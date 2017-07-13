@@ -48,6 +48,10 @@ class VSVideoWriter {
     /// - Parameter track: the source track (to extract dimension and transform)
     /// - Returns: true if successfully started
     public func startWriting(track:AVAssetTrack) -> Bool {
+        return startWriting(size: track.naturalSize, transform: track.preferredTransform)
+    }
+    
+    public func startWriting(size:CGSize, transform:CGAffineTransform) -> Bool {
         if self.urlExport == nil {
             // Use the default URL if not specified by the caller
             let fileManager = FileManager.default
@@ -69,17 +73,17 @@ class VSVideoWriter {
         
         let videoSettings: [String : Any] = [
             AVVideoCodecKey  : AVVideoCodecH264,
-            AVVideoWidthKey  : track.naturalSize.width,
-            AVVideoHeightKey : track.naturalSize.height,
+            AVVideoWidthKey  : size.width,
+            AVVideoHeightKey : size.height,
         ]
         let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
-        input.transform = track.preferredTransform
+        input.transform = transform
         self.input = input
         
         let attrs : [String: Any] = [
             String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
-            String(kCVPixelBufferWidthKey) : track.naturalSize.width,
-            String(kCVPixelBufferHeightKey) : track.naturalSize.height
+            String(kCVPixelBufferWidthKey) : size.width,
+            String(kCVPixelBufferHeightKey) : size.height
         ]
         let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: attrs)
         self.adaptor = adaptor
