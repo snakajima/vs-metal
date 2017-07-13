@@ -74,13 +74,7 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
     }
     
     fileprivate func processNext() {
-        guard let reader = self.reader else {
-            return
-        }
-        reader.readNextFrame()
-        
-        DispatchQueue.main.async {
-        }
+        reader?.readNextFrame()
     }
     
     fileprivate func writeNextFrame(time:CMTime) {

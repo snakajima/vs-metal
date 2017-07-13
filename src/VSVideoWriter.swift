@@ -13,25 +13,24 @@ enum VSVideoWriterError:Error {
     case failedToLoadSourceAsset
 }
 
-protocol VSVideoWriterDelegate {
-    func didStartWriting(videoWriter:VSVideoWriter)
+protocol VSVideoWriterDelegate:NSObjectProtocol {
+    func didWriteFrame(videoWriter:VSVideoWriter)
 }
 
 class VSVideoWriter {
     public var urlExport:URL?
-    public var delegate:VSVideoWriterDelegate?
-    
-    // For Reading
-    private var reader:AVAssetReader?
-    private var output:AVAssetReaderTrackOutput?
-    private var texture:MTLTexture?
+    weak var delegate:VSVideoWriterDelegate?
     
     // For writing
     private var writer:AVAssetWriter?
     private var input:AVAssetWriterInput?
     private var adaptor:AVAssetWriterInputPixelBufferAdaptor?
     
-    func startSession(urlSource:URL, callback:@escaping (Error?)->Void) -> Bool {
+    init(delegate:VSVideoWriterDelegate) {
+        self.delegate = delegate
+    }
+    
+    func startWriting(track:AVAssetTrack) -> Bool {
         if self.urlExport == nil {
             // Use the default URL if not specified by the caller
             let fileManager = FileManager.default
@@ -50,47 +49,67 @@ class VSVideoWriter {
             return false
         }
         self.writer = writer
-
-        let asset = AVURLAsset(url: urlSource)
-        asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
-            let status = asset.statusOfValue(forKey: "tracks", error: nil)
-            if status == AVKeyValueStatus.loaded,
-               let reader = try? AVAssetReader(asset: asset) {
-                self.reader = reader
-                let track = asset.tracks(withMediaType: AVMediaTypeVideo)[0]
-                let settings:[String:Any] = [kCVPixelBufferPixelFormatTypeKey as String:kCVPixelFormatType_32BGRA]
-                let output = AVAssetReaderTrackOutput(track: track, outputSettings: settings)
-                self.output = output
-                reader.add(output)
-                reader.startReading()
-                
-                let videoSettings: [String : Any] = [
-                    AVVideoCodecKey  : AVVideoCodecH264,
-                    AVVideoWidthKey  : track.naturalSize.width,
-                    AVVideoHeightKey : track.naturalSize.height,
-                ]
-                let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
-                input.transform = track.preferredTransform
-                self.input = input
-                
-                let attrs : [String: Any] = [
-                    String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
-                    String(kCVPixelBufferWidthKey) : track.naturalSize.width,
-                    String(kCVPixelBufferHeightKey) : track.naturalSize.height
-                ]
-                let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: attrs)
-                self.adaptor = adaptor
-                
-                writer.add(input)
-                writer.startWriting()
-                writer.startSession(atSourceTime: kCMTimeZero)
-                
-                callback(nil)
-            } else {
-                print("failed to create asset reader")
-                callback(VSVideoWriterError.failedToLoadSourceAsset)
-            }
-        }
+        
+        let videoSettings: [String : Any] = [
+            AVVideoCodecKey  : AVVideoCodecH264,
+            AVVideoWidthKey  : track.naturalSize.width,
+            AVVideoHeightKey : track.naturalSize.height,
+        ]
+        let input = AVAssetWriterInput(mediaType: AVMediaTypeVideo, outputSettings: videoSettings)
+        input.transform = track.preferredTransform
+        self.input = input
+        
+        let attrs : [String: Any] = [
+            String(kCVPixelBufferPixelFormatTypeKey) : kCVPixelFormatType_32BGRA,
+            String(kCVPixelBufferWidthKey) : track.naturalSize.width,
+            String(kCVPixelBufferHeightKey) : track.naturalSize.height
+        ]
+        let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: attrs)
+        self.adaptor = adaptor
+        
+        writer.add(input)
+        writer.startWriting()
+        writer.startSession(atSourceTime: kCMTimeZero)
+        
         return true
+    }
+    
+    func writeFrame(texture:MTLTexture, presentationTime:CMTime) {
+        guard let writer = self.writer,
+            let input = self.input,
+            let adaptor = self.adaptor else {
+                return
+        }
+        
+        if !input.isReadyForMoreMediaData {
+            print("Input is not ready for more media data. Retry async.")
+            DispatchQueue.main.async {
+                self.writeFrame(texture:texture, presentationTime:presentationTime)
+            }
+            return
+        }
+        
+        guard let pixelBufferPool = adaptor.pixelBufferPool else {
+            print("Pixel buffer asset writer input did not have a pixel buffer pool available; cannot retrieve frame")
+            return
+        }
+        
+        var newPixelBuffer: CVPixelBuffer? = nil
+        let status  = CVPixelBufferPoolCreatePixelBuffer(nil, pixelBufferPool, &newPixelBuffer)
+        guard let pixelBuffer = newPixelBuffer, status == kCVReturnSuccess else {
+            print("Could not get pixel buffer from asset writer input; dropping frame...")
+            return
+        }
+        
+        CVPixelBufferLockBaseAddress(pixelBuffer, [])
+        defer { CVPixelBufferUnlockBaseAddress(pixelBuffer, []) }
+        let pixelBufferBytes = CVPixelBufferGetBaseAddress(pixelBuffer)!
+        let bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
+        let region = MTLRegionMake2D(0, 0, texture.width, texture.height)
+        texture.getBytes(pixelBufferBytes, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
+        
+        adaptor.append(pixelBuffer, withPresentationTime: presentationTime)
+        
+        self.delegate?.didWriteFrame(videoWriter: self)
     }
 }
