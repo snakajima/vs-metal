@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AVFoundation
 import MetalKit
 import MetalPerformanceShaders
 
@@ -213,7 +214,7 @@ class VSContext: NSObject {
 }
 
 extension VSContext: VSCaptureSessionDelegate {
-    func didCaptureOutput(session:VSCaptureSession, texture:MTLTexture) {
+    func didCaptureOutput(session:VSCaptureSession, texture:MTLTexture, presentationTime:CMTime) {
         self.set(texture: texture)
     }
 }
