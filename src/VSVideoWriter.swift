@@ -95,12 +95,16 @@ class VSVideoWriter {
         self.adaptor = adaptor
         
         writer.add(input)
-        writer.startWriting()
         
         return true
     }
     
+    public func set(transform:CGAffineTransform) {
+        input?.transform = transform
+    }
+    
     public func startSession(atSourceTime:CMTime) {
+        writer?.startWriting()
         writer?.startSession(atSourceTime: atSourceTime)
     }
     
