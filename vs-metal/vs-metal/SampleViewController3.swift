@@ -11,6 +11,7 @@ import AVFoundation
 import MetalKit
 
 class SampleViewController3: UIViewController {
+    @IBOutlet var mtkView:MTKView!
     @IBOutlet var btnRecord:UIBarButtonItem!
     @IBOutlet var btnStop:UIBarButtonItem!
     var recording = false {
@@ -34,18 +35,16 @@ class SampleViewController3: UIViewController {
         super.viewDidLoad()
         recording = false // force the UI update
 
-        if let mtkView = self.view as? MTKView {
-            mtkView.device = context.device
-            mtkView.delegate = self
-            mtkView.transform = (session.cameraPosition == .front) ? CGAffineTransform(scaleX: -1.0, y: 1.0) : CGAffineTransform.identity
-            context.pixelFormat = mtkView.colorPixelFormat
-            
-            let script = VSScript()
-                .mono()
-            runtime = script.compile(context: context)
+        mtkView.device = context.device
+        mtkView.delegate = self
+        mtkView.transform = (session.cameraPosition == .front) ? CGAffineTransform(scaleX: -1.0, y: 1.0) : CGAffineTransform.identity
+        context.pixelFormat = mtkView.colorPixelFormat
+        
+        let script = VSScript()
+            .mono()
+        runtime = script.compile(context: context)
 
-            session.start()
-        }
+        session.start()
     }
     
     @IBAction func record(sender:UIBarButtonItem) {

@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MLh-M0-MgI">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MLh-M0-MgI">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,7 +17,7 @@
                         <viewControllerLayoutGuide type="top" id="VIu-TN-MaB"/>
                         <viewControllerLayoutGuide type="bottom" id="AFw-1y-Nrn"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="88L-Lj-gZv" customClass="MTKView">
+                    <view key="view" contentMode="scaleToFill" id="88L-Lj-gZv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -37,22 +37,31 @@
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Td5-cr-T3n" customClass="MTKView">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="AFw-1y-Nrn" firstAttribute="top" secondItem="vWV-vg-Nwy" secondAttribute="bottom" id="Fj0-gz-dN4"/>
+                            <constraint firstItem="Td5-cr-T3n" firstAttribute="leading" secondItem="88L-Lj-gZv" secondAttribute="leading" id="MB7-Gk-rc3"/>
+                            <constraint firstItem="Td5-cr-T3n" firstAttribute="top" secondItem="88L-Lj-gZv" secondAttribute="top" id="Rzt-jN-vDL"/>
+                            <constraint firstAttribute="trailing" secondItem="Td5-cr-T3n" secondAttribute="trailing" id="SwE-nz-KCz"/>
                             <constraint firstItem="vWV-vg-Nwy" firstAttribute="leading" secondItem="88L-Lj-gZv" secondAttribute="leading" id="UhO-89-1Od"/>
+                            <constraint firstItem="vWV-vg-Nwy" firstAttribute="top" secondItem="Td5-cr-T3n" secondAttribute="bottom" id="hLK-3G-P84"/>
                             <constraint firstAttribute="trailing" secondItem="vWV-vg-Nwy" secondAttribute="trailing" id="kE5-4N-1ad"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="btnRecord" destination="o6a-gq-fwK" id="ezc-Pw-qAc"/>
                         <outlet property="btnStop" destination="eg9-FG-Yn0" id="b1P-XS-HhB"/>
+                        <outlet property="mtkView" destination="Td5-cr-T3n" id="grm-dL-G4W"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xIA-jy-dBH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="114" y="206"/>
+            <point key="canvasLocation" x="112.8" y="205.54722638680661"/>
         </scene>
     </scenes>
 </document>
