@@ -101,7 +101,6 @@ class VSVideoReader {
         guard reader.status == .reading,
               let sampleBuffer = output.copyNextSampleBuffer(),
               let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-            print("VSVideoReader: Process Complete")
             self.delegate?.didFinishReading(reader: self)
             return
         }

@@ -122,8 +122,8 @@ class VSVideoWriter {
         writer?.startSession(atSourceTime: atSourceTime)
     }
     
-    /// Write the specified metal texture as a frame to the video file.
-    /// It wlll call delegate's didWriteFrame after appending the texture as a video frame asynchronously.
+    /// Append a metal texture as a frame to the video file.
+    /// It wlll call delegate's didWriteFrame after appending the texture asynchronously.
     ///
     /// - Parameters:
     ///   - texture: the metal texture
@@ -168,8 +168,7 @@ class VSVideoWriter {
         self.delegate?.didAppendFrame(writer: self)
     }
     
-    /// Finish the writing session. It will call delegate's didFinishWriting asynchronously, after
-    /// finishing the writing session.
+    /// Finish the writing session. It will call delegate's didFinishWriting asynchronously, after finishing.
     public func finishWriting() {
         if let input = self.input, let writer = self.writer, let url = self.urlExport {
             input.markAsFinished()
