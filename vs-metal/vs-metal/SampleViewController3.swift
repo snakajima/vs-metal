@@ -89,7 +89,18 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                     if self.writer == nil {
                         self.writer = VSVideoWriter(delegate: self)
                         let size = CGSize(width: textureOut.width, height: textureOut.height)
-                        let _ = self.writer?.startWriting(size: size)
+                        var transform = CGAffineTransform.identity
+                        switch(UIDevice.current.orientation) {
+                        case .portrait:
+                            transform = transform.rotated(by: .pi/2.0)
+                        case .landscapeLeft:
+                            transform = transform.rotated(by: .pi)
+                        case .portraitUpsideDown:
+                            transform = transform.rotated(by: -.pi/2.0)
+                        default:
+                            break
+                        }
+                        let _ = self.writer?.startWriting(size: size, transform:transform)
                     }
                     if self.recording {
                         if self.startTime == nil {
