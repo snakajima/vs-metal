@@ -58,6 +58,8 @@
 		74D5B04C1F15703B00C165BC /* yeswecan.js in Resources */ = {isa = PBXBuildFile; fileRef = 74D5B04B1F15703B00C165BC /* yeswecan.js */; };
 		74D5B04E1F1583F000C165BC /* SampleViewController4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D5B04D1F1583F000C165BC /* SampleViewController4.swift */; };
 		74D5B0501F15840F00C165BC /* SampleViewController4.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74D5B04F1F15840F00C165BC /* SampleViewController4.storyboard */; };
+		74DD65491F1944D600E5F420 /* TestViewController1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DD65481F1944D600E5F420 /* TestViewController1.swift */; };
+		74DD654B1F1944F400E5F420 /* TestViewController1.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74DD654A1F1944F400E5F420 /* TestViewController1.storyboard */; };
 		74E284E01EFFE4D00045ADFB /* test0.js in Resources */ = {isa = PBXBuildFile; fileRef = 74E284DF1EFFE4D00045ADFB /* test0.js */; };
 		74E284E21F00B9B70045ADFB /* VSBlender.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74E284E11F00B9B70045ADFB /* VSBlender.metal */; };
 		74E284E41F0336D50045ADFB /* VSDynamicVariable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E284E31F0336D50045ADFB /* VSDynamicVariable.swift */; };
@@ -132,6 +134,8 @@
 		74D5B04B1F15703B00C165BC /* yeswecan.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = yeswecan.js; sourceTree = "<group>"; };
 		74D5B04D1F1583F000C165BC /* SampleViewController4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleViewController4.swift; sourceTree = "<group>"; };
 		74D5B04F1F15840F00C165BC /* SampleViewController4.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SampleViewController4.storyboard; sourceTree = "<group>"; };
+		74DD65481F1944D600E5F420 /* TestViewController1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController1.swift; sourceTree = "<group>"; };
+		74DD654A1F1944F400E5F420 /* TestViewController1.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TestViewController1.storyboard; sourceTree = "<group>"; };
 		74E284DF1EFFE4D00045ADFB /* test0.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test0.js; sourceTree = "<group>"; };
 		74E284E11F00B9B70045ADFB /* VSBlender.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSBlender.metal; sourceTree = "<group>"; };
 		74E284E31F0336D50045ADFB /* VSDynamicVariable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSDynamicVariable.swift; sourceTree = "<group>"; };
@@ -236,11 +240,13 @@
 				74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */,
 				7431D79A1F0D7A8C00A93671 /* SampleViewController2.swift */,
 				74B6514D1F181F9E00B6B091 /* SampleViewController3.swift */,
+				74DD65481F1944D600E5F420 /* TestViewController1.swift */,
 				74D5B04D1F1583F000C165BC /* SampleViewController4.swift */,
 				74D5B0451F156A1B00C165BC /* TestViewController.swift */,
 				74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */,
 				7431D79C1F0D7A9A00A93671 /* SampleViewController2.storyboard */,
 				74B651511F181FEB00B6B091 /* SampleViewController3.storyboard */,
+				74DD654A1F1944F400E5F420 /* TestViewController1.storyboard */,
 				74D5B04F1F15840F00C165BC /* SampleViewController4.storyboard */,
 				74D5B0471F156A5700C165BC /* TestViewController.storyboard */,
 				7480D2921EFE2C5B00DAA88E /* ScriptsViewController.swift */,
@@ -374,6 +380,7 @@
 				7492F7FA1F0EA67400380832 /* sports_light.js in Resources */,
 				7480D28D1EFCC63D00DAA88E /* VSNodes.js in Resources */,
 				74D5B0501F15840F00C165BC /* SampleViewController4.storyboard in Resources */,
+				74DD654B1F1944F400E5F420 /* TestViewController1.storyboard in Resources */,
 				74D5B04C1F15703B00C165BC /* yeswecan.js in Resources */,
 				741847331F01B0EA009A45F9 /* cartoon.js in Resources */,
 				741847311F01B0C2009A45F9 /* gradientmap.js in Resources */,
@@ -401,6 +408,7 @@
 				74D5B0461F156A1B00C165BC /* TestViewController.swift in Sources */,
 				74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */,
 				74B6514E1F181F9E00B6B091 /* SampleViewController3.swift in Sources */,
+				74DD65491F1944D600E5F420 /* TestViewController1.swift in Sources */,
 				74A39DD21EFC4778004713D8 /* VSMPSFilter.swift in Sources */,
 				74E284EE1F09C9800045ADFB /* VSScript+filter.swift in Sources */,
 				74C593BA1F17DA9700768BF0 /* VSVideoWriter.swift in Sources */,
