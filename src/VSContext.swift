@@ -68,8 +68,10 @@ class VSContext: NSObject {
         
     /// This function set the video source
     ///
-    /// - Parameter texture: texture
-    func set(texture:MTLTexture) {
+    /// - Parameters:
+    ///   - texture: metal texture
+    ///   - sampleBuffer: sample buffer the metal texture was created from (optional)
+    func set(texture:MTLTexture, sampleBuffer:CMSampleBuffer?) {
         assert(Thread.current == Thread.main)
 
         // For the very first time
@@ -216,7 +218,7 @@ class VSContext: NSObject {
 }
 
 extension VSContext: VSCaptureSessionDelegate {
-    func didCaptureOutput(session:VSCaptureSession, texture:MTLTexture, presentationTime:CMTime) {
-        self.set(texture: texture)
+    func didCaptureOutput(session:VSCaptureSession, texture:MTLTexture, sampleBuffer:CMSampleBuffer, presentationTime:CMTime) {
+        self.set(texture: texture, sampleBuffer: sampleBuffer)
     }
 }

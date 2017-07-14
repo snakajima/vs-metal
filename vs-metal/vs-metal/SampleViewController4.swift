@@ -75,7 +75,7 @@ extension SampleViewController4 : VSVideoReaderDelegate {
     }
 
     func didGetFrame(reader:VSVideoReader, texture:MTLTexture, presentationTime:CMTime) {
-        self.context.set(texture: texture)
+        self.context.set(texture: texture, sampleBuffer: nil)
         if let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context) {
             commandBuffer.addCompletedHandler { (_) in
                 DispatchQueue.main.async {

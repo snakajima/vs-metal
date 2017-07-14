@@ -73,8 +73,8 @@ extension SampleViewController3 : VSVideoWriterDelegate {
 }
 
 extension SampleViewController3 : VSCaptureSessionDelegate {
-    func didCaptureOutput(session:VSCaptureSession, texture textureIn:MTLTexture, presentationTime:CMTime) {
-        self.context.set(texture: textureIn)
+    func didCaptureOutput(session:VSCaptureSession, texture textureIn:MTLTexture, sampleBuffer:CMSampleBuffer, presentationTime:CMTime) {
+        self.context.set(texture: textureIn, sampleBuffer: sampleBuffer)
         if let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context) {
             commandBuffer.addCompletedHandler { (_) in
                 DispatchQueue.main.async {

@@ -11,7 +11,7 @@ import AVFoundation
 
 /// The protocol the client of VSCaptureSesssion must conform to.
 protocol VSCaptureSessionDelegate: NSObjectProtocol {
-    func didCaptureOutput(session:VSCaptureSession, texture:MTLTexture, presentationTime:CMTime)
+    func didCaptureOutput(session:VSCaptureSession, texture:MTLTexture, sampleBuffer:CMSampleBuffer, presentationTime:CMTime)
 }
 
 /// VSCaptureSession is a helper class (non-essential part of VideoShader), which makes it easy to process
@@ -115,7 +115,7 @@ AVCaptureVideoDataOutputSampleBufferDelegate {
                                                                    pixelFormat, width, height, 0, &metalTexture)
             if let metalTexture = metalTexture, status == kCVReturnSuccess,
                let texture = CVMetalTextureGetTexture(metalTexture) {
-                delegate?.didCaptureOutput(session: self, texture: texture, presentationTime: time)
+                delegate?.didCaptureOutput(session: self, texture: texture, sampleBuffer: sampleBuffer, presentationTime: time)
             } else {
                 print("VSVS: failed to create texture")
             }
