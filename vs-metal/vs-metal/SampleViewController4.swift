@@ -64,7 +64,7 @@ extension SampleViewController4 : UIImagePickerControllerDelegate, UINavigationC
 extension SampleViewController4 : VSVideoReaderDelegate {
     func didStartReading(reader:VSVideoReader, track:AVAssetTrack) {
         self.writer = VSVideoWriter(delegate: self)
-        if let writer = self.writer, writer.startWriting(track: track) {
+        if let writer = self.writer, writer.prepare(track: track) {
             writer.startSession(atSourceTime: kCMTimeZero)
             reader.readNextFrame()
         }

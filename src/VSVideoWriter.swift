@@ -30,8 +30,8 @@ class VSVideoWriter {
     /// The location of the output file (optional). If it is not specified the default URL 
     /// ("export.mov" file in the user's document holder) will be used.
     public var urlExport:URL?
-    private weak var delegate:VSVideoWriterDelegate?
     
+    private weak var delegate:VSVideoWriterDelegate?
     private var writer:AVAssetWriter?
     private var input:AVAssetWriterInput?
     private var adaptor:AVAssetWriterInputPixelBufferAdaptor?
@@ -51,21 +51,21 @@ class VSVideoWriter {
         self.delegate = delegate
     }
     
-    /// Start the writing session
+    /// Prepare the writing session
     ///
     /// - Parameter track: the source track (to extract dimension and transform)
     /// - Returns: true if successfully started
-    public func startWriting(track:AVAssetTrack) -> Bool {
-        return startWriting(size: track.naturalSize, transform: track.preferredTransform)
+    public func prepare(track:AVAssetTrack) -> Bool {
+        return prepare(size: track.naturalSize, transform: track.preferredTransform)
     }
     
-    /// Start the writing session
+    /// Prepare the writing session
     ///
     /// - Parameters:
     ///   - size: size of texture
     ///   - transform: transform
     /// - Returns: true if successfully started
-    public func startWriting(size:CGSize, transform:CGAffineTransform = .identity) -> Bool {
+    public func prepare(size:CGSize, transform:CGAffineTransform = .identity) -> Bool {
         if self.urlExport == nil {
             // Use the default URL if not specified by the caller
             let fileManager = FileManager.default
@@ -107,10 +107,16 @@ class VSVideoWriter {
         return true
     }
     
+    /// Set the preferred transform of the video
+    ///
+    /// - Parameter transform: transform
     public func set(transform:CGAffineTransform) {
         input?.transform = transform
     }
     
+    /// Start the recording session
+    ///
+    /// - Parameter atSourceTime: source time
     public func startSession(atSourceTime:CMTime) {
         writer?.startWriting()
         writer?.startSession(atSourceTime: atSourceTime)

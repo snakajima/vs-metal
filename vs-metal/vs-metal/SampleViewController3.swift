@@ -87,7 +87,7 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                         print("Sample3: creating a new writer")
                         self.writer = VSVideoWriter(delegate: self)
                         let size = CGSize(width: textureOut.width, height: textureOut.height)
-                        let _ = self.writer?.startWriting(size: size)
+                        let _ = self.writer?.prepare(size: size)
                     }
                     if self.recording {
                         if self.startTime == nil {
