@@ -69,10 +69,9 @@ extension TestViewController1 : VSVideoWriterDelegate {
 
 extension TestViewController1 : VSCaptureSessionDelegate {
     func didCaptureOutput(session:VSCaptureSession, texture textureIn:MTLTexture, sampleBuffer:CMSampleBuffer, presentationTime:CMTime) {
+        self.texture = textureIn
         // Intentionally adding async
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.06) {
-        //DispatchQueue.main.async {
-            self.texture = textureIn
             if self.writer == nil {
                 print("Sample3: creating a new writer")
                 self.writer = VSVideoWriter(delegate: self)
@@ -97,7 +96,7 @@ extension TestViewController1 : VSCaptureSessionDelegate {
                     self.writer?.set(transform: transform)
                     self.writer?.startSession(atSourceTime: presentationTime)
                 }
-                self.writer?.append(texture: textureIn, presentationTime: presentationTime)
+                self.writer?.append(texture: textureIn, presentationTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
             }
         }
     }
