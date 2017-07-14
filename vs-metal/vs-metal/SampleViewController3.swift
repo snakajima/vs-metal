@@ -56,7 +56,6 @@ class SampleViewController3: UIViewController {
     @IBAction func stop(sender:UIBarButtonItem) {
         recording = false
         writer?.finishWriting()
-        writer = nil
     }
 }
 
@@ -72,7 +71,6 @@ extension SampleViewController3 : VSVideoWriterDelegate {
             popover.barButtonItem = self.btnRecord
         }
         self.present(sheet, animated: true) {
-            self.writer = nil
         }
     }
 }
@@ -90,16 +88,17 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                     }
                     if self.writer == nil {
                         self.writer = VSVideoWriter(delegate: self)
+                        let size = CGSize(width: textureOut.width, height: textureOut.height)
+                        let _ = self.writer?.startWriting(size: size)
                     }
                     if self.recording {
                         if self.startTime == nil {
                             self.startTime = presentationTime
-                            let size = CGSize(width: textureOut.width, height: textureOut.height)
-                            let _ = self.writer?.startWriting(size: size)
+                            self.writer?.startSession(atSourceTime: presentationTime)
                         }
                         let relativeTime = CMTimeSubtract(presentationTime, self.startTime!)
                         print("time=", relativeTime)
-                        self.writer?.append(texture: textureOut, presentationTime: relativeTime)
+                        self.writer?.append(texture: textureOut, presentationTime: presentationTime)
                     }
                 }
             }

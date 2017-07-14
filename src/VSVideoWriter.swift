@@ -96,9 +96,12 @@ class VSVideoWriter {
         
         writer.add(input)
         writer.startWriting()
-        writer.startSession(atSourceTime: kCMTimeZero)
         
         return true
+    }
+    
+    public func startSession(atSourceTime:CMTime) {
+        writer?.startSession(atSourceTime: atSourceTime)
     }
     
     /// Write the specified metal texture as a frame to the video file.
