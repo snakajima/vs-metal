@@ -22,6 +22,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="mtkView" destination="88L-Lj-gZv" id="2Vm-vB-Qgq"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xIA-jy-dBH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
