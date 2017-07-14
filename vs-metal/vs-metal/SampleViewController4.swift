@@ -12,6 +12,7 @@ import MobileCoreServices
 import AVFoundation
 
 class SampleViewController4: UIViewController {
+    @IBOutlet var mtkView:MTKView!
     @IBOutlet var btnCamera:UIBarButtonItem!
 
     // For Reading & Writing
@@ -29,16 +30,14 @@ class SampleViewController4: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let mtkView = self.view as? MTKView {
-            mtkView.device = context.device
-            mtkView.delegate = self
-            context.pixelFormat = mtkView.colorPixelFormat
-            renderer.orientation = .landscapeLeft // it means "do not transform"
+        mtkView.device = context.device
+        mtkView.delegate = self
+        context.pixelFormat = mtkView.colorPixelFormat
+        renderer.orientation = .landscapeLeft // it means "do not transform"
 
-            let url = Bundle.main.url(forResource: "sports_light", withExtension: "js")
-            if let script = VSScript.load(from: url) {
-                runtime = script.compile(context: context)
-            }
+        let url = Bundle.main.url(forResource: "sports_light", withExtension: "js")
+        if let script = VSScript.load(from: url) {
+            runtime = script.compile(context: context)
         }
     }
     

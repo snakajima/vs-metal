@@ -12,8 +12,8 @@ import MetalKit
 class SampleViewController1: UIViewController {
     @IBOutlet var mtkView:MTKView!
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
-    lazy var session:VSCaptureSession = VSCaptureSession(device: self.context.device, pixelFormat: self.context.pixelFormat, delegate: self.context)
     var runtime:VSRuntime?
+    lazy var session:VSCaptureSession = VSCaptureSession(device: self.context.device, pixelFormat: self.context.pixelFormat, delegate: self.context)
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
 
     override func viewDidLoad() {

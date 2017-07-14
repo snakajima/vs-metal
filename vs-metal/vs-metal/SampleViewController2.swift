@@ -10,6 +10,7 @@ import UIKit
 import MetalKit
 
 class SampleViewController2: UIViewController {
+    @IBOutlet var mtkView:MTKView!
     var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
     lazy var session:VSCaptureSession = VSCaptureSession(device: self.context.device, pixelFormat: self.context.pixelFormat, delegate: self.context)
@@ -18,26 +19,24 @@ class SampleViewController2: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let mtkView = self.view as? MTKView {
-            mtkView.device = context.device
-            mtkView.delegate = self
-            context.pixelFormat = mtkView.colorPixelFormat
-            
-            // This is an alternative way to create a script object (Beta)
-            let script = VSScript()
-                .gaussian_blur(sigma: 2.0)
-                .fork()
-                .gaussian_blur(sigma: 2.0)
-                .toone()
-                .swap()
-                .sobel()
-                .canny_edge(threshhold: 0.19, thin: 0.5)
-                .anti_alias()
-                .alpha(ratio: 1.0)
-            runtime = script.compile(context: context)
+        mtkView.device = context.device
+        mtkView.delegate = self
+        context.pixelFormat = mtkView.colorPixelFormat
+        
+        // This is an alternative way to create a script object (Beta)
+        let script = VSScript()
+            .gaussian_blur(sigma: 2.0)
+            .fork()
+            .gaussian_blur(sigma: 2.0)
+            .toone()
+            .swap()
+            .sobel()
+            .canny_edge(threshhold: 0.19, thin: 0.5)
+            .anti_alias()
+            .alpha(ratio: 1.0)
+        runtime = script.compile(context: context)
 
-            session.start()
-        }
+        session.start()
     }
 }
 
