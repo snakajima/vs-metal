@@ -35,6 +35,14 @@ class VSVideoWriter {
     private var writer:AVAssetWriter?
     private var input:AVAssetWriterInput?
     private var adaptor:AVAssetWriterInputPixelBufferAdaptor?
+    private static var counter = 0
+    
+    // Returns export0.mov and export1.mov alternatively so that the new one
+    // won't destroy the previous one.
+    private static var defaultFileName:String {
+        counter += 1
+        return "export" + String(counter % 2) + ".mov"
+    }
     
     /// Initializer
     ///
@@ -62,7 +70,7 @@ class VSVideoWriter {
             // Use the default URL if not specified by the caller
             let fileManager = FileManager.default
             if let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
-                let url = documentsURL.appendingPathComponent("export.mov")
+                let url = documentsURL.appendingPathComponent(VSVideoWriter.defaultFileName)
                 if fileManager.fileExists(atPath: url.path) {
                     try? fileManager.removeItem(at: url)
                 }

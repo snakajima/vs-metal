@@ -65,12 +65,10 @@ extension SampleViewController3 : VSVideoWriterDelegate {
     
     func didFinishWriting(writer: VSVideoWriter, url: URL) {
         recording = false
+        self.writer = nil
         let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-        if let popover = sheet.popoverPresentationController {
-            popover.barButtonItem = self.btnRecord
-        }
-        self.present(sheet, animated: true) {
-        }
+        sheet.popoverPresentationController?.barButtonItem = self.btnRecord
+        self.present(sheet, animated: true)
     }
 }
 
@@ -86,12 +84,14 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                         return
                     }
                     if self.writer == nil {
+                        print("Sample3: creating a new writer")
                         self.writer = VSVideoWriter(delegate: self)
                         let size = CGSize(width: textureOut.width, height: textureOut.height)
                         let _ = self.writer?.startWriting(size: size)
                     }
                     if self.recording {
                         if self.startTime == nil {
+                            print("Sample3: start the recording session")
                             self.startTime = presentationTime
                             var transform = CGAffineTransform.identity
                             switch(UIDevice.current.orientation) {
@@ -107,8 +107,6 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                             self.writer?.set(transform: transform)
                             self.writer?.startSession(atSourceTime: presentationTime)
                         }
-                        let relativeTime = CMTimeSubtract(presentationTime, self.startTime!)
-                        print("time=", relativeTime)
                         self.writer?.append(texture: textureOut, presentationTime: presentationTime)
                     }
                 }
