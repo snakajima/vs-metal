@@ -21,7 +21,8 @@ struct VSTexture:Equatable {
     }
 }
 
-/// VSContext object manages the texture stack for a VSRuntime object
+/// VSContext object manages the context of video pipeline for a VSRuntime object,
+/// such as texture stack and pixel format.
 class VSContext: NSObject {
     /// Metal device
     let device:MTLDevice
@@ -201,7 +202,8 @@ class VSContext: NSObject {
     }
 */
     
-    /// Moves all the remaining texture in the current stack to the previous stack.
+    /// Moves all the remaining texture in the current stack to the previous stack,
+    /// and resets the hasUpdate property.
     func flush() {
         hasUpdate = false
         prevs = stack
