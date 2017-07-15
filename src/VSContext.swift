@@ -21,6 +21,7 @@ struct VSTexture:Equatable {
     }
 }
 
+/// VSContext object manages the texture stack for a VSRuntime object
 class VSContext: NSObject {
     /// Metal device
     let device:MTLDevice
@@ -135,6 +136,9 @@ class VSContext: NSObject {
         return nil
     }
     
+    /// Pop a texture from the previous frame.
+    ///
+    /// - Returns: a texture from the previous frame
     func prev() -> VSTexture {
         if let texture = prevs.popLast() {
             return texture
@@ -143,16 +147,23 @@ class VSContext: NSObject {
         return sourceTexture!
     }
     
+    /// Push a texture into the texture stack
+    ///
+    /// - Parameter texture: a texture
     func push(texture:VSTexture) {
         stack.append(texture)
     }
     
+    /// Pop the top most texture and insert it at the bottom of stack
     func shift() {
         if let texture = stack.popLast() {
             stack.insert(texture, at: 0)
         }
     }
     
+    /// Return a texture appropriate to write to.
+    ///
+    /// - Returns: a texture
     func getDestination() -> VSTexture {
         // Find a texture in the pool, which is not in the stack
         for texture in pool {
@@ -190,21 +201,33 @@ class VSContext: NSObject {
     }
 */
     
+    /// Moves all the remaining texture in the current stack to the previous stack.
     func flush() {
         hasUpdate = false
         prevs = stack
         stack.removeAll()
     }
     
+    /// Makes a command buffer for nodes the video pipeline to use
+    ///
+    /// - Returns: a command buffer
     func makeCommandBuffer() -> MTLCommandBuffer {
         return commandQueue.makeCommandBuffer()
     }
     
+    /// Register a named buffer for a NSNode object
+    ///
+    /// - Parameters:
+    ///   - key: name of the buffer
+    ///   - buffer: buffer (array of Float)
     func registerNamedBuffer(key:String, buffer:MTLBuffer) {
         print("VSC:registerNamedBuffer", key)
         namedBuffers.append(NamedBuffer(key:key, buffer:buffer))
     }
     
+    /// Update the values of named buffer
+    ///
+    /// - Parameter dictionary: a dictionary of names and Float values
     func updateNamedBuffers(with dictionary:[String:[Float]]) {
         for buffer in namedBuffers {
             if let values = dictionary[buffer.key] {
