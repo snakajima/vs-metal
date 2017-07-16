@@ -73,7 +73,7 @@ class VSContext: NSObject {
     /// - Parameters:
     ///   - texture: metal texture
     ///   - sampleBuffer: sample buffer the metal texture was created from (optional)
-    func set(texture:MTLTexture, sampleBuffer:CMSampleBuffer?) {
+    func set(texture:MTLTexture, sampleBuffer sampleBufferIn:CMSampleBuffer?) {
         assert(Thread.current == Thread.main)
 
         // For the very first time
@@ -106,11 +106,15 @@ class VSContext: NSObject {
         hasUpdate = true
         assert(stack.count < 10) // to detect texture leak (a few is fine for recurring pipeline)
         
-        // HACK: I am creating an extra copy to work around the flicker bug described in the following stackflow comment.
-        // Extra reference to CVMetalTexture does not solve the problem.
+        // NOTE: If the texture is created from CVSampleBuffer, the pixel buffer behind the texture
+        // will be reused by the hardware unless we keep the reference to the sample buffer.
+        // This behavior is not clearly documented in the document (by Apple), but I was able to 
+        // verify it with a few sample apps.
+        // Related Q&A:
         // https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
-        let textureCopy:MTLTexture = {
-            let textureCopy = device.makeTexture(descriptor: descriptor)
+        let textureCopy:MTLTexture
+        if let sampleBuffer = sampleBufferIn {
+            textureCopy = device.makeTexture(descriptor: descriptor)
             let commandBuffer:MTLCommandBuffer = {
                 let commandBuffer = commandQueue.makeCommandBuffer()
                 let encoder = commandBuffer.makeBlitCommandEncoder()
@@ -118,9 +122,14 @@ class VSContext: NSObject {
                 encoder.endEncoding()
                 return commandBuffer
             }()
+            commandBuffer.addCompletedHandler() { (_) in
+                // dummy reference to the sample buffer
+                let _ = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+            }
             commandBuffer.commit()
-            return textureCopy
-        }()
+        } else {
+            textureCopy = texture
+        }
         
         sourceTexture = VSTexture(texture:textureCopy, identity:-1)
         push(texture:sourceTexture!)
