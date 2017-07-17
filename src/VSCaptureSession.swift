@@ -46,6 +46,13 @@ class VSCaptureSession: NSObject {
         self.pixelFormat = pixelFormat
         self.delegate = delegate
     }
+    
+    /// For debugging
+    fileprivate var frameCount = 0
+    fileprivate var dropCount = 0
+    deinit {
+        print("VSCaptureSession:dropCount = ", dropCount, frameCount, Float(dropCount)/Float(frameCount))
+    }
 
     private func addCamera(session:AVCaptureSession) throws -> Bool {
         let s = AVCaptureDeviceDiscoverySession(deviceTypes: [AVCaptureDeviceType.builtInWideAngleCamera],
@@ -83,7 +90,7 @@ class VSCaptureSession: NSObject {
             }
             */
             guard try addCamera(session:session) else {
-                print("VSVS: no camera on this device")
+                print("VSCaptureSession no camera on this device")
                 return
             }
             let videoOutput = AVCaptureVideoDataOutput()
@@ -97,7 +104,7 @@ class VSCaptureSession: NSObject {
             session.startRunning()
             self.session = session
         } catch {
-            print("VSVS: failed to start the video capture session")
+            print("VSCaptureSession failed to start the video capture session")
         }
     }
 
@@ -108,6 +115,7 @@ AVCaptureVideoDataOutputSampleBufferDelegate {
     public func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         if captureOutput is AVCaptureVideoDataOutput,
            let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+            frameCount += 1
             let time = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
             let width = CVPixelBufferGetWidth(pixelBuffer), height = CVPixelBufferGetHeight(pixelBuffer)
             var metalTexture:CVMetalTexture? = nil
@@ -117,11 +125,16 @@ AVCaptureVideoDataOutputSampleBufferDelegate {
                let texture = CVMetalTextureGetTexture(metalTexture) {
                 delegate?.didCaptureOutput(session: self, texture: texture, sampleBuffer: sampleBuffer, presentationTime: time)
             } else {
-                print("VSVS: failed to create texture")
+                print("VSCaptureSession failed to create texture")
             }
         } else {
             //print("capture", captureOutput)
         }
+    }
+    
+    func captureOutput(_ captureOutput: AVCaptureOutput!, didDrop sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+        dropCount += 1
+        frameCount += 1
     }
 }
 

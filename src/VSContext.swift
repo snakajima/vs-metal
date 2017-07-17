@@ -54,7 +54,7 @@ class VSContext: NSObject {
     private var prevs = [VSTexture]() // layers from previous session
     
     private var frameCount = 0  // only for debugging
-    private var droppedFrameCount = 0 // only for debugging
+    private var skippedFrameCount = 0 // only for debugging
     
     /// Initializer
     ///
@@ -65,7 +65,7 @@ class VSContext: NSObject {
     }
     
     deinit {
-        print("VCS:frame drop rate = ", Float(droppedFrameCount) / Float(frameCount))
+        print("VSContext:frame skip rate = ", skippedFrameCount, frameCount, Float(skippedFrameCount) / Float(frameCount))
     }
         
     /// This function set the video source
@@ -100,7 +100,7 @@ class VSContext: NSObject {
         
         if (hasUpdate) {
             // Previous texture has not been processed yet. Ignore the new frame.
-            droppedFrameCount += 1 // debug only
+            skippedFrameCount += 1 // debug only
             return
         }
         hasUpdate = true
@@ -153,7 +153,7 @@ class VSContext: NSObject {
         if let texture = prevs.popLast() {
             return texture
         }
-        print("VSC prev returning source")
+        print("VSContext: prev returning source")
         return sourceTexture!
     }
     
@@ -181,7 +181,7 @@ class VSContext: NSObject {
                 return texture
             }
         }
-        print("VSC:get makeTexture", pool.count)
+        print("VSContext:get makeTexture", pool.count)
         return make()
     }
         
@@ -191,26 +191,6 @@ class VSContext: NSObject {
         return ret
     }
 
-/*
-    func encode(commandBuffer:MTLCommandBuffer, runtime:VSRuntime) throws -> MTLCommandBuffer {
-        assert(Thread.current == Thread.main)
-        
-        var dictionary = [String:[Float]]()
-        for dynamicVariable in runtime.dynamicVariables {
-            dynamicVariable.apply(callback: { (key, values) in
-                dictionary[key] = values
-            })
-        }
-        updateNamedBuffers(with: dictionary)
- 
-        for node in runtime.nodes {
-            try node.encode(commandBuffer:commandBuffer, destination:getDestination(), context:self)
-        }
-        
-        return commandBuffer
-    }
-*/
-    
     /// Moves all the remaining texture in the current stack to the previous stack,
     /// and resets the hasUpdate property.
     func flush() {
@@ -232,7 +212,7 @@ class VSContext: NSObject {
     ///   - key: name of the buffer
     ///   - buffer: buffer (array of Float)
     func registerNamedBuffer(key:String, buffer:MTLBuffer) {
-        print("VSC:registerNamedBuffer", key)
+        print("VSContext:registerNamedBuffer", key)
         namedBuffers.append(NamedBuffer(key:key, buffer:buffer))
     }
     
