@@ -6,15 +6,15 @@
     },{
         "name":"blur",
     },{
-        "name":"toone",
+        "name":"blur",
     },{
-        "name":"swap",
+        "name":"blur",
     },{
         "name":"fork",
     },{
-        "name":"blur",
+        "name":"toone",
     },{
-        "name":"blur",
+        "name":"shift",
     },{
         "name":"invert",
     },{
