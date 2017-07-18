@@ -102,11 +102,11 @@ class VSScript {
         return nil
     }
     
-    private static func makeNode(nodeName name:String?, params paramsIn:[String:Any]?, context:VSContext) -> VSNode? {
-        guard let nodeName = name else { return nil }
+    private static func makeNodes(nodeName name:String?, params paramsIn:[String:Any]?, context:VSContext) -> [VSNode] {
+        guard let nodeName = name else { return [] }
         guard let info = VSScript.getNodeInfo(name: nodeName) else {
             print("### VSScript:makeNode Invalid node name", nodeName)
-            return nil
+            return []
         }
         var params = [String:Any]()
         var attributeNames = [String]()
@@ -140,13 +140,15 @@ class VSScript {
 
         // LATER: pass buffers to VPMPSFilter.makeNode as well
         if let node = VSController.makeNode(name: nodeName) {
-            return node
+            return [node]
         } else if let node = VSMPSFilter.makeNode(name: nodeName, params: params, device: context.device) {
-            return node
-        } else {
-            let sourceCount = info["sources"] as? Int ?? 1
-            return VSFilter.makeNode(name: nodeName, buffers: buffers, sourceCount: sourceCount, device: context.device)
+            return [node]
         }
+        let sourceCount = info["sources"] as? Int ?? 1
+        if let node = VSFilter.makeNode(name: nodeName, buffers: buffers, sourceCount: sourceCount, device: context.device) {
+            return [node]
+        }
+        return []
     }
     
     /// Generate a runtime from the script and initialize the pipeline context.
@@ -154,8 +156,8 @@ class VSScript {
     /// - Parameter context: pipeline context
     /// - Returns: a runtime generated from the script
     public func compile(context:VSContext) -> VSRuntime {
-        let nodes = (self.pipeline.map { (item) -> VSNode? in
-            return VSScript.makeNode(nodeName: item["name"] as? String, params: item["attr"] as? [String:Any], context:context)
+        let nodes = (self.pipeline.map { (item) -> [VSNode] in
+            return VSScript.makeNodes(nodeName: item["name"] as? String, params: item["attr"] as? [String:Any], context:context)
         }).flatMap { $0 }
     
         context.updateNamedBuffers(with: self.variables)
