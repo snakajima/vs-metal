@@ -102,12 +102,28 @@ class VSScript {
         return nil
     }
     
-    private static func makeNodes(nodeName name:String?, params paramsIn:[String:Any]?, context:VSContext) -> [VSNode] {
+    private static func makeNodes(nodeName name:String?, params paramsIn:[String:Any]?, item itemIn:[String:Any], context:VSContext) -> [VSNode] {
         guard let nodeName = name else { return [] }
+
+        if nodeName == "repeat" {
+            if let count = itemIn["count"] as? Int,
+               let nodes = itemIn["nodes"] as? [[String:Any]] {
+                let nestedNodes = (nodes.map { (item) -> [VSNode] in
+                    return VSScript.makeNodes(nodeName: item["name"] as? String, params: item["attr"] as? [String:Any], item:item, context:context)
+                }).flatMap { $0 }
+                return Array(1..<count).map({ (_) -> [VSNode] in
+                    return nestedNodes
+                }).flatMap { $0 }
+            }
+            print("VSScript: repeat is missing count or nodes")
+            return []
+        }
+        
         guard let info = VSScript.getNodeInfo(name: nodeName) else {
             print("### VSScript:makeNode Invalid node name", nodeName)
             return []
         }
+        
         var params = [String:Any]()
         var attributeNames = [String]()
         if let attrs = info["attr"] as? [[String:Any]] {
@@ -157,7 +173,7 @@ class VSScript {
     /// - Returns: a runtime generated from the script
     public func compile(context:VSContext) -> VSRuntime {
         let nodes = (self.pipeline.map { (item) -> [VSNode] in
-            return VSScript.makeNodes(nodeName: item["name"] as? String, params: item["attr"] as? [String:Any], context:context)
+            return VSScript.makeNodes(nodeName: item["name"] as? String, params: item["attr"] as? [String:Any], item:item, context:context)
         }).flatMap { $0 }
     
         context.updateNamedBuffers(with: self.variables)

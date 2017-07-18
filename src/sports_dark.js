@@ -2,35 +2,20 @@
     "title":"Sports Dark",
     "pipeline":[
         { "name":"fork" },
-
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-
-        { "name":"darken" },
-        { "name":"darken" },
-        { "name":"darken" },
-        { "name":"darken" },
-        { "name":"darken" },
-        { "name":"darken" },
-        { "name":"darken" },
+        { "name":"repeat",
+        "count":8,
+        "nodes":[
+                 { "name":"previous" },
+                 { "name":"fork" },
+                 { "name":"shift" },
+                 ],
+        },
+        
+        { "name":"repeat",
+        "count":8,
+        "nodes":[
+                 { "name":"darken" },
+                 ],
+        }
     ]
 }
