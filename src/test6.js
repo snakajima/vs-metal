@@ -2,19 +2,32 @@
     "pipeline":[{
         "name":"fork",
     },{
-        "name":"mono",
-        "attr":{
-            "weight": [0.2126, 0.7152, 0.0722],
-            "color": [1.0, 0.0, 1.0, 1.0]
-        }
+        "name":"blur",
+    },{
+        "name":"blur",
+    },{
+        "name":"toone",
     },{
         "name":"swap",
     },{
-        "name":"sobel",
+        "name":"fork",
+    },{
+        "name":"blur",
+    },{
+        "name":"blur",
+    },{
+        "name":"invert",
     },{
         "name":"alpha",
         "attr":{
             "ratio": [0.5]
         }
+    },{
+        "name":"boolean",
+        "attr":{
+            "range": [0.0, 0.49]
+        }
+    },{
+        "name":"alpha",
     }]
 }

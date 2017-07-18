@@ -1,36 +1,5 @@
 {
-    "title":"Sports Light",
     "pipeline":[
-        { "name":"fork" },
-
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-        { "name":"previous" },
-        { "name":"fork" },
-        { "name":"shift" },
-
-        { "name":"lighten" },
-        { "name":"lighten" },
-        { "name":"lighten" },
-        { "name":"lighten" },
-        { "name":"lighten" },
-        { "name":"lighten" },
-        { "name":"lighten" },
+        { "name":"blur" },
     ]
 }

@@ -182,14 +182,14 @@
 			isa = PBXGroup;
 			children = (
 				742CBFBB1EFDD6930017D38A /* test1.js */,
+				74D3EFCE1EFDE41B0005765A /* test2.js */,
+				7428EF2B1EFE2F8D007BECAF /* test3.js */,
+				7428EF2F1EFF6F9B007BECAF /* test4.js */,
 				7492F7FD1F0EAF8A00380832 /* tennis_ball_tracker.js */,
 				7492F7F71F0E08D400380832 /* smoothskin.js */,
-				74D3EFCE1EFDE41B0005765A /* test2.js */,
 				7492F7F91F0EA67400380832 /* sports_light.js */,
-				7428EF2B1EFE2F8D007BECAF /* test3.js */,
 				7492F7FB1F0EA67F00380832 /* sports_dark.js */,
 				7492F7F31F0E001200380832 /* hawaii.js */,
-				7428EF2F1EFF6F9B007BECAF /* test4.js */,
 				7492F7F51F0E001E00380832 /* hipass.js */,
 				7492F7EF1F0DFC5E00380832 /* emboss.js */,
 				74E284F91F0DF9160045ADFB /* sketch.js */,
