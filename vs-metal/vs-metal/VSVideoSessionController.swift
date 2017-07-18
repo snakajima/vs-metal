@@ -19,6 +19,10 @@ class VSVideoSessionController: UIViewController {
     var runtime:VSRuntime!
     lazy var session:VSCaptureSession = VSCaptureSession(device: self.context.device, pixelFormat: self.context.pixelFormat, delegate: self.context)
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
+    
+    // For benchmark
+    var frameCount = 0
+    var totalTime = CFTimeInterval(0.0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +37,10 @@ class VSVideoSessionController: UIViewController {
             session.start()
         }
     }
+    
+    deinit {
+        print("Average Elapsed Time = ", totalTime / Double(frameCount))
+    }
 }
 
 extension VSVideoSessionController : MTKViewDelegate {
@@ -40,8 +48,13 @@ extension VSVideoSessionController : MTKViewDelegate {
     
     public func draw(in view: MTKView) {
         if context.hasUpdate {
-            runtime.encode(commandBuffer: context.makeCommandBuffer(), context: context)
-                       .commit()
+            let commandBuffer = runtime.encode(commandBuffer: context.makeCommandBuffer(), context: context)
+            let startTime = CFAbsoluteTimeGetCurrent()
+            commandBuffer.addCompletedHandler(){ (_) in
+                self.totalTime += CFAbsoluteTimeGetCurrent() - startTime
+                self.frameCount += 1
+            }
+            commandBuffer.commit()
             if let texture = context.pop() {
                 renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view, texture: texture.texture)?
                     .commit()

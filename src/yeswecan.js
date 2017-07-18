@@ -1,7 +1,8 @@
 {
     "title":"Yes We Can",
     "pipeline":[
-        { "name":"boxblur", "attr":{"radius":4.0} },
+        { "name":"blur" },
+        { "name":"blur" },
         { "name":"fork" },
         { "name":"fork" },
         { "name":"boolean", "ui":{ "hidden":["weight"] },
