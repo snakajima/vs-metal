@@ -56,7 +56,7 @@ struct VSFilter: VSNode {
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) {
         let encoder = commandBuffer.makeComputeCommandEncoder()
         encoder.setComputePipelineState(pipelineState)
-        let destination = context.getDestination() // must be called before any stack operation
+        let destination = context.get() // must be called before any stack operation
         
         for index in 0..<sourceCount {
             if let texture = context.pop() {

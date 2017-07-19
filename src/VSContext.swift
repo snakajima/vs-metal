@@ -114,7 +114,7 @@ class VSContext: NSObject {
         // https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
         let sourceTexture:VSTexture
         if let sampleBuffer = sampleBufferIn {
-            sourceTexture = getDestination()
+            sourceTexture = get()
             let commandBuffer:MTLCommandBuffer = {
                 let commandBuffer = commandQueue.makeCommandBuffer()
                 let encoder = commandBuffer.makeBlitCommandEncoder()
@@ -173,23 +173,19 @@ class VSContext: NSObject {
     /// Return a texture appropriate to write to.
     ///
     /// - Returns: a texture
-    func getDestination() -> VSTexture {
+    func get() -> VSTexture {
         // Find a texture in the pool, which is not in the stack
         for texture in pool {
             if !stack.contains(texture) && !prevs.contains(texture) && (textureOut==nil || texture != textureOut!) {
                 return texture
             }
         }
-        print("VSContext:get makeTexture", pool.count)
-        return make()
-    }
-        
-    private func make() -> VSTexture {
+        print("VSContext:get, making a new Texture", pool.count)
         let ret = VSTexture(texture:device.makeTexture(descriptor: descriptor), identity:pool.count)
         pool.append(ret)
         return ret
     }
-
+        
     /// Moves all the remaining texture in the current stack to the previous stack,
     /// and resets the hasUpdate property.
     func flush() {
