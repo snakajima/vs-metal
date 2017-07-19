@@ -112,13 +112,13 @@ class VSContext: NSObject {
         // verify it with a few sample apps.
         // Related Q&A:
         // https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
-        let textureCopy:MTLTexture
+        let sourceTexture:VSTexture
         if let sampleBuffer = sampleBufferIn {
-            textureCopy = device.makeTexture(descriptor: descriptor)
+            sourceTexture = getDestination()
             let commandBuffer:MTLCommandBuffer = {
                 let commandBuffer = commandQueue.makeCommandBuffer()
                 let encoder = commandBuffer.makeBlitCommandEncoder()
-                encoder.copy(from: texture, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOriginMake(0, 0, 0), sourceSize: MTLSizeMake(width, height, 1), to: textureCopy, destinationSlice: 0, destinationLevel: 0, destinationOrigin: MTLOriginMake(0, 0, 0))
+                encoder.copy(from: texture, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOriginMake(0, 0, 0), sourceSize: MTLSizeMake(width, height, 1), to: sourceTexture.texture, destinationSlice: 0, destinationLevel: 0, destinationOrigin: MTLOriginMake(0, 0, 0))
                 encoder.endEncoding()
                 return commandBuffer
             }()
@@ -128,11 +128,10 @@ class VSContext: NSObject {
             }
             commandBuffer.commit()
         } else {
-            textureCopy = texture
+            sourceTexture = VSTexture(texture:texture, identity:-1)
         }
         
-        sourceTexture = VSTexture(texture:textureCopy, identity:-1)
-        push(texture:sourceTexture!)
+        push(texture:sourceTexture)
     }
     
     /// Pop a texture from the texture stack

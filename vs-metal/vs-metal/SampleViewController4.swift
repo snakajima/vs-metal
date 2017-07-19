@@ -20,7 +20,7 @@ class SampleViewController4: UIViewController {
     var writer:VSVideoWriter?
 
     // For processing
-    var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
+    let context = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
 
     // For rendering

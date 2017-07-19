@@ -22,7 +22,7 @@ class SampleViewController3: UIViewController {
     }
     var startTime:CMTime?
     
-    var context:VSContext = VSContext(device: MTLCreateSystemDefaultDevice()!)
+    let context = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
     var writer:VSVideoWriter?
     lazy var session:VSCaptureSession = VSCaptureSession(device: self.context.device, pixelFormat: self.context.pixelFormat, delegate: self)

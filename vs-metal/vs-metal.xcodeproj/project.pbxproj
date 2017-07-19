@@ -240,8 +240,8 @@
 				74E284EF1F09F6C30045ADFB /* SampleViewController1.swift */,
 				7431D79A1F0D7A8C00A93671 /* SampleViewController2.swift */,
 				74B6514D1F181F9E00B6B091 /* SampleViewController3.swift */,
-				74DD65481F1944D600E5F420 /* TestViewController1.swift */,
 				74D5B04D1F1583F000C165BC /* SampleViewController4.swift */,
+				74DD65481F1944D600E5F420 /* TestViewController1.swift */,
 				74D5B0451F156A1B00C165BC /* TestViewController.swift */,
 				74E284F31F09F8500045ADFB /* SampleViewController1.storyboard */,
 				7431D79C1F0D7A9A00A93671 /* SampleViewController2.storyboard */,
@@ -264,15 +264,9 @@
 				7480D28E1EFCC91A00DAA88E /* shaders.js */,
 				7480D28C1EFCC63D00DAA88E /* VSNodes.js */,
 				742CBFBE1EFDD7F90017D38A /* scripts */,
-				74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */,
-				74C593BB1F17E23B00768BF0 /* VSVideoReader.swift */,
-				74C593B91F17DA9700768BF0 /* VSVideoWriter.swift */,
-				745D3A991F06E614009DD359 /* VSCaptureSession.swift */,
+				749A53521F1EA390009D0A35 /* helpers */,
 				74A39DCD1EFC30EB004713D8 /* VSFilter.swift */,
 				74D3EFCC1EFDD89A0005765A /* VSScript.swift */,
-				74E284ED1F09C9800045ADFB /* VSScript+filter.swift */,
-				74D5B0491F156D4D00C165BC /* VSScript+blender.swift */,
-				74E284F51F09FB790045ADFB /* VSScript+controller.swift */,
 				7428EF2D1EFF6E51007BECAF /* VSController.swift */,
 				74FB9BBF1EFC828E0039A0CA /* VSNode.swift */,
 				74A39DD11EFC4778004713D8 /* VSMPSFilter.swift */,
@@ -283,6 +277,20 @@
 			);
 			name = src;
 			path = ../../src;
+			sourceTree = "<group>";
+		};
+		749A53521F1EA390009D0A35 /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				74FB9BBD1EFC64DF0039A0CA /* VSRenderer.swift */,
+				74C593BB1F17E23B00768BF0 /* VSVideoReader.swift */,
+				74C593B91F17DA9700768BF0 /* VSVideoWriter.swift */,
+				745D3A991F06E614009DD359 /* VSCaptureSession.swift */,
+				74E284ED1F09C9800045ADFB /* VSScript+filter.swift */,
+				74D5B0491F156D4D00C165BC /* VSScript+blender.swift */,
+				74E284F51F09FB790045ADFB /* VSScript+controller.swift */,
+			);
+			name = helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
