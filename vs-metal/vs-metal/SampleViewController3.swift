@@ -41,7 +41,15 @@ class SampleViewController3: UIViewController {
         context.pixelFormat = mtkView.colorPixelFormat
         
         let script = VSScript()
-            .mono()
+            .gaussian_blur(sigma: 2.0)
+            .fork()
+            .gaussian_blur(sigma: 2.0)
+            .toone()
+            .swap()
+            .sobel()
+            .canny_edge(threshhold: 0.19, thin: 0.5)
+            .anti_alias()
+            .alpha(ratio: 1.0)
         runtime = script.compile(context: context)
 
         session.start()
