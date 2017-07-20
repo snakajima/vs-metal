@@ -36,6 +36,10 @@ struct VSRuntime {
     func encode(commandBuffer:MTLCommandBuffer, context:VSContext) -> MTLCommandBuffer {
         assert(Thread.current == Thread.main)
         
+        // NOTE: We need to copy all the textures in the stack so that we can retain the reference to
+        // the associated sample buffer (if any), until the completion hander is called below.
+        let textures = context.texturesInStack
+        
         var dictionary = [String:[Float]]()
         for dynamic in dynamics {
             dynamic.apply(callback: { (key, values) in
@@ -46,6 +50,12 @@ struct VSRuntime {
  
         for node in nodes {
             node.encode(commandBuffer:commandBuffer, context:context)
+        }
+        
+        commandBuffer.addCompletedHandler { (_) in
+            for texture in textures {
+                texture.touchSampleBuffer()
+            }
         }
         
         return commandBuffer
