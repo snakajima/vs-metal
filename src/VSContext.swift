@@ -38,7 +38,7 @@ class VSContext: NSObject {
     lazy var library:MTLLibrary = self.device.newDefaultLibrary()!
     /// The pixel format of texture
     var pixelFormat = MTLPixelFormat.bgra8Unorm
-    /// texture for output (for app to prevent recycling)
+    /// texture for output (to prevent recycling)
     var textureOut:VSTexture?
     /// Becomes true when a source texture is updated
     private(set) var hasUpdate = false

@@ -68,7 +68,8 @@ class SampleViewController3: UIViewController {
 
 extension SampleViewController3 : VSVideoWriterDelegate {
     func didAppendFrame(writer:VSVideoWriter) {
-        //reader?.readNextFrame()
+        // Indicate that the writer has finished writing
+        self.context.textureOut = nil
     }
     
     func didFinishWriting(writer: VSVideoWriter, url: URL) {
@@ -82,12 +83,14 @@ extension SampleViewController3 : VSVideoWriterDelegate {
 
 extension SampleViewController3 : VSCaptureSessionDelegate {
     func didCaptureOutput(session:VSCaptureSession, texture textureIn:MTLTexture, sampleBuffer:CMSampleBuffer, presentationTime:CMTime) {
+        if self.context.textureOut != nil {
+            // The writer is behind. Skip this frame.
+            return
+        }
         self.context.set(texture: textureIn, sampleBuffer: sampleBuffer)
         if let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context) {
             commandBuffer.addCompletedHandler { (_) in
                 DispatchQueue.main.async {
-                    self.context.textureOut  = self.context.pop() // store it for renderer
-                    self.context.flush()
                     guard let textureOut = self.context.textureOut else {
                         return
                     }
@@ -116,10 +119,14 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                             self.writer?.startSession(atSourceTime: presentationTime)
                         }
                         self.writer?.append(texture: textureOut, presentationTime: presentationTime)
+                    } else {
+                        self.context.textureOut = nil
                     }
                 }
             }
             commandBuffer.commit()
+            self.context.textureOut  = self.context.pop() // store it for the writer and the renderer
+            self.context.flush()
         }
     }
 }
