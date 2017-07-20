@@ -89,6 +89,7 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
         }
         self.context.set(texture: textureIn, sampleBuffer: sampleBuffer)
         if let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context) {
+            self.context.textureOut  = self.context.pop() // store it for the writer and the renderer
             commandBuffer.addCompletedHandler { (_) in
                 DispatchQueue.main.async {
                     guard let textureOut = self.context.textureOut else {
@@ -125,7 +126,6 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                 }
             }
             commandBuffer.commit()
-            self.context.textureOut  = self.context.pop() // store it for the writer and the renderer
             self.context.flush()
         }
     }
