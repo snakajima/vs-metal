@@ -34,6 +34,8 @@ struct VSTexture:Equatable {
 class VSContext: NSObject {
     /// Metal device
     let device:MTLDevice
+    /// Metal library
+    lazy var library:MTLLibrary = self.device.newDefaultLibrary()!
     /// The pixel format of texture
     var pixelFormat = MTLPixelFormat.bgra8Unorm
     /// texture for output (for app to prevent recycling)

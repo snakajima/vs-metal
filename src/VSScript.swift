@@ -161,7 +161,7 @@ class VSScript {
             return [node]
         }
         let sourceCount = info["sources"] as? Int ?? 1
-        if let node = VSFilter.makeNode(name: nodeName, buffers: buffers, sourceCount: sourceCount, device: context.device) {
+        if let node = VSFilter.makeNode(name: nodeName, buffers: buffers, sourceCount: sourceCount, context: context) {
             return [node]
         }
         return []
