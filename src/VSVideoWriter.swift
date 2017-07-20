@@ -11,11 +11,6 @@ import AVFoundation
 
 /// The procotol the client of video writer object must conform to.
 protocol VSVideoWriterDelegate:NSObjectProtocol {
-    /// It signals that a frame was appended as a responce to append(texture:) call.
-    ///
-    /// - Parameter writer: the video writer object
-    func didAppendFrame(writer:VSVideoWriter)
-    
     /// It signals that the writing session was finished
     ///
     /// - Parameters:
@@ -128,24 +123,26 @@ class VSVideoWriter {
     /// - Parameters:
     ///   - texture: the video shader texture
     ///   - presentationTime: the presentation time
-    public func append(texture textureIn:VSTexture?, presentationTime:CMTime) {
+    public func append(texture textureIn:VSTexture?, presentationTime:CMTime, callback:((Bool) -> Void)?) {
         guard let writer = self.writer,
             let texture = textureIn?.texture,
             let input = self.input,
             let adaptor = self.adaptor else {
+                callback?(false)
                 return
         }
         
         if !input.isReadyForMoreMediaData {
             print("Input is not ready for more media data. Retry async.")
             DispatchQueue.main.async {
-                self.append(texture:textureIn, presentationTime:presentationTime)
+                self.append(texture:textureIn, presentationTime:presentationTime, callback: callback)
             }
             return
         }
         
         guard let pixelBufferPool = adaptor.pixelBufferPool else {
             print("Pixel buffer asset writer input did not have a pixel buffer pool available; cannot retrieve frame")
+            callback?(false)
             return
         }
         
@@ -153,6 +150,7 @@ class VSVideoWriter {
         let status  = CVPixelBufferPoolCreatePixelBuffer(nil, pixelBufferPool, &newPixelBuffer)
         guard let pixelBuffer = newPixelBuffer, status == kCVReturnSuccess else {
             print("Could not get pixel buffer from asset writer input; dropping frame...")
+            callback?(false)
             return
         }
         
@@ -165,7 +163,7 @@ class VSVideoWriter {
         
         adaptor.append(pixelBuffer, withPresentationTime: presentationTime)
         
-        self.delegate?.didAppendFrame(writer: self)
+        callback?(true)
     }
     
     /// Finish the writing session. It will call delegate's didFinishWriting asynchronously, after finishing.

@@ -67,11 +67,6 @@ class SampleViewController3: UIViewController {
 }
 
 extension SampleViewController3 : VSVideoWriterDelegate {
-    func didAppendFrame(writer:VSVideoWriter) {
-        // Indicate that the writer has finished writing
-        self.context.textureOut = nil
-    }
-    
     func didFinishWriting(writer: VSVideoWriter, url: URL) {
         recording = false
         self.writer = nil
@@ -119,7 +114,12 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                             self.writer?.set(transform: transform)
                             self.writer?.startSession(atSourceTime: presentationTime)
                         }
-                        self.writer?.append(texture: textureOut, presentationTime: presentationTime)
+                        self.writer?.append(texture: textureOut, presentationTime: presentationTime) { (success) -> Void in
+                            if success {
+                                // Indicate that the writer has finished writing
+                                self.context.textureOut = nil
+                            }
+                        }
                     } else {
                         self.context.textureOut = nil
                     }

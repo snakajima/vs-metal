@@ -81,7 +81,11 @@ extension SampleViewController4 : VSVideoReaderDelegate {
                 DispatchQueue.main.async {
                     self.context.textureOut = self.context.pop() // store it for renderer
                     self.context.flush()
-                    self.writer?.append(texture: self.context.textureOut, presentationTime: presentationTime)
+                    self.writer?.append(texture: self.context.textureOut, presentationTime: presentationTime) { (success) -> Void in
+                        if success {
+                            self.reader?.readNextFrame()
+                        }
+                    }
                 }
             }
             commandBuffer.commit()
@@ -94,10 +98,6 @@ extension SampleViewController4 : VSVideoReaderDelegate {
 }
 
 extension SampleViewController4 : VSVideoWriterDelegate {
-    func didAppendFrame(writer:VSVideoWriter) {
-        reader?.readNextFrame()
-    }
-    
     func didFinishWriting(writer: VSVideoWriter, url: URL) {
         let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
         if let popover = sheet.popoverPresentationController {
