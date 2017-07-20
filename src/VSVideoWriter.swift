@@ -126,11 +126,11 @@ class VSVideoWriter {
     /// It wlll call delegate's didWriteFrame after appending the texture asynchronously.
     ///
     /// - Parameters:
-    ///   - texture: the metal texture
+    ///   - texture: the video shader texture
     ///   - presentationTime: the presentation time
-    public func append(texture:MTLTexture?, presentationTime:CMTime) {
+    public func append(texture textureIn:VSTexture?, presentationTime:CMTime) {
         guard let writer = self.writer,
-            let texture = texture,
+            let texture = textureIn?.texture,
             let input = self.input,
             let adaptor = self.adaptor else {
                 return
@@ -139,7 +139,7 @@ class VSVideoWriter {
         if !input.isReadyForMoreMediaData {
             print("Input is not ready for more media data. Retry async.")
             DispatchQueue.main.async {
-                self.append(texture:texture, presentationTime:presentationTime)
+                self.append(texture:textureIn, presentationTime:presentationTime)
             }
             return
         }

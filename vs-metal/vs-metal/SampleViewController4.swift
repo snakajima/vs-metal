@@ -81,7 +81,7 @@ extension SampleViewController4 : VSVideoReaderDelegate {
                 DispatchQueue.main.async {
                     self.context.textureOut = self.context.pop() // store it for renderer
                     self.context.flush()
-                    self.writer?.append(texture: self.context.textureOut?.texture, presentationTime: presentationTime)
+                    self.writer?.append(texture: self.context.textureOut, presentationTime: presentationTime)
                 }
             }
             commandBuffer.commit()

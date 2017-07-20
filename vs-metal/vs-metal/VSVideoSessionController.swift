@@ -48,7 +48,7 @@ extension VSVideoSessionController : MTKViewDelegate {
     
     public func draw(in view: MTKView) {
         if context.hasUpdate {
-            let commandBuffer = runtime.encode(commandBuffer: context.makeCommandBuffer(), context: context)
+            let commandBuffer = runtime.encode(commandBuffer: context.makeCommandBuffer(label: "myCompute"), context: context)
             let startTime = CFAbsoluteTimeGetCurrent()
             commandBuffer.addCompletedHandler(){ (_) in
                 self.totalTime += CFAbsoluteTimeGetCurrent() - startTime
@@ -56,7 +56,7 @@ extension VSVideoSessionController : MTKViewDelegate {
             }
             commandBuffer.commit()
             if let texture = context.pop() {
-                renderer.encode(commandBuffer:context.makeCommandBuffer(), view:view, texture: texture.texture)?
+                renderer.encode(commandBuffer:context.makeCommandBuffer(label: "myRender"), view:view, texture: texture.texture)?
                     .commit()
             }
             context.flush()

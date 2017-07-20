@@ -96,7 +96,7 @@ extension TestViewController1 : VSCaptureSessionDelegate {
                     self.writer?.set(transform: transform)
                     self.writer?.startSession(atSourceTime: presentationTime)
                 }
-                self.writer?.append(texture: textureIn, presentationTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
+                self.writer?.append(texture: VSTexture(texture:textureIn, identity:-1, sampleBuffer:nil), presentationTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer))
             }
         }
     }

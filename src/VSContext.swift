@@ -15,7 +15,7 @@ import MetalPerformanceShaders
 struct VSTexture:Equatable {
     /// Metal texture
     let texture:MTLTexture
-    fileprivate let identity:Int
+    let identity:Int
     let sampleBuffer:CMSampleBuffer?
     public static func ==(lhs: VSTexture, rhs: VSTexture) -> Bool {
         return lhs.identity == rhs.identity
@@ -187,8 +187,12 @@ class VSContext: NSObject {
     /// Makes a command buffer for nodes the video pipeline to use
     ///
     /// - Returns: a command buffer
-    func makeCommandBuffer() -> MTLCommandBuffer {
-        return commandQueue.makeCommandBuffer()
+    func makeCommandBuffer(label labelIn:String? = nil) -> MTLCommandBuffer {
+        let commandBuffer = commandQueue.makeCommandBuffer()
+        if let label = labelIn {
+            commandBuffer.label = label
+        }
+        return commandBuffer
     }
     
     /// Register a named buffer for a NSNode object

@@ -88,13 +88,13 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                 DispatchQueue.main.async {
                     self.context.textureOut  = self.context.pop() // store it for renderer
                     self.context.flush()
-                    guard let textureOut = self.context.textureOut?.texture else {
+                    guard let textureOut = self.context.textureOut else {
                         return
                     }
                     if self.writer == nil {
                         print("Sample3: creating a new writer")
                         self.writer = VSVideoWriter(delegate: self)
-                        let size = CGSize(width: textureOut.width, height: textureOut.height)
+                        let size = CGSize(width: textureOut.texture.width, height: textureOut.texture.height)
                         let _ = self.writer?.prepare(size: size)
                     }
                     if self.recording {
