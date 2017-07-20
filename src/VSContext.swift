@@ -122,8 +122,8 @@ class VSContext: NSObject {
 
         // NOTE: We need to retain the sample buffer (if any) until GPU finishes using it. 
         // See VSRuntime.encode() for more details. 
-        let sourceTexture = VSTexture(texture:texture, identity:-1, sampleBuffer: sampleBufferIn)
-        push(texture:sourceTexture)
+        sourceTexture = VSTexture(texture:texture, identity:-1, sampleBuffer: sampleBufferIn)
+        push(texture:sourceTexture!)
     }
     
     /// Pop a texture from the texture stack
