@@ -21,6 +21,8 @@ class SampleViewController3: UIViewController {
         }
     }
     var startTime:CMTime?
+    var totalFrames = 0
+    var skippedFrames = 0
     
     let context = VSContext(device: MTLCreateSystemDefaultDevice()!)
     var runtime:VSRuntime?
@@ -30,6 +32,10 @@ class SampleViewController3: UIViewController {
     // For rendering
     lazy var commandQueue:MTLCommandQueue = self.context.device.makeCommandQueue()
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
+
+    deinit {
+        print("frames = ", totalFrames, skippedFrames, Double(skippedFrames) / Double(totalFrames))
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,8 +84,14 @@ extension SampleViewController3 : VSVideoWriterDelegate {
 
 extension SampleViewController3 : VSCaptureSessionDelegate {
     func didCaptureOutput(session:VSCaptureSession, texture textureIn:MTLTexture, sampleBuffer:CMSampleBuffer, presentationTime:CMTime) {
+        if self.recording {
+            totalFrames += 1
+        }
         if self.context.textureOut != nil {
             // The writer is behind. Skip this frame.
+            if self.recording {
+                skippedFrames += 1
+            }
             return
         }
         self.context.set(texture: textureIn, sampleBuffer: sampleBuffer)
