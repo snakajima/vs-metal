@@ -16,8 +16,16 @@ struct VSTexture:Equatable {
     /// Metal texture
     let texture:MTLTexture
     fileprivate let identity:Int
+    let sampleBuffer:CMSampleBuffer?
     public static func ==(lhs: VSTexture, rhs: VSTexture) -> Bool {
         return lhs.identity == rhs.identity
+    }
+    
+    /// VSRuntime:encode() will call this function in the completion handler.
+    public func touchSampleBuffer() {
+        if let buffer = sampleBuffer {
+            let _ = CMSampleBufferGetPresentationTimeStamp(buffer)
+        }
     }
 }
 
@@ -67,6 +75,10 @@ class VSContext: NSObject {
     deinit {
         print("VSContext:frame skip rate = ", skippedFrameCount, frameCount, Float(skippedFrameCount) / Float(frameCount))
     }
+    
+    var texturesInStack:[VSTexture] {
+        return self.stack
+    }
         
     /// This function set the video source
     ///
@@ -105,32 +117,10 @@ class VSContext: NSObject {
         }
         hasUpdate = true
         assert(stack.count < 10) // to detect texture leak (a few is fine for recurring pipeline)
-        
-        // NOTE: If the texture is created from CVSampleBuffer, the pixel buffer behind the texture
-        // will be reused by the hardware unless we keep the reference to the sample buffer.
-        // This behavior is not clearly documented in the document (by Apple), but I was able to 
-        // verify it with a few sample apps.
-        // Related Q&A:
-        // https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
-        let sourceTexture:VSTexture
-        if let sampleBuffer = sampleBufferIn {
-            sourceTexture = get()
-            let commandBuffer:MTLCommandBuffer = {
-                let commandBuffer = commandQueue.makeCommandBuffer()
-                let encoder = commandBuffer.makeBlitCommandEncoder()
-                encoder.copy(from: texture, sourceSlice: 0, sourceLevel: 0, sourceOrigin: MTLOriginMake(0, 0, 0), sourceSize: MTLSizeMake(width, height, 1), to: sourceTexture.texture, destinationSlice: 0, destinationLevel: 0, destinationOrigin: MTLOriginMake(0, 0, 0))
-                encoder.endEncoding()
-                return commandBuffer
-            }()
-            commandBuffer.addCompletedHandler() { (_) in
-                // dummy reference to the sample buffer
-                let _ = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-            }
-            commandBuffer.commit()
-        } else {
-            sourceTexture = VSTexture(texture:texture, identity:-1)
-        }
-        
+
+        // NOTE: We need to retain the sample buffer (if any) until GPU finishes using it. 
+        // See VSRuntime.encode() for more details. 
+        let sourceTexture = VSTexture(texture:texture, identity:-1, sampleBuffer: sampleBufferIn)
         push(texture:sourceTexture)
     }
     
@@ -181,7 +171,7 @@ class VSContext: NSObject {
             }
         }
         print("VSContext:get, making a new Texture", pool.count)
-        let ret = VSTexture(texture:device.makeTexture(descriptor: descriptor), identity:pool.count)
+        let ret = VSTexture(texture:device.makeTexture(descriptor: descriptor), identity:pool.count, sampleBuffer: nil)
         pool.append(ret)
         return ret
     }
