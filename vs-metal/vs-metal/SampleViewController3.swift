@@ -34,7 +34,7 @@ class SampleViewController3: UIViewController {
     lazy var renderer:VSRenderer = VSRenderer(device:self.context.device, pixelFormat:self.context.pixelFormat)
 
     deinit {
-        print("frames = ", totalFrames, skippedFrames, Double(skippedFrames) / Double(totalFrames))
+        print("Sample3: frames = ", totalFrames, skippedFrames, Double(skippedFrames) / Double(totalFrames))
     }
     
     override func viewDidLoad() {
@@ -76,6 +76,8 @@ extension SampleViewController3 : VSVideoWriterDelegate {
     func didFinishWriting(writer: VSVideoWriter, url: URL) {
         recording = false
         self.writer = nil
+        context.releaseAllRetainedTextures()
+        
         let sheet = UIActivityViewController(activityItems: [url], applicationActivities: nil)
         sheet.popoverPresentationController?.barButtonItem = self.btnRecord
         self.present(sheet, animated: true)
@@ -86,22 +88,23 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
     func didCaptureOutput(session:VSCaptureSession, texture textureIn:MTLTexture, sampleBuffer:CMSampleBuffer, presentationTime:CMTime) {
         if self.recording {
             totalFrames += 1
-        }
-        if self.context.textureOut != nil {
-            // The writer is behind. Skip this frame.
-            if self.recording {
+            if context.retainedTextureCount() > 2 {
                 skippedFrames += 1
+                return
             }
-            return
         }
         self.context.set(texture: textureIn, sampleBuffer: sampleBuffer)
         if let commandBuffer = self.runtime?.encode(commandBuffer:self.context.makeCommandBuffer(), context:self.context) {
-            self.context.textureOut  = self.context.pop() // store it for the writer and the renderer
+            guard let textureOut = self.context.pop() else {
+                return
+            }
+            self.context.textureOut = textureOut // store it for the renderer
+            if self.recording {
+                // We need to retain the texture so that it won't be re-used.
+                self.context.retain(texture: textureOut) // must be explicitly released after writer.append()
+            }
             commandBuffer.addCompletedHandler { (_) in
                 DispatchQueue.main.async {
-                    guard let textureOut = self.context.textureOut else {
-                        return
-                    }
                     if self.writer == nil {
                         print("Sample3: creating a new writer")
                         self.writer = VSVideoWriter(delegate: self)
@@ -127,13 +130,8 @@ extension SampleViewController3 : VSCaptureSessionDelegate {
                             self.writer?.startSession(atSourceTime: presentationTime)
                         }
                         self.writer?.append(texture: textureOut, presentationTime: presentationTime) { (success) -> Void in
-                            if success {
-                                // Indicate that the writer has finished writing
-                                self.context.textureOut = nil
-                            }
+                            self.context.release(texture: textureOut)
                         }
-                    } else {
-                        self.context.textureOut = nil
                     }
                 }
             }
