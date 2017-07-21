@@ -62,6 +62,7 @@ class VSContext: NSObject {
     private var stack = [VSTexture]() // main texture stack
     private var pool = [VSTexture]()  // texture pool for reuse
     private var prevs = [VSTexture]() // layers from previous session
+    private var retained = [VSTexture]() // layers retained by the app
     
     private var frameCount = 0  // only for debugging
     private var skippedFrameCount = 0 // only for debugging
@@ -168,7 +169,7 @@ class VSContext: NSObject {
     func get() -> VSTexture {
         // Find a texture in the pool, which is not in the stack
         for texture in pool {
-            if !stack.contains(texture) && !prevs.contains(texture) && (textureOut==nil || texture != textureOut!) {
+            if !stack.contains(texture) && !prevs.contains(texture) && !retained.contains(texture) && (textureOut==nil || texture != textureOut!) {
                 return texture
             }
         }
@@ -219,6 +220,26 @@ class VSContext: NSObject {
                 }
             }
         }
+    }
+    
+    func retain(texture:VSTexture) {
+        retained.append(texture)
+    }
+    
+    func release(texture:VSTexture) {
+        if let index = retained.index(of: texture) {
+            retained.remove(at: index)
+        } else {
+            print("VSContext:release #### no texture")
+        }
+    }
+    
+    func retainedTextureCount() -> Int {
+        return retained.count
+    }
+    
+    func releaseAllRetainedTextures() {
+        retained.removeAll()
     }
 }
 
