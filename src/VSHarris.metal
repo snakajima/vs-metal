@@ -96,6 +96,7 @@ kernel void
 step(texture2d<half, access::read>  inTexture  [[texture(0)]],
                 texture2d<half, access::write> outTexture [[texture(1)]],
                 const device float& threshold [[ buffer(2) ]],
+                const device float4& color [[ buffer(3) ]],
                 uint2 gid [[thread_position_in_grid]])
 {
     // Check if the pixel is within the bounds of the output texture
@@ -107,5 +108,5 @@ step(texture2d<half, access::read>  inTexture  [[texture(0)]],
 
     half inColor = inTexture.read(gid).r;
     half o = step(half(threshold), inColor);
-    outTexture.write(half4(o, o, o, o), gid);
+    outTexture.write(half4(color) * o, gid);
 }

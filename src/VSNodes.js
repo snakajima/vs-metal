@@ -561,12 +561,13 @@
         "type":"filter",
         "title":"Step",
         "description":"Step",
-        "attr" : [
-                  {
+        "attr" : [{
                   "name":"threshold",
                   "default":[ 0.0001 ],
-                  },
-                  ],
+                  },{
+                  "name":"color",
+                  "default":[ 1.0, 0.0, 0.0, 0.5 ],
+                  }],
     },
 
     
