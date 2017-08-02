@@ -535,6 +535,17 @@
             },
         ],
     },
+    "harris_detector": {
+        "type":"filter",
+        "title":"Harris Cornder Detector",
+        "description":"Harris Corner Detector",
+        "attr" : [
+            {
+                "name":"sensitivity",
+                "default":[ 5.0 ],
+            },
+        ],
+    },
     
     "tilt_shift": {
         "type":"filter",
