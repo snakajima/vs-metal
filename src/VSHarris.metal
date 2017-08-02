@@ -52,6 +52,42 @@ harris_detector(texture2d<half, access::read>  inTexture  [[texture(0)]],
     half3 inColor = inTexture.read(gid).xyz;
     half sum = inColor.x + inColor.y;
     half z = (inColor.z * 2.0) - 1.0;
-    half c = sensitivity * (inColor.x * inColor.y - z * z - 0.04 * sum * sum);
-    outTexture.write(half4(c, c, c, 1.0), gid);
+    half o = sensitivity * (inColor.x * inColor.y - z * z - 0.04 * sum * sum);
+    outTexture.write(half4(o, o, o, 1.0), gid);
+}
+
+kernel void
+local_non_max_suppression(texture2d<half, access::read>  inTexture  [[texture(0)]],
+           texture2d<half, access::write> outTexture [[texture(1)]],
+           const device float& threshold [[ buffer(2) ]],
+           uint2 gid [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half c = inTexture.read(gid).r;
+    half n = inTexture.read(gid + uint2(0,-1)).r;
+    half s = inTexture.read(gid + uint2(0,1)).r;
+    half w = inTexture.read(gid + uint2(-1,0)).r;
+    half e = inTexture.read(gid + uint2(1,0)).r;
+    half nw = inTexture.read(gid + uint2(-1,-1)).r;
+    half ne = inTexture.read(gid + uint2(1,-1)).r;
+    half sw = inTexture.read(gid + uint2(-1,1)).r;
+    half se = inTexture.read(gid + uint2(1,1)).r;
+
+    // For tie-breaker
+    half tb = 1.0 - step(c, n);
+    tb *= (1.0 - step(c, nw));
+    tb *= (1.0 - step(c, w));
+    tb *= (1.0 - step(c, sw));
+    
+    half mv = max(max(max(max(c, s), se), e), ne);
+    half o = c * step(mv, c) * tb;
+    o = step(half(threshold), o);
+
+    outTexture.write(half4(o, o, o, 1.0), gid);
 }

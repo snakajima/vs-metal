@@ -546,6 +546,17 @@
             },
         ],
     },
+    "local_non_max_suppression": {
+        "type":"filter",
+        "title":"Local non-max Surpression",
+        "description":"Local non-max Surpression",
+        "attr" : [
+                  {
+                  "name":"threshold",
+                  "default":[ 0.2 ],
+                  },
+                  ],
+    },
     
     "tilt_shift": {
         "type":"filter",
