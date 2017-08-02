@@ -188,6 +188,8 @@
 				74D3EFCE1EFDE41B0005765A /* test2.js */,
 				7428EF2B1EFE2F8D007BECAF /* test3.js */,
 				7428EF2F1EFF6F9B007BECAF /* test4.js */,
+				7428EF311EFF6FDD007BECAF /* test5.js */,
+				7428EF331EFF7003007BECAF /* test6.js */,
 				7492F7FD1F0EAF8A00380832 /* tennis_ball_tracker.js */,
 				7492F7F71F0E08D400380832 /* smoothskin.js */,
 				7492F7F91F0EA67400380832 /* sports_light.js */,
@@ -208,8 +210,6 @@
 				74E284DF1EFFE4D00045ADFB /* test0.js */,
 				741847301F01B0C2009A45F9 /* gradientmap.js */,
 				7418473C1F04525C009A45F9 /* motionblur.js */,
-				7428EF311EFF6FDD007BECAF /* test5.js */,
-				7428EF331EFF7003007BECAF /* test6.js */,
 				741847341F01B108009A45F9 /* cartoon_hipass.js */,
 			);
 			name = scripts;

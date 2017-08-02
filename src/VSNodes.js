@@ -557,6 +557,18 @@
                   },
                   ],
     },
+    "step": {
+        "type":"filter",
+        "title":"Step",
+        "description":"Step",
+        "attr" : [
+                  {
+                  "name":"threshold",
+                  "default":[ 0.0001 ],
+                  },
+                  ],
+    },
+
     
     "tilt_shift": {
         "type":"filter",

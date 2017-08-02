@@ -91,3 +91,21 @@ local_non_max_suppression(texture2d<half, access::read>  inTexture  [[texture(0)
 
     outTexture.write(half4(o, o, o, 1.0), gid);
 }
+
+kernel void
+step(texture2d<half, access::read>  inTexture  [[texture(0)]],
+                texture2d<half, access::write> outTexture [[texture(1)]],
+                const device float& threshold [[ buffer(2) ]],
+                uint2 gid [[thread_position_in_grid]])
+{
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= outTexture.get_width()) || (gid.y >= outTexture.get_height()))
+    {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+
+    half inColor = inTexture.read(gid).r;
+    half o = step(half(threshold), inColor);
+    outTexture.write(half4(o, o, o, 1.0), gid);
+}

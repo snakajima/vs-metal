@@ -34,6 +34,8 @@ class VSVideoSessionController: UIViewController {
             mtkView.device = context.device
             mtkView.delegate = self
             mtkView.transform = (session.cameraPosition == .front) ? CGAffineTransform(scaleX: -1.0, y: 1.0) : CGAffineTransform.identity
+            
+            session.preset = AVCaptureSessionPreset352x288
             session.start()
         }
     }

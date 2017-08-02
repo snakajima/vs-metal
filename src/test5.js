@@ -1,29 +1,16 @@
 {
-    "pipeline":[{
-        "name":"blur",
-    },{
-        "name":"blur",
-    },{
-        "name":"fork",
-    },{
-        "name":"blur",
-    },{
-        "name":"blur",
-    },{
-        "name":"toone",
-    },{
-        "name":"swap"
-    },{
-        "name":"sobel",
-    },{
-        "name":"canny_edge",
-        "attr":{
-            "threshold": [0.19],
-            "thin": [0.50],
-        }
-    },{
-        "name":"anti_alias"
-    },{
-        "name":"alpha"
-    }]
+    "pipeline":[
+                { "name":"derivative" },
+                { "name":"gaussian_blur",
+                "attr":{
+                "sigma": [2.0],
+                }
+                },
+                { "name":"harris_detector" },
+                { "name":"local_non_max_suppression" },
+                { "name":"gaussian_blur",
+                "attr":{
+                "sigma": [4.0],
+                }
+                ]
 }
