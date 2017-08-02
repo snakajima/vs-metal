@@ -52,6 +52,7 @@
 		74C593BC1F17E23B00768BF0 /* VSVideoReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C593BB1F17E23B00768BF0 /* VSVideoReader.swift */; };
 		74D3EFCD1EFDD89A0005765A /* VSScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D3EFCC1EFDD89A0005765A /* VSScript.swift */; };
 		74D3EFCF1EFDE41B0005765A /* test2.js in Resources */ = {isa = PBXBuildFile; fileRef = 74D3EFCE1EFDE41B0005765A /* test2.js */; };
+		74D4E8841F3196A9004BABBA /* VSHarris.metal in Sources */ = {isa = PBXBuildFile; fileRef = 74D4E8831F3196A9004BABBA /* VSHarris.metal */; };
 		74D5B0461F156A1B00C165BC /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D5B0451F156A1B00C165BC /* TestViewController.swift */; };
 		74D5B0481F156A5700C165BC /* TestViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74D5B0471F156A5700C165BC /* TestViewController.storyboard */; };
 		74D5B04A1F156D4D00C165BC /* VSScript+blender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D5B0491F156D4D00C165BC /* VSScript+blender.swift */; };
@@ -128,6 +129,7 @@
 		74D3EFCC1EFDD89A0005765A /* VSScript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VSScript.swift; sourceTree = "<group>"; };
 		74D3EFCE1EFDE41B0005765A /* test2.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = test2.js; sourceTree = "<group>"; };
 		74D3EFD21F01AC3F0005765A /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE.txt; path = ../LICENSE.txt; sourceTree = "<group>"; };
+		74D4E8831F3196A9004BABBA /* VSHarris.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = VSHarris.metal; sourceTree = "<group>"; };
 		74D5B0451F156A1B00C165BC /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		74D5B0471F156A5700C165BC /* TestViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TestViewController.storyboard; sourceTree = "<group>"; };
 		74D5B0491F156D4D00C165BC /* VSScript+blender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VSScript+blender.swift"; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				74E284E91F0517A50045ADFB /* VSSource.metal */,
 				74E284EB1F0517DA0045ADFB /* VSTransform.metal */,
 				74E284E11F00B9B70045ADFB /* VSBlender.metal */,
+				74D4E8831F3196A9004BABBA /* VSHarris.metal */,
 			);
 			name = metal;
 			sourceTree = "<group>";
@@ -417,6 +420,7 @@
 				74FB9BC21EFC84070039A0CA /* VSFilters.metal in Sources */,
 				74B6514E1F181F9E00B6B091 /* SampleViewController3.swift in Sources */,
 				74DD65491F1944D600E5F420 /* TestViewController1.swift in Sources */,
+				74D4E8841F3196A9004BABBA /* VSHarris.metal in Sources */,
 				74A39DD21EFC4778004713D8 /* VSMPSFilter.swift in Sources */,
 				74E284EE1F09C9800045ADFB /* VSScript+filter.swift in Sources */,
 				74C593BA1F17DA9700768BF0 /* VSVideoWriter.swift in Sources */,

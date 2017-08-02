@@ -524,6 +524,28 @@
             "default":[0.34, 0.8],
         }],
     },
+    "derivative": {
+        "type":"filter",
+        "title":"Derivative",
+        "description":"XY derivative for Harris Corner detector",
+        "attr" : [
+            {
+                "name":"strength",
+                "default":[ 1.0 ],
+            },
+        ],
+    },
+    "harris_detector": {
+        "type":"filter",
+        "title":"Harris Cornder Detector",
+        "description":"Harris Corner Detector",
+        "attr" : [
+            {
+                "name":"sensitivity",
+                "default":[ 5.0 ],
+            },
+        ],
+    },
     
     "tilt_shift": {
         "type":"filter",
