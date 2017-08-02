@@ -107,5 +107,5 @@ step(texture2d<half, access::read>  inTexture  [[texture(0)]],
 
     half inColor = inTexture.read(gid).r;
     half o = step(half(threshold), inColor);
-    outTexture.write(half4(o, o, o, 1.0), gid);
+    outTexture.write(half4(o, o, o, o), gid);
 }

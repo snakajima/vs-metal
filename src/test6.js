@@ -1,5 +1,6 @@
 {
     "pipeline":[
+                { "name":"fork" },
                 { "name":"derivative" },
                 { "name":"gaussian_blur",
                 "attr":{
@@ -13,7 +14,8 @@
                 "sigma": [4.0],
                 }
                 },
-                { "name":"step" }
+                { "name":"step" },
+                { "name":"alpha" },
                 ]
 }
 
